@@ -5,6 +5,7 @@
  */
 package AS;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,7 +15,25 @@ import java.io.IOException;
 public class AnnealingStandard {
     public static void main(String [] args) throws IOException{
         ManipulaCSV obj = new ManipulaCSV();
-        obj.readCsvFile();
+//        File arquivo = new File("D:\\Pesquisa\\Desenvolvimento\\resultado1.csv");
+//        File arquivo = new File("H:\\Meu Drive\\UFCG\\Pesquisa\\Desenvolvimento\\resultado1.csv");
+//        File arquivo = new File("../","resultado1.csv");
+        
+        try {
+            System.out.println("/  -> " + new File("/").getCanonicalPath());
+            System.out.println(".. -> " + new File("..").getCanonicalPath());
+            System.out.println(".  -> " + new File(".").getCanonicalPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        obj.readCsvFile();
+//        obj.padronizaCsvFile(arquivo);
+        
+        
+        
+        
+        
     }
     
 }

@@ -14,12 +14,44 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.LineNumberReader;
 
 /**
  *
  * @author Diego
  */
 public class ManipulaCSV {
+
+    int vp, fp, iteracao;
+    File estat;
+    FileWriter estatisticas;
+
+    public ManipulaCSV() {
+
+        estat = new File("./src/csv/", "estatisticas.csv");
+
+        if (!estat.exists()) {
+            try {
+                estat.createNewFile();
+                estatisticas = new FileWriter(estat);
+
+                BufferedWriter StrW = new BufferedWriter(estatisticas);
+
+                StrW.append("Precision");
+                StrW.append(";");
+                StrW.append("Recall");
+                StrW.append(";");
+                StrW.append("F1");
+                StrW.append(";");
+                StrW.append("Iteracao");
+                StrW.append("\n");
+
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
 
     public void readCsvFile() throws java.io.IOException {
 
@@ -79,17 +111,14 @@ public class ManipulaCSV {
     }
 
     public void padronizaCsvFile(File arquivo) throws IOException {
-        
+
         try {
             BufferedReader arquivoCSV = new BufferedReader(new FileReader(arquivo.getPath()));
 
             String Str, Str2 = "";
-            int index_c1, index_c2;
+            int index_c1, index_c2, cont;
             String[] TableLine;
 
-//            System.out.println("arquivo.getParent() + arquivo.getName() + \"NEW.csv\" = " + arquivo.getParent() + " " + arquivo.getName() + "NEW.csv");
-            
-            int cont;
             String diretorio = arquivo.getParent();
             String nome = arquivo.getName();
             nome = nome.substring(0, nome.indexOf('.'));
@@ -99,40 +128,41 @@ public class ManipulaCSV {
             //Essa estrutura do looping while é clássica para ler cada linha
             //do arquivo
             while ((Str = arquivoCSV.readLine()) != null) {
+
+                if (Str.contains("First Object")) {
+                    System.out.println("Contém First Object");
+                    System.out.println(Str);
+                    continue;
+                }
                 //Aqui usamos o método split que divide a linha lida em um array de String
                 //passando como parametro o divisor ";".
 //                    TableLine = Str.split(";");
+
                 TableLine = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
 
-                //O foreach é usadao para imprimir cada célula do array de String.
+                //O foreach é usado para imprimir cada célula do array de String.
                 for (String cell : TableLine) {
+
                     cont++;
-//                        System.out.print(cell + " ");
 
                     index_c1 = cell.indexOf('[');
                     index_c2 = cell.indexOf(']');
 
-//                        System.out.println("c1 = " + index_c1 + " c2 = " + index_c2);
                     Str2 = cell.substring(index_c1 + 1, index_c2);
-                    
-//                    System.out.print(Str2 + " ");
 
                     newCSV.append(Str2);
-                    
+
                     if (cont == 1) {
                         newCSV.append(';');
                     } else {
                         newCSV.append('\n');
                     }
-                    
-                    
+
                 }
-//                    System.out.println("cont = " + cont);
-//                newCSV.append('\n');
-//                System.out.println("\n");
+                System.out.println("Comprimento do array = " + TableLine.length);
             }
-            
+
             newCSV.flush();
             newCSV.close();
             //Fechamos o buffer
@@ -141,6 +171,128 @@ public class ManipulaCSV {
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void comparaComGS(File arqResult, File gs) {
+        //Já recebe o arqResult padronizado
+        vp = 0;
+        fp = 0;
+
+        String Str, Str2, elemento1, elemento2 = "";
+        String[] TableLine;
+        boolean existe;
+
+        try {
+            BufferedReader StrR = new BufferedReader(new FileReader(arqResult.getPath()));
+
+//        String diretorio = arquivo.getParent();
+//        String nome = arquivo.getName();
+//        nome = nome.substring(0, nome.indexOf('.'));
+//        FileWriter newCSV = new FileWriter(diretorio + "\\" + nome + "_NEW.csv");
+            while ((Str = StrR.readLine()) != null) {
+
+                TableLine = Str.split(";", 2);
+
+                elemento1 = TableLine[0];
+                elemento2 = TableLine[1];
+
+                existe = buscaGabarito(elemento1, elemento2, gs);
+
+                if (existe) {
+                    vp++;
+                } else {
+                    fp++;
+                }
+
+                calculaMetricas(vp, fp, gs);
+            }
+
+            StrR.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private boolean buscaGabarito(String elemento1, String elemento2, File gs) {
+        String Str, Str2, elementoGS1, elementoGS2 = "";
+        String[] TableLine;
+        boolean existe = false;
+
+        try {
+            BufferedReader StrR = new BufferedReader(new FileReader(gs.getPath()));
+
+            while ((Str = StrR.readLine()) != null) {
+
+                TableLine = Str.split(";", 2);
+
+                elementoGS1 = TableLine[0];
+                elementoGS2 = TableLine[1];
+
+                if ((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) {
+                    existe = true;
+                    break;
+                }
+            }
+            StrR.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return existe;
+    }
+
+    public void calculaMetricas(int vp, int fp, File gs) {
+
+        try {
+
+            LineNumberReader linhaLeitura;
+            linhaLeitura = new LineNumberReader(new FileReader(gs.getPath()));
+            linhaLeitura.skip(gs.length());
+            // conta o numero de linhas do arquivo, começa com zero, por isso adiciona 1
+            int qtdLinha = linhaLeitura.getLineNumber() + 1;
+
+            double precision = getPrecision(vp, fp);
+            double recall = getRecall(vp, qtdLinha);
+            double f1 = getF1(precision, recall);
+
+            try {
+                BufferedWriter StrW = new BufferedWriter(estatisticas);
+
+                StrW.append(Double.toString(precision));
+                StrW.append(";");
+                StrW.append(Double.toString(recall));
+                StrW.append(";");
+                StrW.append(Double.toString(f1));
+                StrW.append(";");
+                StrW.append(Double.toString(iteracao));
+                StrW.append("\n");
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public double getPrecision(int vp, int fp) {
+        return (double) this.vp / (this.vp + this.fp);
+    }
+
+    public double getRecall(int vp, int tamGS) {
+        return (double) this.fp / tamGS;
+    }
+
+    public double getF1(double precision, double recall) {
+        return 2 * recall * precision / (recall + precision);
     }
 
 }

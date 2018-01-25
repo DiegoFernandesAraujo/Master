@@ -19,13 +19,15 @@ public class AnnealingStandard {
 //        File arquivo = new File("H:\\Meu Drive\\UFCG\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 
 //        File arquivo = new File("./src/csv/","resultado1.csv");
-        File arquivo = new File("./src/csv/","result2.csv");
+        File resultado = new File("./src/csv/","resultTestCD.csv");
+        File gs = new File("./src/csv/","cd_gold.csv");
 
         /* Para retornar o path do projeto
         try {
 
             System.out.println(".. -> " + new File("..").getCanonicalPath());
             System.out.println(".  -> " + new File(".").getCanonicalPath());
+            System.out.println(System.getProperty("user.dir"));
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,7 +35,7 @@ public class AnnealingStandard {
         
 */
 //        obj.readCsvFile();
-        obj.padronizaCsvFile(arquivo);
+        obj.comparaComGS(obj.padronizaCsvFile(resultado), gs);
         
         
         

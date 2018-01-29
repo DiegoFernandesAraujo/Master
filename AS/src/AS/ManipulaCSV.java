@@ -24,9 +24,15 @@ public class ManipulaCSV {
 
     int vp, fp, iteracao;
     File estat;
+    File D_A;
+    File gs;
     FileWriter estatisticas;
 
     public ManipulaCSV() {
+        
+        vp = 0;
+        fp = 0;
+        iteracao = 0;
 
         estat = new File("./src/csv/", "estatisticas.csv");
 
@@ -47,7 +53,7 @@ public class ManipulaCSV {
 //            StrW.append(";");
 //            StrW.append("Iteracao");
 //            StrW.append("\n");
-                    StrW.write("Precision;Recall;F1;Iteração\n");
+                    StrW.write("Precision;Recall;F1;VP;FP;Iteração\n");
                     StrW.flush();
                     StrW.close();
 
@@ -61,81 +67,36 @@ public class ManipulaCSV {
         }
 
     }
-
-    public void readCsvFile() throws java.io.IOException {
-
-        //A estrutura try-catch é usada pois o objeto BufferedWriter exige que as
-        //excessões sejam tratadas
-        try {
-
-            //Criação de um buffer para a ler de uma stream
-            BufferedReader StrR = new BufferedReader(new FileReader("D:\\Pesquisa\\Desenvolvimento\\resultado1.csv"));
-
-            //NÃO FUNCIONA!
-//              BufferedReader StrR = new BufferedReader(new FileReader("./csv/cd.csv"));  
-            System.out.println(StrR.readLine());
-            String Str;
-            String[] TableLine;
-            //Essa estrutura do looping while é clássica para ler cada linha
-            //do arquivo
-            while ((Str = StrR.readLine()) != null) {
-                //Aqui usamos o método split que divide a linha lida em um array de String
-                //passando como parametro o divisor ";".
-                TableLine = Str.split(";");
-
-                //O foreach é usadao para imprimir cada célula do array de String.
-                for (String cell : TableLine) {
-                    System.out.print(cell + " ");
-                }
-                System.out.println("\n");
-            }
-            //Fechamos o buffer
-            StrR.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void createCsvFile() throws java.io.IOException {
-        //A estrutura try-catch é usada pois o objeto BufferedWriter exige que as
-        //excessões sejam tratadas
-        try {
-
-            //Criação de um buffer para a escrita em uma stream
-            BufferedWriter StrW = new BufferedWriter(new FileWriter("C:\\tabela.csv"));
-
-            //Escrita dos dados da tabela
-            StrW.write("Nome;Telefone;Idade\n");
-            StrW.write("Juliana;6783-8490;23\n");
-            StrW.write("Tatiana;6743-7480;45\n");
-            StrW.write("Janice;6909-9380;21");
-
-            //Fechamos o buffer
-            StrW.close();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
+    
     public File padronizaCsvFile(File arquivo) throws IOException {
 
         File returnCSV = null;
 
+        
         try {
             BufferedReader arquivoCSV = new BufferedReader(new FileReader(arquivo.getPath()));
 
-            String Str, Str2 = "";
-            int index_c1, index_c2, cont;
+            String Str = "";
+            String Str2 = "";
+            int index_c1 = 0;
+            int index_c2 = 0;
+            int cont = 0;
             String[] TableLine;
 
             String diretorio = arquivo.getParent();
             String nome = arquivo.getName();
             nome = nome.substring(0, nome.indexOf('.'));
-
-            FileWriter newCSV = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", true);
+            
+            if(arquivo.exists()){
+                System.out.println(arquivo.getName() + " existe!");
+            }
+//            arquivo.
+//            arquivo.createNewFile();
+//            
+            FileWriter newCSV = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
             returnCSV = new File(diretorio + "\\" + nome + "_NEW.csv");
+            
+            
 
             //Essa estrutura do looping while é clássica para ler cada linha
             //do arquivo
@@ -152,7 +113,7 @@ public class ManipulaCSV {
 
                 TableLine = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
-
+//                System.out.println("TableLine[0] = " + TableLine[0] + " TableLine[1] = " + TableLine[1]);
                 //O foreach é usado para imprimir cada célula do array de String.
                 for (String cell : TableLine) {
 
@@ -186,12 +147,14 @@ public class ManipulaCSV {
         return returnCSV;
     }
 
-    public void comparaComGS(File arqResult, File gs) {
+    public void comparaComGS(File arqResult) {
         //Já deve receber o arqResult padronizado
         vp = 0;
         fp = 0;
 
-        String Str, elemento1, elemento2 = "";
+        String Str = "";
+        String elemento1 = "";
+        String elemento2 = "";
         String[] TableLine;
         boolean existe = false;
 
@@ -226,6 +189,31 @@ public class ManipulaCSV {
         } catch (IOException ex) {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void comparaConjuntos(File arqResult) {
+        
+        D_A = new File("./src/csv/", "D_A.csv");
+        
+        if (!D_A.exists()) {
+
+            try {
+                estat.createNewFile();
+                D_A = arqResult;
+//                    estatisticas = new FileWriter(estat, true);
+//                    BufferedWriter StrW = new BufferedWriter(estatisticas);
+
+//                    StrW.write("Precision;Recall;F1;VP;FP;Iteração\n");
+//                    StrW.flush();
+//                    StrW.close();
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo D_A.csv.");
+            }
+            comparaComGS(D_A);
+        }else{
+            //TODO
+        }
+
     }
 
     private boolean buscaGabarito(String elemento1, String elemento2, File gs) {
@@ -283,20 +271,26 @@ public class ManipulaCSV {
                 BufferedWriter StrW = new BufferedWriter(estatisticas);
 //                System.out.println(estatisticas.);
 
-//                StrW.append(Double.toString(precision));
-//                StrW.append(";");
-//                StrW.append(Double.toString(recall));
-//                StrW.append(";");
-//                StrW.append(Double.toString(f1));
-//                StrW.append(";");
-//                StrW.append(Double.toString(iteracao));
-//                StrW.append("\n");
-                StrW.write(Double.toString(precision) + ";" + Double.toString(recall) + ";" + Double.toString(f1) + ";" + Double.toString(iteracao) + "\n");
+                StrW.append(Double.toString(precision));
+                StrW.append(";");
+                StrW.append(Double.toString(recall));
+                StrW.append(";");
+                StrW.append(Double.toString(f1));
+                StrW.append(";");
+                StrW.append(Integer.toString(vp));
+                StrW.append(";");
+                StrW.append(Integer.toString(fp));
+                StrW.append(";");
+                StrW.append(Integer.toString(iteracao));
+                StrW.append("\n");
+//                StrW.write(Double.toString(precision) + ";" + Double.toString(recall) + ";" + Double.toString(f1) + ";" + Double.toString(iteracao) + "\n");
 //                estatisticas.flush();
 //                estatisticas.close();
                 StrW.flush();
                 StrW.close();
                 iteracao++;
+                vp = 0;
+                fp = 0;
 
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
@@ -320,5 +314,17 @@ public class ManipulaCSV {
     public double getF1(double precision, double recall) {
         return 2 * recall * precision / (recall + precision);
     }
-
+    
+    public void fechaExecucao(){
+//        TODO
+    }
+    
+    public int getIteracao(){
+        return iteracao;
+    }
+    
+    public void setGs(File gs){
+        this.gs = gs;
+    }
+    
 }

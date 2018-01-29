@@ -35,7 +35,11 @@ public class AnnealingStandard {
         
 */
 //        obj.readCsvFile();
-        obj.comparaComGS(obj.padronizaCsvFile(resultado), gs);
+        obj.setGs(gs);
+        obj.comparaComGS(obj.padronizaCsvFile(resultado));
+//        obj.comparaComGS(obj.padronizaCsvFile(resultado));
+//           obj.padronizaCsvFile(resultado);
+        System.out.println("Iteração " + obj.getIteracao());
         
         
         

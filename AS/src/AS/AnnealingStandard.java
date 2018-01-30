@@ -13,14 +13,17 @@ import java.io.IOException;
  * @author Diego
  */
 public class AnnealingStandard {
-    public static void main(String [] args) throws IOException{
+
+    public static void main(String[] args) throws IOException {
         ManipulaCSV obj = new ManipulaCSV();
 //        File arquivo = new File("D:\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 //        File arquivo = new File("H:\\Meu Drive\\UFCG\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 
 //        File arquivo = new File("./src/csv/","resultado1.csv");
-        File resultado = new File("./src/csv/","resultTestCD.csv");
-        File gs = new File("./src/csv/","cd_gold.csv");
+//        File resultado1 = new File("./src/csv/","testeResult1.csv");
+        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
+        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
+        File gs = new File("./src/csv/", "cd_gold.csv");
 
         /* Para retornar o path do projeto
         try {
@@ -33,20 +36,15 @@ public class AnnealingStandard {
             e.printStackTrace();
         }
         
-*/
+         */
 //        obj.readCsvFile();
         obj.setGs(gs);
-        obj.comparaComGS(obj.padronizaCsvFile(resultado));
+//        obj.comparaComGS(obj.padronizaCsvFile(resultado1));
+        obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado));
 //           obj.padronizaCsvFile(resultado);
         System.out.println("Iteração " + obj.getIteracao());
-        
-        
-        
-        
-        
-        
-        
+
     }
-    
+
 }

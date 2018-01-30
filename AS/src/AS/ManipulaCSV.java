@@ -50,14 +50,6 @@ public class ManipulaCSV {
                     estatisticas = new FileWriter(estat, true);
                     BufferedWriter StrW = new BufferedWriter(estatisticas);
 
-//            StrW.append("Precision");
-//            StrW.append(";");
-//            StrW.append("Recall");
-//            StrW.append(";");
-//            StrW.append("F1");
-//            StrW.append(";");
-//            StrW.append("Iteracao");
-//            StrW.append("\n");
                     StrW.write("Precision;Recall;F1;VP;FP;Iteração\n");
                     StrW.flush();
                     StrW.close();
@@ -91,9 +83,9 @@ public class ManipulaCSV {
             String nome = arquivo.getName();
             nome = nome.substring(0, nome.indexOf('.'));
 
-            if (arquivo.exists()) {
-                System.out.println(arquivo.getName() + " existe!");
-            }
+//            if (arquivo.exists()) {
+//                System.out.println(arquivo.getName() + " existe!");
+//            }
 //            arquivo.
 //            arquivo.createNewFile();
 //            
@@ -190,48 +182,6 @@ public class ManipulaCSV {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void comparaConjuntos(File arqResult) {
-
-        D_A = new File("./src/csv/", "D_A.csv");
-        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
-        File aux1 = new File("./src/csv/", "auxiliar.csv");
-
-        if (!D_A.exists()) {
-
-            try {
-                D_A.createNewFile();
-                D_A = arqResult;
-                comparaComGS(D_A);
-
-            } catch (IOException ex) {
-                System.out.println("Não foi possível criar arquivo D_A.csv.");
-            }
-
-        } else {
-            if (!aux1.exists()) {
-
-                try {
-                    aux1.createNewFile();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-            } else {
-                try {
-                    aux1 = juntaArquivos(D_A, arqResult);
-                    D_A = copiaDuplicatas(aux1);
-                    NAO_D_A = removeDuplicatas(aux1);
-                    geraDM_NDM(NAO_D_A);
-
-//                    BufferedWriter StrW = new BufferedWriter(auxiliar);
-                } catch (Exception e) {
-                }
-
-            }
         }
     }
 
@@ -346,33 +296,99 @@ public class ManipulaCSV {
         this.gs = gs;
     }
 
+    public void comparaConjuntos(File arqResult) {
+
+//        arqResult é o resultado da atual iteração
+        D_A = new File("./src/csv/", "D_A.csv");
+
+        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
+        File aux = new File("./src/csv/", "auxiliar.csv");
+
+        if (!D_A.exists()) {
+
+            try {
+                D_A.createNewFile();
+                D_A = arqResult; //Resultado baseline
+                comparaComGS(D_A);
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo D_A.csv.");
+            }
+
+        } else {
+//            Desnecessário, acho
+//            if (!aux1.exists()) {
+//
+//                try {
+//                    aux1.createNewFile();
+//
+//                } catch (IOException ex) {
+//                    Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//
+//            } else {
+//                try {
+            aux = juntaArquivos(D_A, arqResult); //Isso é feito para que se possa ver a união e intersecção do resultado atual com o D_A
+
+            D_A = copiaDuplicatas(aux); //D_A deve ficar apenas com a intersecção
+
+            NAO_D_A = removeDuplicatas(aux); //NAO_D_A deve ficar apenas com aquilo que não for intersecção com D_A
+
+            geraDM_NDM(NAO_D_A); //Separação daquilo que não é D_A em D_M e ND_M
+
+//                } catch (Exception e) {
+//                    System.out.println("Exceção...");
+//                }
+//            }
+        }
+    }
+
+    //OK
     public File juntaArquivos(File arquivoD_A, File arquivo2) {
-        File juncao = null;
-        FileWriter auxiliar1;
+
+        File juncao = new File("./src/csv/", "juncao.csv");
+        FileWriter escreveJuncao;
 
         String Str;
         String[] TableLine;
 
+        if (!juncao.exists()) {
+            System.out.println("Não existe arquivo juncao.csv.");
+            try {
+                juncao.createNewFile();
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        System.out.println("Existe arquivo juncao.csv.");
+
         //concatenação
         try {
+
             BufferedReader StrR1 = new BufferedReader(new FileReader(arquivoD_A.getPath()));
             BufferedReader StrR2 = new BufferedReader(new FileReader(arquivo2.getPath()));
 
-            auxiliar1 = new FileWriter(juncao);
-            BufferedWriter StrW = new BufferedWriter(auxiliar1);
+            escreveJuncao = new FileWriter(juncao);
+            BufferedWriter StrW = new BufferedWriter(escreveJuncao);
 
+            //Copiando do primeiro arquivo
             while ((Str = StrR1.readLine()) != null) {
 
                 TableLine = Str.split(";", 2);
-
+                System.out.println(TableLine[0] + ";" + TableLine[1]);
                 StrW.write(TableLine[0] + ";" + TableLine[1] + "\n");
 
             }
-
+            //Copiando do segundo arquivo
             while ((Str = StrR2.readLine()) != null) {
 
+                System.out.println("Entrei no segundo");
                 TableLine = Str.split(";", 2);
-
+                System.out.println(TableLine[0] + ";" + TableLine[1]);
                 StrW.write(TableLine[0] + ";" + TableLine[1] + "\n");
 
             }
@@ -381,6 +397,7 @@ public class ManipulaCSV {
             StrW.close();
 
         } catch (FileNotFoundException ex) {
+
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
@@ -393,9 +410,24 @@ public class ManipulaCSV {
         String Str;
         String[] TableLine1;
         String[] TableLine2;
-        FileWriter duplicatas;
+
 //        File new_D_A = new File("./src/csv/", "D_A.csv");;
-        File new_D_A = null;
+        File new_D_A = new File("./src/csv/", "new_D_A.csv");
+        FileWriter duplicatas;
+
+        if (!new_D_A.exists()) {
+            System.out.println("Não existe arquivo new_D_A.csv.");
+
+            try {
+                new_D_A.createNewFile();
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
 
         try {
 
@@ -433,6 +465,7 @@ public class ManipulaCSV {
 //                    System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
 //                }
 //                System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
+                    //Se os elementos forem iguais adiciona ao new_D_A
                     if ((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) {
 //                    System.out.println("Existe em buscaGabarito.");
                         //copia uma delas para aux2 e depois remove de aux
@@ -466,23 +499,37 @@ public class ManipulaCSV {
 
         return new_D_A;
     }
-
     //Para gerar DN e NM
+
     public File removeDuplicatas(File arqDA) {
         String Str;
         String[] TableLine1;
         String[] TableLine2;
-        FileWriter naoDuplicatas;
-//        File new_D_A = new File("./src/csv/", "D_A.csv");;
-        File NAO_D_A = null;
         boolean existe = false;
+
+        File new_NAO_D_A = new File("./src/csv/", "new_NAO_D_A.csv");
+        FileWriter naoDuplicatas;
+
+        if (!new_NAO_D_A.exists()) {
+            System.out.println("Não existe arquivo new_D_A.csv.");
+
+            try {
+                new_NAO_D_A.createNewFile();
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
 
         try {
 
             BufferedReader StrR3 = new BufferedReader(new FileReader(arqDA.getPath()));
             BufferedReader StrR4 = new BufferedReader(new FileReader(arqDA.getPath()));
 
-            naoDuplicatas = new FileWriter(NAO_D_A);
+            naoDuplicatas = new FileWriter(new_NAO_D_A);
             BufferedWriter StrW2 = new BufferedWriter(naoDuplicatas);
 
             String elemento1;
@@ -492,6 +539,8 @@ public class ManipulaCSV {
 //            Collection lista = new ArrayList();
 
             while ((Str = StrR3.readLine()) != null) {
+
+                existe = false;
 
                 TableLine1 = Str.split(";", 2);
 
@@ -549,7 +598,7 @@ public class ManipulaCSV {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return NAO_D_A;
+        return new_NAO_D_A;
     }
 
     private void geraDM_NDM(File naoDup) {
@@ -561,10 +610,42 @@ public class ManipulaCSV {
         String elemento2 = "";
         String[] TableLine;
         boolean existe = false;
-        File duplicatasManual = null;
-        File naoDuplicatasManual = null;
+
+        FileWriter naoDuplicatas;
+
+        File duplicatasManual = new File("./src/csv/", "D_M.csv");
         FileWriter dupM;
+        File naoDuplicatasManual = new File("./src/csv/", "ND_M.csv");
+
         FileWriter naoDupM;
+
+        if (!duplicatasManual.exists()) {
+            System.out.println("Não existe arquivo duplicatasManual.csv.");
+
+            try {
+                duplicatasManual.createNewFile();
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        
+        if (!naoDuplicatasManual.exists()) {
+            System.out.println("Não existe arquivo duplicatasManual.csv.");
+
+            try {
+                naoDuplicatasManual.createNewFile();
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
 
         try {
             BufferedReader StrR = new BufferedReader(new FileReader(naoDup.getPath()));
@@ -598,15 +679,14 @@ public class ManipulaCSV {
             }
 
             StrR.close();
-            
+
             StrW1.flush();
             StrW1.close();
-            
+
             StrW2.flush();
             StrW2.close();
-            
-//            calculaMetricas(vp, fp, gs);
 
+//            calculaMetricas(vp, fp, gs);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

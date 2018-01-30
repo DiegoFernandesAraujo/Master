@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  *
@@ -25,11 +28,13 @@ public class ManipulaCSV {
     int vp, fp, iteracao;
     File estat;
     File D_A;
+    File D_M;
+    File ND_M;
     File gs;
     FileWriter estatisticas;
 
     public ManipulaCSV() {
-        
+
         vp = 0;
         fp = 0;
         iteracao = 0;
@@ -67,12 +72,11 @@ public class ManipulaCSV {
         }
 
     }
-    
+
     public File padronizaCsvFile(File arquivo) throws IOException {
 
         File returnCSV = null;
 
-        
         try {
             BufferedReader arquivoCSV = new BufferedReader(new FileReader(arquivo.getPath()));
 
@@ -86,8 +90,8 @@ public class ManipulaCSV {
             String diretorio = arquivo.getParent();
             String nome = arquivo.getName();
             nome = nome.substring(0, nome.indexOf('.'));
-            
-            if(arquivo.exists()){
+
+            if (arquivo.exists()) {
                 System.out.println(arquivo.getName() + " existe!");
             }
 //            arquivo.
@@ -95,8 +99,6 @@ public class ManipulaCSV {
 //            
             FileWriter newCSV = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
             returnCSV = new File(diretorio + "\\" + nome + "_NEW.csv");
-            
-            
 
             //Essa estrutura do looping while é clássica para ler cada linha
             //do arquivo
@@ -190,30 +192,47 @@ public class ManipulaCSV {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void comparaConjuntos(File arqResult) {
-        
+
         D_A = new File("./src/csv/", "D_A.csv");
-        
+        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
+        File aux1 = new File("./src/csv/", "auxiliar.csv");
+
         if (!D_A.exists()) {
 
             try {
-                estat.createNewFile();
+                D_A.createNewFile();
                 D_A = arqResult;
-//                    estatisticas = new FileWriter(estat, true);
-//                    BufferedWriter StrW = new BufferedWriter(estatisticas);
+                comparaComGS(D_A);
 
-//                    StrW.write("Precision;Recall;F1;VP;FP;Iteração\n");
-//                    StrW.flush();
-//                    StrW.close();
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo D_A.csv.");
             }
-            comparaComGS(D_A);
-        }else{
-            //TODO
-        }
 
+        } else {
+            if (!aux1.exists()) {
+
+                try {
+                    aux1.createNewFile();
+
+                } catch (IOException ex) {
+                    Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } else {
+                try {
+                    aux1 = juntaArquivos(D_A, arqResult);
+                    D_A = copiaDuplicatas(aux1);
+                    NAO_D_A = removeDuplicatas(aux1);
+                    geraDM_NDM(NAO_D_A);
+
+//                    BufferedWriter StrW = new BufferedWriter(auxiliar);
+                } catch (Exception e) {
+                }
+
+            }
+        }
     }
 
     private boolean buscaGabarito(String elemento1, String elemento2, File gs) {
@@ -314,17 +333,285 @@ public class ManipulaCSV {
     public double getF1(double precision, double recall) {
         return 2 * recall * precision / (recall + precision);
     }
-    
-    public void fechaExecucao(){
+
+    public void fechaExecucao() {
 //        TODO
     }
-    
-    public int getIteracao(){
+
+    public int getIteracao() {
         return iteracao;
     }
-    
-    public void setGs(File gs){
+
+    public void setGs(File gs) {
         this.gs = gs;
     }
-    
+
+    public File juntaArquivos(File arquivoD_A, File arquivo2) {
+        File juncao = null;
+        FileWriter auxiliar1;
+
+        String Str;
+        String[] TableLine;
+
+        //concatenação
+        try {
+            BufferedReader StrR1 = new BufferedReader(new FileReader(arquivoD_A.getPath()));
+            BufferedReader StrR2 = new BufferedReader(new FileReader(arquivo2.getPath()));
+
+            auxiliar1 = new FileWriter(juncao);
+            BufferedWriter StrW = new BufferedWriter(auxiliar1);
+
+            while ((Str = StrR1.readLine()) != null) {
+
+                TableLine = Str.split(";", 2);
+
+                StrW.write(TableLine[0] + ";" + TableLine[1] + "\n");
+
+            }
+
+            while ((Str = StrR2.readLine()) != null) {
+
+                TableLine = Str.split(";", 2);
+
+                StrW.write(TableLine[0] + ";" + TableLine[1] + "\n");
+
+            }
+
+            StrW.flush();
+            StrW.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return juncao;
+    }
+
+    public File copiaDuplicatas(File arqDuplicatas) {
+        String Str;
+        String[] TableLine1;
+        String[] TableLine2;
+        FileWriter duplicatas;
+//        File new_D_A = new File("./src/csv/", "D_A.csv");;
+        File new_D_A = null;
+
+        try {
+
+            BufferedReader StrR3 = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
+            BufferedReader StrR4 = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
+
+            duplicatas = new FileWriter(new_D_A);
+            BufferedWriter StrW2 = new BufferedWriter(duplicatas);
+
+            String elemento1;
+            String elemento2;
+            String elementoA;
+            String elementoB;
+//            Collection lista = new ArrayList();
+
+            while ((Str = StrR3.readLine()) != null) {
+
+                TableLine1 = Str.split(";", 2);
+
+                elemento1 = TableLine1[0];
+                elemento2 = TableLine1[1];
+
+//                lista.add(TableLine1[0] + ";" + TableLine1[1]);
+//            }
+//
+//            Collection lista2 = new LinkedHashSet(lista);
+                while ((Str = StrR4.readLine()) != null) {
+
+                    TableLine2 = Str.split(";", 2);
+
+                    elementoA = TableLine2[0];
+                    elementoB = TableLine2[1];
+
+//                if(elemento1.equals("10230") && elemento2.equals("10383")){
+//                    System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
+//                }
+//                System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
+                    if ((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) {
+//                    System.out.println("Existe em buscaGabarito.");
+                        //copia uma delas para aux2 e depois remove de aux
+                        //COPIA
+                        StrW2.write(TableLine1[0] + ";" + TableLine1[1] + "\n");
+                        //DELETE!!!
+                        break;
+                    }
+                }
+            }
+//            for (Object item : lista2) {
+//                
+//                /* ESCREVE A LISTA NO ARQUIVO...
+//             * OBSERVE O TYPECAST FEITO POIS O 
+//             * FOR ESTÁ PASSANDO UM "Object"
+//                 */
+//                StrW2.write((String) item);
+//                StrW2.newLine();
+//            }
+            StrR3.close();
+            StrR4.close();
+
+            StrW2.flush();
+            StrW2.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return new_D_A;
+    }
+
+    //Para gerar DN e NM
+    public File removeDuplicatas(File arqDA) {
+        String Str;
+        String[] TableLine1;
+        String[] TableLine2;
+        FileWriter naoDuplicatas;
+//        File new_D_A = new File("./src/csv/", "D_A.csv");;
+        File NAO_D_A = null;
+        boolean existe = false;
+
+        try {
+
+            BufferedReader StrR3 = new BufferedReader(new FileReader(arqDA.getPath()));
+            BufferedReader StrR4 = new BufferedReader(new FileReader(arqDA.getPath()));
+
+            naoDuplicatas = new FileWriter(NAO_D_A);
+            BufferedWriter StrW2 = new BufferedWriter(naoDuplicatas);
+
+            String elemento1;
+            String elemento2;
+            String elementoA;
+            String elementoB;
+//            Collection lista = new ArrayList();
+
+            while ((Str = StrR3.readLine()) != null) {
+
+                TableLine1 = Str.split(";", 2);
+
+                elemento1 = TableLine1[0];
+                elemento2 = TableLine1[1];
+
+//                lista.add(TableLine1[0] + ";" + TableLine1[1]);
+//            }
+//
+//            Collection lista2 = new LinkedHashSet(lista);
+                while ((Str = StrR4.readLine()) != null) {
+
+                    TableLine2 = Str.split(";", 2);
+
+                    elementoA = TableLine2[0];
+                    elementoB = TableLine2[1];
+
+//                if(elemento1.equals("10230") && elemento2.equals("10383")){
+//                    System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
+//                }
+//                System.out.println("gs1: " + elementoGS1 + " gs2: " + elementoGS2);
+                    if ((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) {
+//                    System.out.println("Existe em buscaGabarito.");
+                        //copia uma delas para aux2 e depois remove de aux
+                        //COPIA
+                        existe = true;
+//                        StrW2.write(TableLine1[0] + ";" + TableLine1[1] + "\n");
+                        //DELETE!!!
+                        break;
+                    }
+                }
+
+                if (existe = false) {
+                    StrW2.write(TableLine1[0] + ";" + TableLine1[1] + "\n");
+                }
+            }
+//            for (Object item : lista2) {
+//                
+//                /* ESCREVE A LISTA NO ARQUIVO...
+//             * OBSERVE O TYPECAST FEITO POIS O 
+//             * FOR ESTÁ PASSANDO UM "Object"
+//                 */
+//                StrW2.write((String) item);
+//                StrW2.newLine();
+//            }
+            StrR3.close();
+            StrR4.close();
+
+            StrW2.flush();
+            StrW2.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return NAO_D_A;
+    }
+
+    private void geraDM_NDM(File naoDup) {
+        vp = 0;
+        fp = 0;
+
+        String Str = "";
+        String elemento1 = "";
+        String elemento2 = "";
+        String[] TableLine;
+        boolean existe = false;
+        File duplicatasManual = null;
+        File naoDuplicatasManual = null;
+        FileWriter dupM;
+        FileWriter naoDupM;
+
+        try {
+            BufferedReader StrR = new BufferedReader(new FileReader(naoDup.getPath()));
+
+            dupM = new FileWriter(duplicatasManual);
+            BufferedWriter StrW1 = new BufferedWriter(dupM);
+
+            naoDupM = new FileWriter(naoDuplicatasManual);
+            BufferedWriter StrW2 = new BufferedWriter(naoDupM);
+
+            while ((Str = StrR.readLine()) != null) {
+
+                TableLine = Str.split(";", 2);
+
+                elemento1 = TableLine[0];
+                elemento2 = TableLine[1];
+
+                System.out.println("e1: " + elemento1 + " e2: " + elemento2);
+
+                existe = buscaGabarito(elemento1, elemento2, gs);
+
+                if (existe) {
+//                    System.out.println("Existe! vp++");
+                    StrW1.write(elemento1 + ";" + elemento2 + "\n");
+//                    vp++;
+                } else {
+//                    fp++;
+                    StrW2.write(elemento1 + ";" + elemento2 + "\n");
+                }
+
+            }
+
+            StrR.close();
+            
+            StrW1.flush();
+            StrW1.close();
+            
+            StrW2.flush();
+            StrW2.close();
+            
+//            calculaMetricas(vp, fp, gs);
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

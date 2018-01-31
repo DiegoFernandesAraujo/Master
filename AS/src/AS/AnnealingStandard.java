@@ -39,10 +39,16 @@ public class AnnealingStandard {
          */
 //        obj.readCsvFile();
         obj.setGs(gs);
+//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado1));
-        obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
+//        File juncaoTeste = obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado));
 //           obj.padronizaCsvFile(resultado);
+//        obj.atualizaD_A(juncaoTeste);
+        
+//        System.out.println(juncaoTeste.getPath());
+
         System.out.println("Iteração " + obj.getIteracao());
 
     }

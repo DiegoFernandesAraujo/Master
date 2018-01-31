@@ -18,6 +18,7 @@ import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  *
@@ -34,7 +35,6 @@ public class ManipulaCSV {
     FileWriter estatisticas;
 
     public ManipulaCSV() {
-
         vp = 0;
         fp = 0;
         iteracao = 0;
@@ -415,7 +415,7 @@ public class ManipulaCSV {
                 bwJuncao.write(TableLine[0] + ";" + TableLine[1] + "\n");
 
             }
-            
+
             brD_A.close();
             brArq2.close();
 
@@ -439,6 +439,9 @@ public class ManipulaCSV {
         String Str2;
         String[] TableLine1;
         String[] TableLine2;
+        List<String> dupEncontradas = new ArrayList<String>();
+        boolean existe2 = false;
+
         int cont = 0;
         int cont1 = 0;
         boolean existe = false;
@@ -449,8 +452,7 @@ public class ManipulaCSV {
 
             BufferedReader brArqDup = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
             BufferedReader brArqDup2;
-            
-            
+
 //            duplicatas = new FileWriter(D_A, false); //Tem que apagar antes
             duplicatas = new FileWriter(D_A); //Tem que apagar antes
             BufferedWriter bwD_A = new BufferedWriter(duplicatas);
@@ -467,7 +469,6 @@ public class ManipulaCSV {
 
                 elemento1 = TableLine1[0];
                 elemento2 = TableLine1[1];
-                
 
 //                lista.add(TableLine1[0] + ";" + TableLine1[1]);
 //            }
@@ -501,19 +502,30 @@ public class ManipulaCSV {
 
                     if (cont >= 2) {
 //                        System.out.println("Maior ou igual a dois");
-                        System.out.println(cont1++);
-                        bwD_A.write(TableLine1[0] + ";" + TableLine1[1] + "\n");
-                        break;
+
+                        for (int x = 0; x < dupEncontradas.size(); x++) {
+                            if (dupEncontradas.get(x).equals(elemento1 + ";" + elemento2)) {
+                                existe2 = true; //Só é verdadeiro se a duplicada já tiver sido encontrada antes
+                                break;
+                            }
+
+                        }
+
+                        if (existe2 == false) { //Se não existe ocorrência anterior, adiciona a D_A e à lista de duplicadas encontradas
+                            System.out.println(cont1++);
+                            bwD_A.write(elemento1 + ";" + elemento2 + "\n");
+                            dupEncontradas.add(elemento1 + ";" + elemento2);
+                        }
                     }
+                    existe2 = false;
                 }
                 brArqDup2.close();
 //                System.out.println("break");
-                
+
                 cont = 0;
 
             }
             brArqDup.close();
-            
 
             bwD_A.flush();
             bwD_A.close();
@@ -526,7 +538,8 @@ public class ManipulaCSV {
                 "Tamanho de D_A depois da atualização: " + D_A.length());
         return D_A;
     }
-//Para gerar DN e NM
+   
+    //Para gerar DN e NM        //Para gerar DN e NM
 
     public File removeDuplicatas(File arqDA) {
 
@@ -561,8 +574,7 @@ public class ManipulaCSV {
 
             BufferedReader brD_A = new BufferedReader(new FileReader(arqDA.getPath()));
             BufferedReader brD_A2 = new BufferedReader(new FileReader(arqDA.getPath()));
-            
-            
+
             naoDuplicatas = new FileWriter(new_NAO_D_A);
             BufferedWriter bwN_D_A = new BufferedWriter(naoDuplicatas);
 

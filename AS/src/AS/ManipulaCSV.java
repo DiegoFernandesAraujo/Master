@@ -304,7 +304,7 @@ public class ManipulaCSV {
         D_A = new File("./src/csv/", "D_A.csv");
         FileWriter escreveD_A;
 
-        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
+        
         File aux = new File("./src/csv/", "auxiliar.csv");
 
         if (!D_A.exists()) {
@@ -357,7 +357,7 @@ public class ManipulaCSV {
 
             atualizaD_A(aux); //D_A deve ficar apenas com a intersecção
 
-//        NAO_D_A = removeDuplicatas(aux); //NAO_D_A deve ficar apenas com aquilo que não for intersecção com D_A
+            removeDuplicatas(aux); //NAO_D_A deve ficar apenas com aquilo que não for intersecção com D_A
 //        geraDM_NDM(NAO_D_A); //Separação daquilo que não é D_A em D_M e ND_M
 //                } catch (Exception e) {
 //                    System.out.println("Exceção...");
@@ -433,7 +433,7 @@ public class ManipulaCSV {
     }
 
     public File atualizaD_A(File arqDuplicatas) {
-        System.out.println("Tamanho de D_A antes da atualização: " + D_A.length());
+//        System.out.println("Tamanho de D_A antes da atualização: " + D_A.length());
 
         String Str;
         String Str2;
@@ -512,7 +512,7 @@ public class ManipulaCSV {
                         }
 
                         if (existe2 == false) { //Se não existe ocorrência anterior, adiciona a D_A e à lista de duplicadas encontradas
-                            System.out.println(cont1++);
+//                            System.out.println(cont1++);
                             bwD_A.write(elemento1 + ";" + elemento2 + "\n");
                             dupEncontradas.add(elemento1 + ";" + elemento2);
                         }
@@ -534,13 +534,11 @@ public class ManipulaCSV {
             Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.out.println(
-                "Tamanho de D_A depois da atualização: " + D_A.length());
+//        System.out.println("Tamanho de D_A depois da atualização: " + D_A.length());
         return D_A;
     }
-   
-    //Para gerar DN e NM        //Para gerar DN e NM
 
+    //Para gerar DN e NM       
     public File removeDuplicatas(File arqDA) {
 
         String Str;
@@ -549,14 +547,14 @@ public class ManipulaCSV {
         boolean existe = false;
         int cont = 0;
 
-        File new_NAO_D_A = new File("./src/csv/", "new_NAO_D_A.csv");
+        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
         FileWriter naoDuplicatas;
 
-        if (!new_NAO_D_A.exists()) {
-            System.out.println("Não existe arquivo new_NAO_D_A.csv.");
+        if (!NAO_D_A.exists()) {
+            System.out.println("Não existe arquivo NAO_D_A.csv.");
 
             try {
-                new_NAO_D_A.createNewFile();
+                NAO_D_A.createNewFile();
 
             } catch (FileNotFoundException ex) {
 
@@ -573,9 +571,9 @@ public class ManipulaCSV {
         try {
 
             BufferedReader brD_A = new BufferedReader(new FileReader(arqDA.getPath()));
-            BufferedReader brD_A2 = new BufferedReader(new FileReader(arqDA.getPath()));
+            
 
-            naoDuplicatas = new FileWriter(new_NAO_D_A);
+            naoDuplicatas = new FileWriter(NAO_D_A);
             BufferedWriter bwN_D_A = new BufferedWriter(naoDuplicatas);
 
             String elemento1;
@@ -587,6 +585,8 @@ public class ManipulaCSV {
             while ((Str = brD_A.readLine()) != null) {
 
                 existe = false;
+                cont = 0;
+                BufferedReader brD_A2 = new BufferedReader(new FileReader(arqDA.getPath()));
 
                 TableLine1 = Str.split(";", 2);
 
@@ -598,6 +598,8 @@ public class ManipulaCSV {
 //
 //            Collection lista2 = new LinkedHashSet(lista);
                 while ((Str = brD_A2.readLine()) != null) {
+                    
+                    
 
                     TableLine2 = Str.split(";", 2);
 
@@ -619,14 +621,17 @@ public class ManipulaCSV {
                     }
 
                     if (cont >= 2) {
+                        System.out.println(">=2");
                         existe = true;
                         break;
                     }
                 }
+//                System.out.println(elemento1 + ";" + elemento2 +" existe: "+ existe);
+
+                brD_A2.close();
 
                 if (existe == false) {
-                    bwN_D_A.write(TableLine1[0] + ";" + TableLine1[1] + "\n");
-                    cont = 0;
+                    bwN_D_A.write(elemento1 + ";" + elemento2 + "\n");
                 }
             }
 //            for (Object item : lista2) {
@@ -639,7 +644,6 @@ public class ManipulaCSV {
 //                StrW2.newLine();
 //            }
             brD_A.close();
-            brD_A2.close();
 
             bwN_D_A.flush();
             bwN_D_A.close();
@@ -653,7 +657,7 @@ public class ManipulaCSV {
                     .getName()).log(Level.SEVERE, null, ex);
         }
 
-        return new_NAO_D_A;
+        return NAO_D_A;
     }
 
     private void geraDM_NDM(File naoDup) {

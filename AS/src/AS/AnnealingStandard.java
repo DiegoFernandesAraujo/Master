@@ -21,8 +21,10 @@ public class AnnealingStandard {
 
 //        File arquivo = new File("./src/csv/","resultado1.csv");
 //        File resultado1 = new File("./src/csv/","testeResult1.csv");
-        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
-        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
+//        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
+//        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
+        File resultado1 = new File("./src/csv/", "resultTestMaiorCD1.csv");
+        File resultado2 = new File("./src/csv/", "resultTestMaiorCD2.csv");
         File gs = new File("./src/csv/", "cd_gold.csv");
 
         /* Para retornar o path do projeto
@@ -39,8 +41,8 @@ public class AnnealingStandard {
          */
 //        obj.readCsvFile();
         obj.setGs(gs);
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
-        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado1));
 //        File juncaoTeste = obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado));

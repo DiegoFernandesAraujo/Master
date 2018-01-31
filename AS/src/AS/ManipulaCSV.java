@@ -29,6 +29,7 @@ public class ManipulaCSV {
     int vp, fp, iteracao;
     File estat;
     File D_A;
+    File NAO_D_A;
     File D_M;
     File ND_M;
     File gs;
@@ -304,7 +305,6 @@ public class ManipulaCSV {
         D_A = new File("./src/csv/", "D_A.csv");
         FileWriter escreveD_A;
 
-        
         File aux = new File("./src/csv/", "auxiliar.csv");
 
         if (!D_A.exists()) {
@@ -358,7 +358,7 @@ public class ManipulaCSV {
             atualizaD_A(aux); //D_A deve ficar apenas com a intersecção
 
             removeDuplicatas(aux); //NAO_D_A deve ficar apenas com aquilo que não for intersecção com D_A
-//        geraDM_NDM(NAO_D_A); //Separação daquilo que não é D_A em D_M e ND_M
+            geraDM_NDM(NAO_D_A); //Separação daquilo que não é D_A em D_M e ND_M
 //                } catch (Exception e) {
 //                    System.out.println("Exceção...");
 //                }
@@ -547,7 +547,7 @@ public class ManipulaCSV {
         boolean existe = false;
         int cont = 0;
 
-        File NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
+        NAO_D_A = new File("./src/csv/", "NAO_D_A.csv");
         FileWriter naoDuplicatas;
 
         if (!NAO_D_A.exists()) {
@@ -571,7 +571,6 @@ public class ManipulaCSV {
         try {
 
             BufferedReader brD_A = new BufferedReader(new FileReader(arqDA.getPath()));
-            
 
             naoDuplicatas = new FileWriter(NAO_D_A);
             BufferedWriter bwN_D_A = new BufferedWriter(naoDuplicatas);
@@ -598,8 +597,6 @@ public class ManipulaCSV {
 //
 //            Collection lista2 = new LinkedHashSet(lista);
                 while ((Str = brD_A2.readLine()) != null) {
-                    
-                    
 
                     TableLine2 = Str.split(";", 2);
 

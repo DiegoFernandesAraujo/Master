@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ManipulaCSV {
 
-    int vp, fp, iteracao;
+    int vp, fp, fn, iteracao, permutacao;
     File estatisticas;
     File DA;
     File divergencias;
@@ -51,7 +51,7 @@ public class ManipulaCSV {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     BufferedWriter bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("Precision;Recall;F1;VP;FP;Iteração\n");
+                    bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;fn\n");
                     bwEstat.flush();
                     bwEstat.close();
 
@@ -133,6 +133,8 @@ public class ManipulaCSV {
     public void comparaComGS(File arqResult) {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
+
+        System.out.println("comparaComGS");
         vp = 0;
         fp = 0;
 
@@ -163,7 +165,7 @@ public class ManipulaCSV {
             }
 
             brResult.close();
-            calculaMetricas(vp, fp, gs);
+            gravaEstatisticas(vp, fp, gs, arqResult);
 
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
@@ -206,79 +208,6 @@ public class ManipulaCSV {
         return existe;
     }
 
-    public void calculaMetricas(int vp, int fp, File gs) {
-
-        try {
-
-            LineNumberReader linhaLeitura;
-            linhaLeitura = new LineNumberReader(new FileReader(gs.getPath()));
-            linhaLeitura.skip(gs.length());
-
-            int qtdLinha = linhaLeitura.getLineNumber() + 1;
-
-            double precision = getPrecision(vp, fp);
-            double recall = getRecall(vp, qtdLinha);
-            double f1 = getF1(precision, recall);
-
-            try {
-                escreveEstat = new FileWriter(estatisticas, true);
-                BufferedWriter bwEstat = new BufferedWriter(escreveEstat);
-
-                bwEstat.append(Double.toString(precision));
-                bwEstat.append(";");
-                bwEstat.append(Double.toString(recall));
-                bwEstat.append(";");
-                bwEstat.append(Double.toString(f1));
-                bwEstat.append(";");
-                bwEstat.append(Integer.toString(vp));
-                bwEstat.append(";");
-                bwEstat.append(Integer.toString(fp));
-                bwEstat.append(";");
-                bwEstat.append(Integer.toString(iteracao));
-                bwEstat.append("\n");
-
-                bwEstat.flush();
-                bwEstat.close();
-
-                iteracao++;
-                vp = 0;
-                fp = 0;
-
-            } catch (FileNotFoundException ex) {
-                System.out.println("Não foi possível encontrar o arquivo " + gs.getName());
-            }
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName());
-        } catch (IOException ex) {
-            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public double getPrecision(int vp, int fp) {
-        return (double) vp / (vp + fp);
-    }
-
-    public double getRecall(int vp, int tamGS) {
-        return (double) fp / tamGS;
-    }
-
-    public double getF1(double precision, double recall) {
-        return 2 * recall * precision / (recall + precision);
-    }
-
-    public void fechaExecucao() {
-//        TODO
-    }
-
-    public int getIteracao() {
-        return iteracao;
-    }
-
-    public void setGs(File gs) {
-        this.gs = gs;
-    }
-
     public void comparaConjuntos(File arqResult) {
 
         String Str;
@@ -310,12 +239,13 @@ public class ManipulaCSV {
                 }
 
                 baseline = true;
-                comparaComGS(DA);
 
                 brArqResult.close();
 
                 bwDupAuto.flush();
                 bwDupAuto.close();
+
+                comparaComGS(DA);
 
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
@@ -662,6 +592,230 @@ public class ManipulaCSV {
             Logger.getLogger(ManipulaCSV.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void gravaEstatisticas(int vp, int fp, File gs, File arqResult) {
+        System.out.println("calculaMetricas");
+
+        try {
+
+            LineNumberReader linhaLeitura;
+            linhaLeitura = new LineNumberReader(new FileReader(gs.getPath()));
+            linhaLeitura.skip(gs.length());
+
+            int qtdLinha = linhaLeitura.getLineNumber() + 1;
+
+            double precision = getPrecision(vp, fp);
+            double recall = getRecall(vp, qtdLinha);
+            double f1 = getF1(precision, recall);
+            int fn = getFN(arqResult);
+            int inspecoes = getInspManuais();
+            int tamDA = getTamDA();
+            int tamDM = getTamDM();
+            int tamNDM = getTamNDM();
+            
+            try {
+                escreveEstat = new FileWriter(estatisticas, true);
+                BufferedWriter bwEstat = new BufferedWriter(escreveEstat);
+
+                bwEstat.append(Integer.toString(permutacao));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(iteracao));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(inspecoes));
+                bwEstat.append(";");
+                bwEstat.append(Double.toString(precision));
+                bwEstat.append(";");
+                bwEstat.append(Double.toString(recall));
+                bwEstat.append(";");
+                bwEstat.append(Double.toString(f1));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(tamDA));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(tamDM));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(tamNDM));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(vp));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(fp));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(fn));
+                bwEstat.append("\n");
+
+                bwEstat.flush();
+                bwEstat.close();
+
+                iteracao++;
+                vp = 0;
+                fp = 0;
+
+            } catch (FileNotFoundException ex) {
+                System.out.println("Não foi possível encontrar o arquivo " + gs.getName());
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName());
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public double getPrecision(int vp, int fp) {
+        return (double) vp / (vp + fp);
+    }
+
+    public double getRecall(int vp, int tamGS) {
+        return (double) fp / tamGS;
+    }
+
+    public double getF1(double precision, double recall) {
+        return 2 * recall * precision / (recall + precision);
+    }
+
+    public void fechaExecucao() {
+//        TODO
+    }
+
+    public int getIteracao() {
+        return iteracao;
+    }
+
+    public void setGs(File gs) {
+        this.gs = gs;
+    }
+
+    public int getTamDA() {
+
+        LineNumberReader linhaLeitura1 = null;
+
+        try {
+            linhaLeitura1 = new LineNumberReader(new FileReader(DA.getPath()));
+            linhaLeitura1.skip(DA.length());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return linhaLeitura1.getLineNumber() + 1;
+
+    }
+
+    public int getTamDM() {
+        LineNumberReader linhaLeitura1 = null;
+        try {
+            linhaLeitura1 = new LineNumberReader(new FileReader(DM.getPath()));
+            linhaLeitura1.skip(DM.length());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return linhaLeitura1.getLineNumber() + 1;
+
+    }
+
+    public int getTamNDM() {
+        LineNumberReader linhaLeitura1 = null;
+        try {
+            linhaLeitura1 = new LineNumberReader(new FileReader(NDM.getPath()));
+            linhaLeitura1.skip(NDM.length());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+        return linhaLeitura1.getLineNumber() + 1;
+
+    }
+
+    public int getInspManuais() throws IOException {
+
+        return getTamNDM() + getTamDM();
+    }
+
+    public int getFN(File arqResult) {
+        //Já deve receber o arqResult padronizado
+        //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
+
+        System.out.println("comparaComGS");
+        vp = 0;
+        fp = 0;
+
+        String Str;
+        String elemento1;
+        String elemento2;
+        String[] linhaAtual;
+        boolean existe = false;
+
+        try {
+            BufferedReader brGS = new BufferedReader(new FileReader(gs.getPath()));
+
+            while ((Str = brGS.readLine()) != null) {
+
+                linhaAtual = Str.split(";", 2);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+                //Passando o arqResult para procurar os elementos do gabarito nele.
+                //O que estiver no gabarito e não estiver em arqResult é, portanto, um falso negativo
+                existe = buscaFN(elemento1, elemento2, arqResult);
+
+                //Só entra se existe for falso
+                if (!existe) {
+                    fn++;
+                }
+
+            }
+            fn--; //Reduzindo um do título
+
+            brGS.close();
+            System.out.println(fn + " falsos negativos!");
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + gs.getName());
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return fn;
+    }
+
+    private boolean buscaFN(String elementoGS1, String elementoGS2, File arqResult) {
+        String Str;
+        String elemento1;
+        String elemento2;
+        String[] linhaAtual;
+        boolean existe = false;
+
+        try {
+            BufferedReader brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
+
+            while ((Str = brArqResult.readLine()) != null) {
+
+                linhaAtual = Str.split(";", 2);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+                if ((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) {
+
+                    existe = true;
+                    break;
+                }
+            }
+            brArqResult.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + gs.getName());
+        } catch (IOException ex) {
+            Logger.getLogger(ManipulaCSV.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return existe;
     }
 
 }

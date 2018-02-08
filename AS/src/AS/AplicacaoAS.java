@@ -25,6 +25,9 @@ public class AplicacaoAS {
 //        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
         File resultado1 = new File("./src/csv/", "resultTestMaiorCD1.csv");
         File resultado2 = new File("./src/csv/", "resultTestMaiorCD2.csv");
+        //Copiado diretamente do gold standard:
+        File resultado3 = new File("./src/csv/", "resultTestMaiorCD3.csv");
+
         File gs = new File("./src/csv/", "cd_gold.csv");
 
         /* Para retornar o path do projeto
@@ -43,15 +46,17 @@ public class AplicacaoAS {
         obj.setGs(gs);
 //        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
 //        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
+//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado3));
+        obj.comparaConjuntos(resultado3);
 
-        obj.getFN(obj.padronizaCsvFile(resultado2));
+//        obj.getFN(obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado1));
-                //        File juncaoTeste = obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
-                //        obj.comparaComGS(obj.padronizaCsvFile(resultado));
-                //           obj.padronizaCsvFile(resultado);
-                //        obj.atualizaD_A(juncaoTeste);
-                //        System.out.println(juncaoTeste.getPath());
-                System.out.println("Iteração " + obj.getIteracao());
+        //        File juncaoTeste = obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
+        //        obj.comparaComGS(obj.padronizaCsvFile(resultado));
+        //           obj.padronizaCsvFile(resultado);
+        //        obj.atualizaD_A(juncaoTeste);
+        //        System.out.println(juncaoTeste.getPath());
+        System.out.println("Iteração " + obj.getIteracao());
 
     }
 

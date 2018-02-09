@@ -27,6 +27,8 @@ public class AplicacaoAS {
         File resultado2 = new File("./src/csv/", "resultTestMaiorCD2.csv");
         //Copiado diretamente do gold standard:
         File resultado3 = new File("./src/csv/", "resultTestMaiorCD3.csv");
+        File resultado4 = new File("./src/csv/", "resultTestMaiorCD4.csv");
+        File resultado5 = new File("./src/csv/", "resultTestMaiorCD5.csv");
 
         File gs = new File("./src/csv/", "cd_gold.csv");
 
@@ -44,10 +46,24 @@ public class AplicacaoAS {
          */
 //        obj.readCsvFile();
         obj.setGs(gs);
+        
+        obj.setPermutacao(0);
+        
+//        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
 //        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
 //        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado3));
-        obj.comparaConjuntos(resultado3);
+//        obj.comparaConjuntos(resultado3);
+//        obj.comparaConjuntos(resultado4);
+//        obj.comparaConjuntos(resultado5);
+        
+//        obj.setPermutacao(1);
+//        
+//        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
+//        obj.comparaConjuntos(resultado3);
+//        obj.comparaConjuntos(resultado4);
+        obj.comparaConjuntos(resultado5);
 
 //        obj.getFN(obj.padronizaCsvFile(resultado2));
 //        obj.comparaComGS(obj.padronizaCsvFile(resultado1));

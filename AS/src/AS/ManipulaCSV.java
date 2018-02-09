@@ -27,6 +27,7 @@ import java.util.List;
 public class ManipulaCSV {
 
     int vp, fp, fn, iteracao, permutacao;
+
     File estatisticas;
     File DA;
     File divergencias;
@@ -194,6 +195,7 @@ public class ManipulaCSV {
                 elementoGS2 = linhaAtual[1];
 
                 if ((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) {
+//                if (((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) || ((elemento1.equals(elementoGS2)) && ((elemento2.equals(elementoGS1))))) {
 
                     existe = true;
                     break;
@@ -499,6 +501,7 @@ public class ManipulaCSV {
                     elementoB = linhaAtual2[1];
 
                     if ((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) {
+//                    if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
                         cont++;
                     }
 
@@ -597,6 +600,7 @@ public class ManipulaCSV {
                     elementoB = linhaAtual2[1];
 
                     if ((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) {
+//                    if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
                         cont++;
                     }
@@ -713,9 +717,9 @@ public class ManipulaCSV {
             int qtdLinha = linhaLeitura.getLineNumber() + 1;
 
             double precision = getPrecision(vp, fp);
-            double recall = getRecall(vp, qtdLinha);
-            double f1 = getF1(precision, recall);
             int fn = getFN(arqResult);
+            double recall = getRecall(vp, fn);
+            double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
             int tamDA = getTamDA();
             int tamDM = getTamDM();
@@ -768,12 +772,23 @@ public class ManipulaCSV {
         }
     }
 
+    public void setPermutacao(int permutacao) {
+        this.permutacao = permutacao;
+    }
+
     public double getPrecision(int vp, int fp) {
         return (double) vp / (vp + fp);
     }
 
-    public double getRecall(int vp, int tamGS) {
-        return (double) fp / tamGS;
+//    public double getRecall(int vp, int tamGS) {
+//        return (double) fp / tamGS;
+//    }
+    public double getRecall(int vp, int fn) {
+//        System.out.println("VP: " + vp);
+//        System.out.println("FN: " + fn);
+//        System.out.println("Recall: " + (double) vp / (vp + fn));
+
+        return (double) vp / (vp + fn);
     }
 
     public double getF1(double precision, double recall) {
@@ -908,6 +923,8 @@ public class ManipulaCSV {
                 elemento2 = linhaAtual[1];
 
                 if ((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) {
+                //Para admitir o fecho transitivo:
+//                if (((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) || ((elemento1.equals(elementoGS2)) && ((elemento2.equals(elementoGS1))))) {
 
                     existe = true;
                     break;
@@ -943,6 +960,7 @@ public class ManipulaCSV {
                 elementoDM_NDM2 = linhaAtual[1];
 
                 if ((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) {
+//                if (((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) || ((elemento1.equals(elementoDM_NDM2)) && ((elemento2.equals(elementoDM_NDM1))))) {
 
                     System.out.println("Encontrou os elementos em DM!");
                     return existe = true;
@@ -969,6 +987,7 @@ public class ManipulaCSV {
                 elementoDM_NDM2 = linhaAtual[1];
 
                 if ((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) {
+//                if (((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) || ((elemento1.equals(elementoDM_NDM2)) && ((elemento2.equals(elementoDM_NDM1))))) {
 
                     System.out.println("Encontrou os elementos em NDM!");
                     return existe = true;
@@ -984,6 +1003,38 @@ public class ManipulaCSV {
         }
 
         return existe;
+    }
+
+    public void setIteracao(int iteracao) {
+        this.iteracao = iteracao;
+    }
+
+    public void limpaTudo() {
+
+        DA = new File("./src/csv/", "DA.csv");
+        DADM = new File("./src/csv/", "DADM.csv");
+        DM = new File("./src/csv/", "DM.csv");
+        NDM = new File("./src/csv/", "NDM.csv");
+        divergencias = new File("./src/csv/", "NAO_DA.csv");
+
+        System.out.println("LIMPA TUDO POR DINHEIRO!");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        
+        
+        DA.delete();
+        DM.delete();
+        NDM.delete();
+        DADM.delete();
+        divergencias.delete();
+        
+        vp = 0;
+        fp = 0;
+        fn = 0;
+        iteracao = 0;
+
     }
 
 }

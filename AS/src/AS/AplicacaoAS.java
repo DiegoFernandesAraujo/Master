@@ -49,20 +49,20 @@ public class AplicacaoAS {
         
         obj.setPermutacao(0);
         
-//        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
-//        obj.comparaConjuntos(resultado3);
-//        obj.comparaConjuntos(resultado4);
-//        obj.comparaConjuntos(resultado5);
+        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
+        obj.comparaConjuntos(resultado3);
+        obj.comparaConjuntos(resultado4);
+        obj.comparaConjuntos(resultado5);
         
-//        obj.setPermutacao(1);
-//        
-//        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
-//        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
-//        obj.comparaConjuntos(resultado3);
-//        obj.comparaConjuntos(resultado4);
+        obj.setPermutacao(1);
+        
+        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
+        obj.comparaConjuntos(resultado3);
+        obj.comparaConjuntos(resultado4);
         obj.comparaConjuntos(resultado5);
 
 //        obj.getFN(obj.padronizaCsvFile(resultado2));

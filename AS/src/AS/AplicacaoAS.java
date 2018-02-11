@@ -23,6 +23,7 @@ public class AplicacaoAS {
 //        File resultado1 = new File("./src/csv/","testeResult1.csv");
 //        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
 //        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
+        File resultado0 = new File("./src/csv/", "resultTestMaiorCD0_NEW.csv");
         File resultado1 = new File("./src/csv/", "resultTestMaiorCD1.csv");
         File resultado2 = new File("./src/csv/", "resultTestMaiorCD2.csv");
         //Copiado diretamente do gold standard:
@@ -50,6 +51,7 @@ public class AplicacaoAS {
         obj.setPermutacao(0);
         
         obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+        obj.comparaConjuntos(resultado0);
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
         obj.comparaConjuntos(resultado3);
@@ -59,6 +61,7 @@ public class AplicacaoAS {
         obj.setPermutacao(1);
         
         obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+        obj.comparaConjuntos(resultado0);
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
         obj.comparaConjuntos(resultado3);

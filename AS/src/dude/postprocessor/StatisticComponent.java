@@ -305,13 +305,13 @@ public class StatisticComponent implements AutoJsonable {
 		if (this.goldStandardSet()) {
 			if (this.goldStandard.contains(pair)) {
 				this.truePositives++;
-                                System.out.println("DUPLICATE TRUE");
+//                                System.out.println("DUPLICATE TRUE");
 				if (actualComparison) {
 					this.truePositivesByComparison++;
 				}
 			} else {
 				this.falsePositives++;
-                                System.out.println("DUPLICATE FALSE");
+//                                System.out.println("DUPLICATE FALSE");
 				if (actualComparison) {
 					this.falsePositivesByComparison++;
 				}
@@ -376,10 +376,8 @@ public class StatisticComponent implements AutoJsonable {
 			this.actualComparisonCount++;
 			if (this.goldStandardSet()) {
 				if (!this.goldStandard.contains(pair)) {
-                                        System.out.println("NONDUPLICATE TRUE");
 					this.trueNegativesByComparison++;
 				} else {
-                                        System.out.println("NONDUPLICATE FALSE");
 					this.falseNegativesByComparison++;
 				}
 			}
@@ -567,7 +565,7 @@ public class StatisticComponent implements AutoJsonable {
 		if (this.getTruePositivesByComparison() == 0) {
 			return 0.0;
 		}
-		System.out.println("PRECISION:" + this.getTruePositivesByComparison() + "/" + (this.getTruePositivesByComparison()  + "+" + this.getFalsePositivesByComparison()));
+//		System.out.println("PRECISION:" + this.getTruePositivesByComparison() + "/" + (this.getTruePositivesByComparison()  + "+" + this.getFalsePositivesByComparison()));
 		return (double) this.getTruePositivesByComparison() / (this.getTruePositivesByComparison() + this.getFalsePositivesByComparison());
 	}
 
@@ -589,7 +587,7 @@ public class StatisticComponent implements AutoJsonable {
 		if (this.getTruePositivesByComparison() == 0) {
 			return 0.0;
 		}
-		System.out.println("RECALL: " + this.getTruePositivesByComparison() + "/" +  this.goldStandard.size());
+//		System.out.println("RECALL: " + this.getTruePositivesByComparison() + "/" +  this.goldStandard.size());
 		return (double) this.getTruePositivesByComparison() / this.goldStandard.size();
 	}
 

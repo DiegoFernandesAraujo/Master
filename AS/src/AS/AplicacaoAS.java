@@ -15,7 +15,7 @@ import java.io.IOException;
 public class AplicacaoAS {
 
     public static void main(String[] args) throws IOException {
-        ManipulaCSV obj = new ManipulaCSV();
+        AnnStd obj = new AnnStd();
 //        File arquivo = new File("D:\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 //        File arquivo = new File("H:\\Meu Drive\\UFCG\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 
@@ -23,15 +23,15 @@ public class AplicacaoAS {
 //        File resultado1 = new File("./src/csv/","testeResult1.csv");
 //        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
 //        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
-        File resultado0 = new File("./src/csv/", "resultTestMaiorCD0_NEW.csv");
-        File resultado1 = new File("./src/csv/", "resultTestMaiorCD1.csv");
-        File resultado2 = new File("./src/csv/", "resultTestMaiorCD2.csv");
+        File resultado0 = new File("./src/csv/resultsDedup", "resultTestMaiorCD0_NEW.csv");
+        File resultado1 = new File("./src/csv/resultsDedup", "resultTestMaiorCD1.csv");
+        File resultado2 = new File("./src/csv/resultsDedup", "resultTestMaiorCD2.csv");
         //Copiado diretamente do gold standard:
-        File resultado3 = new File("./src/csv/", "resultTestMaiorCD3.csv");
-        File resultado4 = new File("./src/csv/", "resultTestMaiorCD4.csv");
-        File resultado5 = new File("./src/csv/", "resultTestMaiorCD5.csv");
+        File resultado3 = new File("./src/csv/resultsDedup", "resultTestMaiorCD3.csv");
+        File resultado4 = new File("./src/csv/resultsDedup", "resultTestMaiorCD4.csv");
+        File resultado5 = new File("./src/csv/resultsDedup", "resultTestMaiorCD5.csv");
 
-        File gs = new File("./src/csv/", "cd_gold.csv");
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
         /* Para retornar o path do projeto
         try {

@@ -74,25 +74,18 @@ public class DedupAlg1 extends DedupAlg {
         
 
         statistic.setStartTime();
-//        for (DuDeObjectPair pair : algorithm) {
-//            final double similarity = similarityFunc.getSimilarity(pair);
-//            if (similarity > 0.9) {
-//                output.write(pair);
-//                
-//
-//                statistic.addDuplicate(pair);
-//            } else {
-//                statistic.addNonDuplicate(pair);
-//            }
-//        }
-        int count = 0;
         for (DuDeObjectPair pair : algorithm) {
-            
-//            if(count % 1000 == 0){
-                System.out.print(pair.getFirstElement() + " " + pair.getSecondElement());
-                System.out.println("");
-//            }
+            final double similarity = similarityFunc.getSimilarity(pair);
+            if (similarity > 0.9) {
+                output.write(pair);
+                
+
+                statistic.addDuplicate(pair);
+            } else {
+                statistic.addNonDuplicate(pair);
+            }
         }
+        
         
         
         statistic.setEndTime();

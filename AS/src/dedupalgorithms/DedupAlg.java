@@ -77,6 +77,11 @@ public class DedupAlg {
         String literalGS = baseDados1;
         try {
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
+    
+            //Vejamos se funcionam essas 2 linhas:
+            source1.withQuoteCharacter('"');
+            source1.withSeparatorCharacter(';');
+            
             source1.enableHeader();
             
             source1.addIdAttributes(chavePrimaria);

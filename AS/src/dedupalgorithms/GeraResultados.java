@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class GeraResultados {
     public static void main(String [] args){
-        DedupAlg1 obj1 = new DedupAlg1("cd3", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 1);
+        DedupAlg1 obj1 = new DedupAlg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 2000);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {

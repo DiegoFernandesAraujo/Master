@@ -10,16 +10,21 @@ import dude.algorithm.SortingDuplicateDetection;
 import dude.algorithm.duplicatedetection.NaiveDuplicateDetection;
 import dude.algorithm.recordlinkage.NaiveRecordLinkage;
 import dude.datasource.CSVSource;
+import dude.output.CSVOutput;
 import dude.output.DuDeOutput;
 import dude.output.JsonOutput;
+import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.StatisticComponent;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.SimmetricsFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +47,7 @@ public class DedupAlg {
     private CSVSource source1;
     private CSVSource source2;
     private GoldStandard goldStandard;
-
+    
     public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
 //    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
 
@@ -72,7 +77,8 @@ public class DedupAlg {
         this.result = baseDados1 + baseDados2;
         recordLinkage();
     }
-
+    
+    
     public void deduplication() {
         String literalGS = baseDados1;
         try {
@@ -194,4 +200,5 @@ public class DedupAlg {
     public void executaDedupAlg() throws Exception {
 
     }
+    
 }

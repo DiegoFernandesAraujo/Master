@@ -57,8 +57,6 @@ public class VetorSim extends DedupAlg {
 
         }
     }
-    //    File resultado = new File("./src/csv/datasets", "resultado.csv");
-    //  Era o método executaDedupAlg()
 
     public void geraVetor(File arqDiverg) throws IOException {
 
@@ -75,8 +73,6 @@ public class VetorSim extends DedupAlg {
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
-        StatisticOutput statisticOutput = new SimpleStatisticOutput(System.out, statistic);
-
         LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
         LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("artist");
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
@@ -85,7 +81,7 @@ public class VetorSim extends DedupAlg {
 
         //Escrita do cabeçalho
         try {
-            escreveArqVetor = new FileWriter(vetorSimilaridade, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+            escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
             bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
@@ -97,17 +93,6 @@ public class VetorSim extends DedupAlg {
             bwArqVetor.close();
 
         }
-
-        String elemento1T = null;
-        String elemento2T = null;
-
-        String[] parAtual;
-        parAtual = null;
-        int index_c1 = 0;
-        int index_c2 = 0;
-
-        int cont = 0;
-        String Str2 = null;
 
         //Escrita dos valores de similaridade
         try {
@@ -123,45 +108,12 @@ public class VetorSim extends DedupAlg {
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
 
-//                System.out.println("Buscando elemento1: " + elemento1 + " - elemento2: " + elemento2);
+                System.out.println("Buscando elemento1: " + elemento1 + " - elemento2: " + elemento2);
                 for (DuDeObjectPair pair : algorithm) {
 
-//                    String par = pair.getReference().toString();
-////                    System.out.println(par);
-//
-//                    parAtual = par.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
-//
-//                    for (String cell : parAtual) {
-////
-//                        cont++;
-//
-//                        index_c1 = cell.indexOf('[');
-//                        index_c2 = cell.indexOf(']');
-//
-//                        if (cont == 1) {
-//
-//                            elemento1T = cell.substring(index_c1 + 2, index_c2);
-//                        } else {
-//                            elemento2T = cell.substring(index_c1 + 1, index_c2);
-//                        }
-//
-//                    }
-//                    
-//                    cont = 0;
-//
-//                    System.out.println("elemento1T: " + elemento1T);
-//
-//                    System.out.println("elemento2T: " + elemento2T);
-//                    System.out.println(pair.getSecondElement().toString());
-//                    System.out.println(pair.getSecondElement());
-//                    if (pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2)) {
                     if ( (pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2)) 
                             || (pair.getFirstElement().toString().contains(elemento2) && pair.getSecondElement().toString().contains(elemento1))) {
-//                    if ((pair.getFirstElement().toString().contains("6858")) && (pair.getSecondElement().toString().equals("[cd.[10230]]"))) {
-//                    if (pair.getFirstElement().toString().contains("2004") && pair.getSecondElement().toString().contains("3710")) {
-//                    if (elemento1T.equals(elemento1) && elemento2T.equals(elemento2))  {
 
-//                        System.out.println(pair.getReference().toString());
                         id++;
 
                         a = Double.toString(similarityFunc.getSimilarity(pair));
@@ -171,10 +123,7 @@ public class VetorSim extends DedupAlg {
                         e = Double.toString(similarityFunc5.getSimilarity(pair));
                         rotulo = Boolean.toString(statistic.isDuplicate(pair));
 
-//                        System.out.println("a: " + a);
                         try {
-//                            System.out.println("Entrou no try");
-//                        escreveArqVetor.write(Integer.toString(id) + ";" + elemento1 + ";" + elemento2 + ";" + a + ";" + b + ";" + c + ";" + d + ";" + e + ";" + rotulo + "\n");
                             bwArqVetor.append(Integer.toString(id));
                             bwArqVetor.append(';');
                             bwArqVetor.append(elemento1);
@@ -193,28 +142,21 @@ public class VetorSim extends DedupAlg {
                             bwArqVetor.append(';');
                             bwArqVetor.append(rotulo);
                             bwArqVetor.append('\n');
-                            System.out.println("Escreveu!");
 
                         } catch (IOException ex) {
                             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
                         }
 
-//                        System.out.print(pair.getFirstElement().toString() + " " + pair.getSecondElement().toString());
+                        System.out.print(pair.getFirstElement().toString() + " " + pair.getSecondElement().toString());
                         System.out.println("");
-//                        new Thread().sleep(10000);
                         break;
                     }
 
                 }
-//                cont--;
-                System.out.println("Saiu do for " + id);
-                System.out.println("**************************");
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } finally {
-//            escreveArqVetor.flush();
-//            escreveArqVetor.close();
 
             bwArqVetor.flush();
             bwArqVetor.close();

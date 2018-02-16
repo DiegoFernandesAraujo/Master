@@ -14,7 +14,12 @@ import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.StatisticComponent;
+import dude.preprocessor.Preprocessor;
+import dude.similarityfunction.SimilarityFunction;
+import dude.similarityfunction.aggregators.Aggregator;
+import dude.similarityfunction.aggregators.Average;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.SimmetricsFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.File;
@@ -27,13 +32,13 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class DedupAlg1 extends DedupAlg {
+public class Alg1 extends DedupAlg {
 
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
     
-    public DedupAlg1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
+    public Alg1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
 
         estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
@@ -44,7 +49,7 @@ public class DedupAlg1 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(DedupAlg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -58,6 +63,7 @@ public class DedupAlg1 extends DedupAlg {
         algorithm.enableInMemoryProcessing();
 
         LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
+//        SimmetricsFunction similarityFunc = new LevenshteinDistanceFunction("title");
 
 //        DuDeOutput output = new JsonOutput(System.out);
         DuDeOutput output = new CSVOutput(escreveResult);
@@ -71,14 +77,12 @@ public class DedupAlg1 extends DedupAlg {
         statisticOutputTXT = new SimpleStatisticOutput(estatisticasTXT, statistic);
         
 //        statisticOutput = new SimpleStatisticOutput(System.out, statistic);
-        
 
         statistic.setStartTime();
         for (DuDeObjectPair pair : algorithm) {
             final double similarity = similarityFunc.getSimilarity(pair);
             if (similarity > 0.9) {
                 output.write(pair);
-                
 
                 statistic.addDuplicate(pair);
             } else {
@@ -96,6 +100,15 @@ public class DedupAlg1 extends DedupAlg {
         algorithm.cleanUp();
         goldStandard.close();
 
+    }
+    
+    public static void main(String [] args){
+        Alg1 obj1 = new Alg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 1);
+        try {
+            obj1.executaDedupAlg();
+        } catch (IOException ex) {
+            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

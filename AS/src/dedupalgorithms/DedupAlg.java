@@ -156,6 +156,8 @@ public class DedupAlg {
             
             
             goldStandard = new GoldStandard(goldStandardSource);
+            
+            goldStandardSource.enableHeader();
 
             goldStandard.setSourceIdLiteral(literalGS);
             goldStandard.setFirstElementsObjectIdAttributes(goldId1);

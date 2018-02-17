@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class AnnStd {
 
-    int vp, fp, fn, iteracao, permutacao;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig;
 
     File estatisticas;
     File DA;
@@ -38,7 +38,7 @@ public class AnnStd {
     FileWriter escreveEstat;
 
     public AnnStd() {
-        vp = 0;
+        tp = 0;
         fp = 0;
         iteracao = 0;
 
@@ -54,7 +54,7 @@ public class AnnStd {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;vp;fp;fn\n");
+                    bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
@@ -96,8 +96,6 @@ public class AnnStd {
             while ((Str = brArq.readLine()) != null) {
 
                 if (Str.contains("First Object")) {
-                    System.out.println("Contém First Object");
-                    System.out.println(Str);
                     continue;
                 }
                 //Aqui usamos o método split que divide a linha lida em um array de String
@@ -140,8 +138,7 @@ public class AnnStd {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
 
-        System.out.println("comparaComGS");
-        vp = 0;
+        tp = 0;
         fp = 0;
 
         String Str;
@@ -164,21 +161,21 @@ public class AnnStd {
                 existe = buscaGabarito(elemento1, elemento2, gs);
 
                 if (existe) {
-                    vp++;
+                    tp++;
                 } else {
                     fp++;
                 }
 
             }
 
-            gravaEstatisticas(vp, fp, gs, arqResult);
+//            gravaEstatisticas(tp, fp, gs, arqResult);
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
         } catch (IOException ex) {
             Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brResult.close();
-//            gravaEstatisticas(vp, fp, gs, arqResult);
+            gravaEstatisticas(tp, fp, gs, arqResult);
         }
     }
 
@@ -642,7 +639,7 @@ public class AnnStd {
     }
 
     private void atualizaDM_NDM() throws IOException {
-        vp = 0;
+        tp = 0;
         fp = 0;
 
         String Str = "";
@@ -711,14 +708,14 @@ public class AnnStd {
         }
     }
 
-    public void gravaEstatisticas(int vp, int fp, File gs, File arqResult) {
-        System.out.println("gravaEstatisticas");
+    public void gravaEstatisticas(int tp, int fp, File gs, File arqResult) {
 
         try {
 
-            double precision = getPrecision(vp, fp);
+            double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            double recall = getRecall(vp, fn);
+            int tn = getTN(tp, fp, fn);
+            double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
             int tamDA = getTamDA();
@@ -749,9 +746,11 @@ public class AnnStd {
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(tamNDM));
                 bwEstat.append(";");
-                bwEstat.append(Integer.toString(vp));
+                bwEstat.append(Integer.toString(tp));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(fp));
+                bwEstat.append(";");
+                bwEstat.append(Integer.toString(tn));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(fn));
                 bwEstat.append("\n");
@@ -763,9 +762,10 @@ public class AnnStd {
                 bwEstat.close();
 
                 iteracao++;
-                vp = 0;
+                tp = 0;
                 fp = 0;
                 this.fn = 0;
+                this.tn = 0;
             }
 
         } catch (FileNotFoundException ex) {
@@ -779,13 +779,13 @@ public class AnnStd {
         this.permutacao = permutacao;
     }
 
-    public double getPrecision(int vp, int fp) {
-        return (double) vp / (vp + fp);
+    public double getPrecision(int tp, int fp) {
+        return (double) tp / (tp + fp);
     }
 
-    public double getRecall(int vp, int fn) {
+    public double getRecall(int tp, int fn) {
 
-        return (double) vp / (vp + fn);
+        return (double) tp / (tp + fn);
     }
 
     public double getF1(double precision, double recall) {
@@ -866,6 +866,14 @@ public class AnnStd {
         return tamNDM;
 
     }
+    
+    public int getTN(int tp, int fp, int fn) throws IOException {
+        
+        tn = ( ((tamBaseOrig--) * (tamBaseOrig)) )/2 - (tp+fp+fn);
+        
+        return tn;
+
+    }
 
     public int getInspManuais() throws IOException {
 
@@ -876,7 +884,7 @@ public class AnnStd {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
 
-        vp = 0;
+        tp = 0;
         fp = 0;
 
         String Str;
@@ -914,7 +922,6 @@ public class AnnStd {
             Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
-            System.out.println(fn + " falsos negativos!");
         }
 
         return fn;
@@ -1020,6 +1027,10 @@ public class AnnStd {
     public void setIteracao(int iteracao) {
         this.iteracao = iteracao;
     }
+    
+    public void setTamBaseOrig(int tamBaseOrig){
+        this.tamBaseOrig = tamBaseOrig;
+    }
 
     public void limpaTudo() {
 
@@ -1032,8 +1043,9 @@ public class AnnStd {
             }
         }
 
-        vp = 0;
+        tp = 0;
         fp = 0;
+        tn = 0;
         fn = 0;
         iteracao = 0;
 

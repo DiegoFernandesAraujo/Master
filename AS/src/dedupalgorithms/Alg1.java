@@ -13,7 +13,9 @@ import dude.output.JsonOutput;
 import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
+import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
+import dude.postprocessor.WarshallTransitiveClosureGenerator;
 import dude.preprocessor.Preprocessor;
 import dude.similarityfunction.SimilarityFunction;
 import dude.similarityfunction.aggregators.Aggregator;
@@ -25,6 +27,7 @@ import dude.util.data.DuDeObjectPair;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,14 +40,13 @@ public class Alg1 extends DedupAlg {
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
-    
+
     public Alg1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
 
         estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".txt");
-        
-        
+
         try {
             this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
 
@@ -72,26 +74,49 @@ public class Alg1 extends DedupAlg {
 
         StatisticOutput statisticOutputCSV;
         StatisticOutput statisticOutputTXT;
-        
+
         statisticOutputCSV = new CSVStatisticOutput(estatisticasCSV, statistic, ';');
         statisticOutputTXT = new SimpleStatisticOutput(estatisticasTXT, statistic);
-        
-//        statisticOutput = new SimpleStatisticOutput(System.out, statistic);
 
+//        statisticOutput = new SimpleStatisticOutput(System.out, statistic);
+        int cont = 0;
         statistic.setStartTime();
+//        for (DuDeObjectPair pair : algorithm) {
+//            final double similarity = similarityFunc.getSimilarity(pair);
+//            if (similarity > 0.9) {
+//                output.write(pair);
+//
+//                statistic.addDuplicate(pair);
+//            } else {
+//                statistic.addNonDuplicate(pair);
+//            }
+//        }
+
+//********************************************
+        NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
+//        WarshallTransitiveClosureGenerator trans = new WarshallTransitiveClosureGenerator();
+
+//        NaiveTransitiveClosureGenerator trans = new NaiveTransitiveClosureGenerator();
+//        trans.enableAdjacencyListRepresentation();
+        //Gerando o fecho transitivo?
         for (DuDeObjectPair pair : algorithm) {
             final double similarity = similarityFunc.getSimilarity(pair);
             if (similarity > 0.9) {
-                output.write(pair);
+                fechoTrans.add(pair);
 
-                statistic.addDuplicate(pair);
             } else {
                 statistic.addNonDuplicate(pair);
             }
         }
+
         
-        
-        
+        for (DuDeObjectPair pair : fechoTrans) {
+
+            statistic.addDuplicate(pair);
+            output.write(pair);
+
+        }
+
         statistic.setEndTime();
 
         statisticOutputCSV.writeStatistics();
@@ -101,9 +126,9 @@ public class Alg1 extends DedupAlg {
         goldStandard.close();
 
     }
-    
-    public static void main(String [] args){
-        Alg1 obj1 = new Alg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 1);
+
+    public static void main(String[] args) {
+        Alg1 obj1 = new Alg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 10001);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {

@@ -16,13 +16,7 @@ public class AplicacaoAS {
 
     public static void main(String[] args) throws IOException {
         AnnStd obj = new AnnStd();
-//        File arquivo = new File("D:\\Pesquisa\\Desenvolvimento\\resultado1.csv");
-//        File arquivo = new File("H:\\Meu Drive\\UFCG\\Pesquisa\\Desenvolvimento\\resultado1.csv");
 
-//        File arquivo = new File("./src/csv/","resultado1.csv");
-//        File resultado1 = new File("./src/csv/","testeResult1.csv");
-//        File resultado1 = new File("./src/csv/", "resultTestCD1.csv");
-//        File resultado2 = new File("./src/csv/", "resultTestCD2.csv");
         File resultado0 = new File("./src/csv/resultsDedup", "resultTestMaiorCD0_NEW.csv");
         File resultado1 = new File("./src/csv/resultsDedup", "resultTestMaiorCD1.csv");
         File resultado2 = new File("./src/csv/resultsDedup", "resultTestMaiorCD2.csv");
@@ -30,6 +24,7 @@ public class AplicacaoAS {
         File resultado3 = new File("./src/csv/resultsDedup", "resultTestMaiorCD3.csv");
         File resultado4 = new File("./src/csv/resultsDedup", "resultTestMaiorCD4.csv");
         File resultado5 = new File("./src/csv/resultsDedup", "resultTestMaiorCD5.csv");
+        File resultado10000 = new File("./src/csv/resultsDedup", "resultado10000.csv");
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -45,8 +40,8 @@ public class AplicacaoAS {
         }
         
          */
-//        obj.readCsvFile();
         obj.setGs(gs);
+        obj.setTamBaseOrig(9763);
         
         obj.setPermutacao(0);
         
@@ -67,15 +62,10 @@ public class AplicacaoAS {
         obj.comparaConjuntos(resultado3);
         obj.comparaConjuntos(resultado4);
         obj.comparaConjuntos(resultado5);
-
-//        obj.getFN(obj.padronizaCsvFile(resultado2));
-//        obj.comparaComGS(obj.padronizaCsvFile(resultado1));
-        //        File juncaoTeste = obj.juntaArquivos(obj.padronizaCsvFile(resultado1), obj.padronizaCsvFile(resultado2));
-        //        obj.comparaComGS(obj.padronizaCsvFile(resultado));
-        //           obj.padronizaCsvFile(resultado);
-        //        obj.atualizaD_A(juncaoTeste);
-        //        System.out.println(juncaoTeste.getPath());
-        System.out.println("Iteração " + obj.getIteracao());
+        
+        obj.setPermutacao(10001);
+        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado10000));
 
     }
 

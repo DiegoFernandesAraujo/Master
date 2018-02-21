@@ -64,8 +64,10 @@ public class Alg1 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
-//        SimmetricsFunction similarityFunc = new LevenshteinDistanceFunction("title");
+        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("artist");
+        LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("title");
+        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
+        LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");
 
 //        DuDeOutput output = new JsonOutput(System.out);
         DuDeOutput output = new CSVOutput(escreveResult);
@@ -79,29 +81,18 @@ public class Alg1 extends DedupAlg {
         statisticOutputTXT = new SimpleStatisticOutput(estatisticasTXT, statistic);
 
 //        statisticOutput = new SimpleStatisticOutput(System.out, statistic);
-        int cont = 0;
         statistic.setStartTime();
-//        for (DuDeObjectPair pair : algorithm) {
-//            final double similarity = similarityFunc.getSimilarity(pair);
-//            if (similarity > 0.9) {
-//                output.write(pair);
-//
-//                statistic.addDuplicate(pair);
-//            } else {
-//                statistic.addNonDuplicate(pair);
-//            }
-//        }
 
-//********************************************
         NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
-//        WarshallTransitiveClosureGenerator trans = new WarshallTransitiveClosureGenerator();
 
-//        NaiveTransitiveClosureGenerator trans = new NaiveTransitiveClosureGenerator();
-//        trans.enableAdjacencyListRepresentation();
-        //Gerando o fecho transitivo?
+        //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
             final double similarity = similarityFunc.getSimilarity(pair);
-            if (similarity > 0.9) {
+            final double similarity2 = similarityFunc2.getSimilarity(pair);
+            final double similarity3 = similarityFunc3.getSimilarity(pair);
+            final double similarity4 = similarityFunc4.getSimilarity(pair);
+            
+            if ( (similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) && (similarity4 >= 0.9)) {
                 fechoTrans.add(pair);
 
             } else {
@@ -128,12 +119,14 @@ public class Alg1 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg1 obj1 = new Alg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 10001);
+        Alg1 obj1 = new Alg1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 1);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
             Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
         }
+        java.awt.Toolkit.getDefaultToolkit().beep();
     }
+    
 
 }

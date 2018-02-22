@@ -32,13 +32,13 @@ import org.simmetrics.metrics.functions.AffineGap;
  *
  * @author Diego
  */
-public class Alg4 extends DedupAlg {
+public class Alg5 extends DedupAlg {
 
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
 
-    public Alg4(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
+    public Alg5(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
 
         estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
@@ -54,7 +54,7 @@ public class Alg4 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg5.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -107,7 +107,7 @@ public class Alg4 extends DedupAlg {
             final double similarity = avg.getSimilarity(pair);
             final double similarity2 = avg2.getSimilarity(pair);
 
-            if ((similarity >= 0.9) && (similarity2 >= 0.9)) {
+            if ((similarity >= 0.9) && (similarity2 >= 0.7)) {
                 fechoTrans.add(pair);
 
             } else {
@@ -134,11 +134,11 @@ public class Alg4 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg4 obj1 = new Alg4("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 6);
+        Alg5 obj1 = new Alg5("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 5);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg5.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

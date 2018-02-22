@@ -32,13 +32,13 @@ import org.simmetrics.metrics.functions.AffineGap;
  *
  * @author Diego
  */
-public class Alg4 extends DedupAlg {
+public class Alg6 extends DedupAlg {
 
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
 
-    public Alg4(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
+    public Alg6(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
 
         estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
@@ -54,7 +54,7 @@ public class Alg4 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg6.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -68,8 +68,8 @@ public class Alg4 extends DedupAlg {
         algorithm.enableInMemoryProcessing();
 
         LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
-        JaroDistanceFunction similarityFunc2 = new JaroDistanceFunction("artist");
-        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("title");
+        JaroDistanceFunction similarityFunc2 = new JaroDistanceFunction("title");
+        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("artist");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track01");
         LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("track02");
 
@@ -107,7 +107,7 @@ public class Alg4 extends DedupAlg {
             final double similarity = avg.getSimilarity(pair);
             final double similarity2 = avg2.getSimilarity(pair);
 
-            if ((similarity >= 0.9) && (similarity2 >= 0.9)) {
+            if ((similarity >= 0.85) && (similarity2 >= 0.9)) {
                 fechoTrans.add(pair);
 
             } else {
@@ -134,11 +134,11 @@ public class Alg4 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg4 obj1 = new Alg4("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 6);
+        Alg6 obj1 = new Alg6("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 6);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg4.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg6.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

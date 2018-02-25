@@ -714,7 +714,7 @@ public class AnnStd {
 
             double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            int tn = getTN(tp, fp, fn);
+            int tn = getTN(tp, fp, fn, tamBaseOrig);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
@@ -867,9 +867,9 @@ public class AnnStd {
 
     }
     
-    public int getTN(int tp, int fp, int fn) throws IOException {
+    public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
         
-        tn = ( ((tamBaseOrig--) * (tamBaseOrig)) )/2 - (tp+fp+fn);
+        tn = ( ((tamBase--) * (tamBase)) )/2 - tp - fp - fn;
         
         return tn;
 

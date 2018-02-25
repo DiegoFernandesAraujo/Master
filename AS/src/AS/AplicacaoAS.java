@@ -17,14 +17,17 @@ public class AplicacaoAS {
     public static void main(String[] args) throws IOException {
         AnnStd obj = new AnnStd();
 
-        File resultado0 = new File("./src/csv/resultsDedup", "resultTestMaiorCD0_NEW.csv");
-        File resultado1 = new File("./src/csv/resultsDedup", "resultTestMaiorCD1.csv");
-        File resultado2 = new File("./src/csv/resultsDedup", "resultTestMaiorCD2.csv");
-        //Copiado diretamente do gold standard:
-        File resultado3 = new File("./src/csv/resultsDedup", "resultTestMaiorCD3.csv");
-        File resultado4 = new File("./src/csv/resultsDedup", "resultTestMaiorCD4.csv");
-        File resultado5 = new File("./src/csv/resultsDedup", "resultTestMaiorCD5.csv");
-        File resultado10000 = new File("./src/csv/resultsDedup", "resultado10000.csv");
+        File resultado1 = new File("./src/csv/resultsDedup", "resultado1.csv");
+        File resultado2 = new File("./src/csv/resultsDedup", "resultado2.csv");
+        File resultado3 = new File("./src/csv/resultsDedup", "resultado3.csv");
+        File resultado4 = new File("./src/csv/resultsDedup", "resultado4.csv");
+        File resultado5 = new File("./src/csv/resultsDedup", "resultado5.csv");
+        File resultado6 = new File("./src/csv/resultsDedup", "resultado6.csv");
+        File resultado7 = new File("./src/csv/resultsDedup", "resultado7.csv");
+        File resultado8 = new File("./src/csv/resultsDedup", "resultado8.csv");
+        File resultado9 = new File("./src/csv/resultsDedup", "resultado9.csv");
+        File resultado10 = new File("./src/csv/resultsDedup", "resultado10.csv");
+        File resultado11 = new File("./src/csv/resultsDedup", "resultado11.csv");
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -41,31 +44,37 @@ public class AplicacaoAS {
         
          */
         obj.setGs(gs);
-        obj.setTamBaseOrig(9763);
-        
+        obj.setTamBaseOrig(9763); //Necessário!
+
         obj.setPermutacao(0);
-        
+
         obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
-        obj.comparaConjuntos(resultado0);
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
-        obj.comparaConjuntos(resultado3);
-        obj.comparaConjuntos(resultado4);
-        obj.comparaConjuntos(resultado5);
-        
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado3));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado4));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado5));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado6));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado7));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado8));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado9));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado10));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado11));
+
         obj.setPermutacao(1);
-        
+
         obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
-        obj.comparaConjuntos(resultado0);
-        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado11));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado10));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado9));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado8));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado7));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado6));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado5));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado4));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado3));
         obj.comparaConjuntos(obj.padronizaCsvFile(resultado2));
-        obj.comparaConjuntos(resultado3);
-        obj.comparaConjuntos(resultado4);
-        obj.comparaConjuntos(resultado5);
-        
-        obj.setPermutacao(10001);
-        obj.limpaTudo(); //Só utilizar após a execução de um conjunto de permutações
-        obj.comparaConjuntos(obj.padronizaCsvFile(resultado10000));
+        obj.comparaConjuntos(obj.padronizaCsvFile(resultado1));
 
     }
 

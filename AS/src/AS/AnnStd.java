@@ -238,6 +238,7 @@ public class AnnStd {
             BufferedWriter bwDupAuto = null;
             try {
                 DA.createNewFile();
+                new Thread().sleep(50);
 
                 brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
 
@@ -258,6 +259,7 @@ public class AnnStd {
 
                     try {
                         DM.createNewFile();
+                        new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -267,6 +269,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -276,6 +280,7 @@ public class AnnStd {
 
                     try {
                         NDM.createNewFile();
+                        new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -285,6 +290,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -295,6 +302,7 @@ public class AnnStd {
 
                     try {
                         DADM.createNewFile();
+                        new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -304,6 +312,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -312,6 +322,8 @@ public class AnnStd {
 
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
 
                 brArqResult.close();
@@ -356,11 +368,15 @@ public class AnnStd {
             System.out.println("Não existe arquivo juncao.csv.");
             try {
                 juncao.createNewFile();
+                new Thread().sleep(50);
+                
             } catch (FileNotFoundException ex) {
 
                 System.out.println("Não foi possível encontrar o arquivo " + juncao.getName());
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -402,7 +418,7 @@ public class AnnStd {
 
             bwJuncao.flush();
             bwJuncao.close();
-            
+
         }
 
         return juncao;
@@ -556,6 +572,7 @@ public class AnnStd {
 
             try {
                 divergencias.createNewFile();
+                new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -565,6 +582,8 @@ public class AnnStd {
             } catch (IOException ex) {
                 Logger.getLogger(AnnStd.class
                         .getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -805,7 +824,7 @@ public class AnnStd {
     }
 
     public int getTamDA() throws IOException {
-        
+
         int tamDA = 0;
 
         LineNumberReader linhaLeitura1 = null;
@@ -814,7 +833,7 @@ public class AnnStd {
             linhaLeitura1 = new LineNumberReader(new FileReader(DA.getPath()));
             linhaLeitura1.skip(DA.length());
             tamDA = linhaLeitura1.getLineNumber();
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -822,7 +841,6 @@ public class AnnStd {
         } finally {
             linhaLeitura1.close();
         }
-        
 
         return tamDA;
 
@@ -835,7 +853,7 @@ public class AnnStd {
             linhaLeitura1 = new LineNumberReader(new FileReader(DM.getPath()));
             linhaLeitura1.skip(DM.length());
             tamDM = linhaLeitura1.getLineNumber();
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -866,11 +884,11 @@ public class AnnStd {
         return tamNDM;
 
     }
-    
+
     public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
-        
-        tn = ( ((tamBase--) * (tamBase)) )/2 - tp - fp - fn;
-        
+
+        tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+
         return tn;
 
     }
@@ -1027,15 +1045,15 @@ public class AnnStd {
     public void setIteracao(int iteracao) {
         this.iteracao = iteracao;
     }
-    
-    public void setTamBaseOrig(int tamBaseOrig){
+
+    public void setTamBaseOrig(int tamBaseOrig) {
         this.tamBaseOrig = tamBaseOrig;
     }
 
     public void limpaTudo() {
 
         File dir = new File("./src/csv/conjuntosAS");
-        
+
         if (dir.isDirectory()) {
             File[] sun = dir.listFiles();
             for (File toDelete : sun) {

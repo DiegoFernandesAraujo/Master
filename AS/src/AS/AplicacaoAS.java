@@ -25,7 +25,7 @@ public class AplicacaoAS {
             int index = i + 1;
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
         }
-        
+
         System.out.println("resultados.length: " + resultados.length);
 
         //Padronização dos arquivos
@@ -60,6 +60,7 @@ public class AplicacaoAS {
 
             obj.setPermutacao(i);
             obj.limpaTudo();
+            System.out.println("Iteração " + i);
 
             while (aux.size() < 23) {
 
@@ -77,6 +78,9 @@ public class AplicacaoAS {
             aux.clear();
 
         }
+
+        java.awt.Toolkit.getDefaultToolkit().beep();
+
     }
 
 }

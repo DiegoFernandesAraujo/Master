@@ -73,6 +73,7 @@ public class VetorSim extends DedupAlg {
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
+        //Utilizando-se a função de similaridade Levensthein como base para gerar os vetores de similaridade.
         LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
         LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("artist");
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
@@ -111,7 +112,8 @@ public class VetorSim extends DedupAlg {
                 System.out.println("Buscando elemento1: " + elemento1 + " - elemento2: " + elemento2);
                 for (DuDeObjectPair pair : algorithm) {
 
-                    if ( (pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2)) 
+                    //Fecho transitivo
+                    if ((pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2))
                             || (pair.getFirstElement().toString().contains(elemento2) && pair.getSecondElement().toString().contains(elemento1))) {
 
                         id++;
@@ -142,17 +144,22 @@ public class VetorSim extends DedupAlg {
                             bwArqVetor.append(';');
                             bwArqVetor.append(rotulo);
                             bwArqVetor.append('\n');
+                            bwArqVetor.flush();
 
                         } catch (IOException ex) {
                             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
                         }
 
                         System.out.print(pair.getFirstElement().toString() + " " + pair.getSecondElement().toString());
-                        System.out.println("");
+                        System.out.println(" - id: " + id);
                         break;
                     }
 
                 }
+
+//                if (id > 20) {
+//                    break;
+//                }
             }
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

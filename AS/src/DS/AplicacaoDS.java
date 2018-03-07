@@ -64,16 +64,22 @@ public class AplicacaoDS {
             obj.limpaTudo();
             System.out.println("Iteração " + i);
 
+            int cont = 0;
+
             while (aux.size() < 23) {
 
-                int randomNum = gerador.nextInt(resultados.length);
-
-                if (!aux.contains(Integer.toString(randomNum))) {
-
-                    aux.add(Integer.toString(randomNum));
-                    obj.comparaConjuntos(resultadosPadr[randomNum]);
-
-                }
+//                int randomNum = gerador.nextInt(resultados.length);
+//
+//                if (!aux.contains(Integer.toString(randomNum))) {
+//
+//                    aux.add(Integer.toString(randomNum));
+//                    obj.comparaConjuntos(resultadosPadr[randomNum]);
+//
+//                }
+                aux.add(Integer.toString(cont));
+                obj.comparaConjuntos(resultadosPadr[cont]);
+                
+                cont++;
 
             }
 
@@ -81,9 +87,9 @@ public class AplicacaoDS {
 
         }
 
-        obj.removeDuplicatasDiverg();
-
-        java.awt.Toolkit.getDefaultToolkit().beep();
+//        obj.remDupDiverg();
+        java.awt.Toolkit.getDefaultToolkit()
+                .beep();
 
     }
 

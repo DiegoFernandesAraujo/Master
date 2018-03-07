@@ -331,11 +331,12 @@ public class DgStd {
                 bwDupAuto.flush(); //Alterei DA aqui!!!!!
                 bwDupAuto.close();
 
-                //Juntar DA + DN para calcular precision, recall e f-measure para o TODO, O ANNEALING!
+                //Juntar DA + DM para calcular precision, recall e f-measure para o TODO, O ANNEALING!
                 //Como é o baseline poderia ser calculado apenas com DA mesmo
-                juntaDADM(DA, DM);
-
-                comparaComGS(DADM);
+//                juntaDADM(DA, DM);
+//
+//                comparaComGS(DADM);
+                comparaComGS(DA);
 
             }
 
@@ -347,13 +348,22 @@ public class DgStd {
 
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
 
-            filtraDivergencias(aux); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+            /*
+             *ATENÇÃO! Como as estatísticas só são gravadas quando chamadas de dentro do método comparaComGS,
+             *esta etapa só está gravando as estatísticas do primeiro algoritmo de deduplicação.
+             *Creio que não faz sentido gravar as estatísticas de cada iteração, 
+             *a não ser que seja a quantidade de divergências.
+            */
+            remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
 
-            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
+            //ATENÇÃO! Os arquivos DN e NDM devem ser povoados a partir do algoritmo de AA
+//            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
+//
+//            juntaDADM(DA, DM);
 
-            juntaDADM(DA, DM);
-
-            comparaComGS(DADM);
+            
+//
+//            comparaComGS(DADM);
         }
     }
 
@@ -660,39 +670,59 @@ public class DgStd {
         return divergencias;
     }
 
-    public String file;
-    public static String origem;
-    public static String destino;
-
-    public void removeDuplicatasDiverg() throws IOException {
+    //Remove a duplicidade dos registros no conjunto de pares divergentes acumulados
+    @SuppressWarnings("unchecked")
+    public void remDupDiverg(File divergencias) throws IOException {
 
         String line = "";
-        
-        File divergencias = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
-                
-        BufferedReader brDiverg = new BufferedReader(new FileReader(divergencias));
 
-        Collection lista = new ArrayList();
+//        File divergencias = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
+        BufferedReader brDiverg = null;
+        Collection lista = null;
 
-        while ((line = brDiverg.readLine()) != null) {
-            lista.add(line);
+        try {
+            brDiverg = new BufferedReader(new FileReader(divergencias));
+
+            lista = new ArrayList();
+
+            while ((line = brDiverg.readLine()) != null) {
+                lista.add(line);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brDiverg.close();
         }
-        brDiverg.close();
 
         //Tratamento da lista sem repetições
+        BufferedWriter bwDiverg = null;
         Collection lista2 = new LinkedHashSet(lista);
 
-//        File arquivo = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+        try {//        File arquivo = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+            bwDiverg = new BufferedWriter(new FileWriter(divergencias));
+            for (Object item : lista2) {
+                bwDiverg.write((String) item);
+                bwDiverg.newLine();
+            }
+            bwDiverg.flush();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
 
-        BufferedWriter bwDiverg = new BufferedWriter(new FileWriter(divergencias));
-
-        for (Object item : lista2) {
-            bwDiverg.write((String) item);
-            bwDiverg.newLine();
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwDiverg.flush();
+            bwDiverg.close();
         }
-
-        bwDiverg.flush();
-        bwDiverg.close();
 
     }
 

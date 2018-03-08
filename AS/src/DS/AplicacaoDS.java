@@ -9,6 +9,7 @@ import AS.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -88,8 +89,8 @@ public class AplicacaoDS {
         }
 
 //        obj.remDupDiverg();
-        java.awt.Toolkit.getDefaultToolkit()
-                .beep();
+        java.awt.Toolkit.getDefaultToolkit().beep();
+        
 
     }
 

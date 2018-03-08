@@ -37,7 +37,7 @@ import java.util.logging.Logger;
  */
 public class VetorSim extends DedupAlg {
 
-    File vetorSimilaridade = new File("./src/csv/conjuntosDS", "vetorSimilaridades.csv");
+    File vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades.csv");
     FileWriter escreveArqVetor;
     BufferedWriter bwArqVetor = null;
     String a, b, c, d, e, rotulo;

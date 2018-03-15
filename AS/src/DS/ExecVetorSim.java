@@ -17,11 +17,9 @@ import java.util.logging.Logger;
  */
 public class ExecVetorSim {
     public static void main(String [] args){
-//        VetorSim obj1 = new VetorSim("cd3", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
-//        VetorSim obj1 = new VetorSim("cd4", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
-//        VetorSim obj1 = new VetorSim("cd - Copy", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
         //VetorSim obj1 = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
-        VetorSim1 obj1 = new VetorSim1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
+//        VetorSim1 obj1 = new VetorSim1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
+        VetorSim2 obj1 = new VetorSim2("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
         File diverg = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
         try {
             obj1.geraVetor(diverg);

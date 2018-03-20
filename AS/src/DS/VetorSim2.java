@@ -141,8 +141,8 @@ public class VetorSim2 extends DedupAlg {
                         rotulo = Boolean.toString(statistic.isDuplicate(pair));
 
                         try {
-                            bwArqVetor.append(Integer.toString(id));
-                            bwArqVetor.append(';');
+//                            bwArqVetor.append(Integer.toString(id));
+//                            bwArqVetor.append(';');
                             bwArqVetor.append(elemento1);
                             bwArqVetor.append(';');
                             bwArqVetor.append(elemento2);

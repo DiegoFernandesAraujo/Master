@@ -330,7 +330,7 @@ public class AnnStd {
                 bwDupAuto.flush(); //Alterei DA aqui!!!!!
                 bwDupAuto.close();
 
-                //Juntar DA + DN para calcular precision, recall e f-measure para o TODO, O ANNEALING!
+                //Juntar DA + DM para calcular precision, recall e f-measure para o TODO, O ANNEALING!
                 //Como é o baseline poderia ser calculado apenas com DA mesmo
                 juntaDADM(DA, DM);
 

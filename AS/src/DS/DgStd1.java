@@ -12,10 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.LineNumberReader;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -25,7 +28,7 @@ import java.util.List;
  *
  * @author Diego
  */
-public class DgStd {
+public class DgStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig;
 
@@ -38,12 +41,12 @@ public class DgStd {
     File DADM;
     FileWriter escreveEstat;
 
-    public DgStd() {
+    public DgStd1() {
         tp = 0;
         fp = 0;
         iteracao = 0;
 
-        estatisticas = new File("./src/csv/conjuntosDS", "estatisticaInicialDS.csv");
+        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
@@ -54,7 +57,7 @@ public class DgStd {
                 try {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
-                    
+
                     bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
@@ -173,7 +176,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brResult.close();
             gravaEstatisticas(tp, fp, gs, arqResult);
@@ -208,7 +211,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }
@@ -264,14 +267,14 @@ public class DgStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -285,14 +288,14 @@ public class DgStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -307,14 +310,14 @@ public class DgStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(DgStd.class
+                        Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -324,7 +327,7 @@ public class DgStd {
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
             } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
 
                 brArqResult.close();
@@ -353,15 +356,14 @@ public class DgStd {
              *esta etapa só está gravando as estatísticas do primeiro algoritmo de deduplicação.
              *Creio que não faz sentido gravar as estatísticas de cada iteração, 
              *a não ser que seja a quantidade de divergências.
-            */
+             */
             remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+            copiaArqDiverg();
 
             //ATENÇÃO! Os arquivos DN e NDM devem ser povoados a partir do algoritmo de AA
 //            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
 //
 //            juntaDADM(DA, DM);
-
-            
 //
 //            comparaComGS(DADM);
         }
@@ -387,7 +389,7 @@ public class DgStd {
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
             } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -420,9 +422,9 @@ public class DgStd {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
             brArq2.close();
@@ -471,9 +473,9 @@ public class DgStd {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
             brDM.close();
@@ -558,7 +560,7 @@ public class DgStd {
             brArqDup.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDA.flush();
             bwDA.close();
@@ -587,14 +589,14 @@ public class DgStd {
 
             } catch (FileNotFoundException ex) {
 
-                Logger.getLogger(DgStd.class
+                Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
 
             } catch (IOException ex) {
-                Logger.getLogger(DgStd.class
+                Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -655,16 +657,16 @@ public class DgStd {
             brDA.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDiverg.flush();
             bwDiverg.close();
-
+            
         }
 
         return divergencias;
@@ -690,11 +692,11 @@ public class DgStd {
             }
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDiverg.close();
@@ -711,13 +713,13 @@ public class DgStd {
                 bwDiverg.newLine();
             }
             bwDiverg.flush();
-            
+
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDiverg.flush();
@@ -779,11 +781,11 @@ public class DgStd {
             }
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class
+            Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDiverg.close();
@@ -859,7 +861,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName());
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -904,9 +906,9 @@ public class DgStd {
             tamDA = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -924,9 +926,9 @@ public class DgStd {
             tamDM = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -943,9 +945,9 @@ public class DgStd {
             linhaLeitura1.skip(NDM.length());
             tamNDM = linhaLeitura1.getLineNumber();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -1006,7 +1008,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em getFN()");
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }
@@ -1042,7 +1044,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaFN()");
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brArqResult.close();
         }
@@ -1077,7 +1079,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDM.close();
 
@@ -1103,7 +1105,7 @@ public class DgStd {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
         } catch (IOException ex) {
-            Logger.getLogger(DgStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brNDM.close();
         }
@@ -1136,6 +1138,31 @@ public class DgStd {
         fn = 0;
         iteracao = 0;
 
+    }
+
+    public void copiaArqDiverg() throws IOException {
+        
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg" + permutacao +".csv");
+        
+        
+        if (divergToAA.exists()) {
+            divergToAA.delete();
+        }
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+        try {
+            sourceChannel = new FileInputStream(divergencias).getChannel();
+            destinationChannel = new FileOutputStream(divergToAA).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen()) {
+                sourceChannel.close();
+            }
+            if (destinationChannel != null && destinationChannel.isOpen()) {
+                destinationChannel.close();
+            }
+        }
     }
 
 }

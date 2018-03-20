@@ -8,6 +8,7 @@
  */
 package DS;
 
+import AS.AnnStd;
 import dedupalgorithms.*;
 import dude.algorithm.Algorithm;
 import dude.datasource.CSVSource;
@@ -126,8 +127,8 @@ public class VetorSim extends DedupAlg {
                         rotulo = Boolean.toString(statistic.isDuplicate(pair));
 
                         try {
-                            bwArqVetor.append(Integer.toString(id));
-                            bwArqVetor.append(';');
+//                            bwArqVetor.append(Integer.toString(id));
+//                            bwArqVetor.append(';');
                             bwArqVetor.append(elemento1);
                             bwArqVetor.append(';');
                             bwArqVetor.append(elemento2);
@@ -172,4 +173,97 @@ public class VetorSim extends DedupAlg {
         }
     }
 
+    //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
+    //existente no arquivo de divergências informado
+    public void geraVetorMenor(File arqDiverg, File vetorSim) throws IOException {
+
+//O gabarito tem de estar sem aspas
+        String Str;
+        String Str2;
+        String elementoDiverg1;
+        String elementoDiverg2;
+        String elementoVetorSim1;
+        String elementoVetorSim2;
+        String[] linhaAtual;
+        String[] linhaAtualVetor;
+
+        File vetorMenor = null;
+        BufferedReader brDiverg = null;
+        BufferedReader brVetorSim = null;
+        BufferedWriter bwVetorMenor = null;
+        FileWriter escreveVetorMenor;
+
+        try {
+            brDiverg = new BufferedReader(new FileReader(arqDiverg.getPath()));
+
+            String diretorio = arqDiverg.getParent();
+            String nome = arqDiverg.getName();
+            nome = nome.substring(0, nome.indexOf('.'));
+
+            escreveVetorMenor = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
+            vetorMenor = new File(diretorio + "\\" + nome + "_NEW.csv");
+            bwVetorMenor = new BufferedWriter(escreveVetorMenor);
+
+            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+
+            while ((Str = brDiverg.readLine()) != null) {
+
+                linhaAtual = Str.split(";");
+
+                elementoDiverg1 = linhaAtual[0];
+                elementoDiverg2 = linhaAtual[1];
+
+                brVetorSim = new BufferedReader(new FileReader(vetorSim.getPath()));
+
+//                System.out.println("elementoDiverg1: " + elementoDiverg1 + " - " + "elementoDiverg2: " + elementoDiverg2);
+                while ((Str2 = brVetorSim.readLine()) != null) {
+
+                    linhaAtualVetor = Str2.split(";");
+                    int cont = 0;
+
+                    elementoVetorSim1 = linhaAtualVetor[0];
+                    elementoVetorSim2 = linhaAtualVetor[1];
+
+//                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+                    if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
+
+                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+
+//                        System.out.println(linhaAtualVetor.length);
+                        for (String valor : linhaAtualVetor) {
+
+                            bwVetorMenor.append(valor);
+
+                            if (cont < linhaAtualVetor.length - 1) {
+
+                                bwVetorMenor.append(';');
+                            }
+
+                            cont++;
+                        }
+
+                        bwVetorMenor.append('\n');
+                        bwVetorMenor.flush();
+                        break;
+
+                    }
+                }
+
+                brVetorSim.close();
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em buscaGabarito()");
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            bwVetorMenor.flush();
+            bwVetorMenor.close();
+
+            brDiverg.close();
+            brVetorSim.close();
+        }
+    }
+
+//        return existe;
 }

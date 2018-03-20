@@ -28,8 +28,6 @@ public class AplicacaoDS {
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
         }
 
-        System.out.println("resultados.length: " + resultados.length);
-
         //Padronização dos arquivos
         File[] resultadosPadr = new File[23];
 

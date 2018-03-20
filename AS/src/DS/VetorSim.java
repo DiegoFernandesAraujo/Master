@@ -124,7 +124,12 @@ public class VetorSim extends DedupAlg {
                         c = Double.toString(similarityFunc3.getSimilarity(pair));
                         d = Double.toString(similarityFunc4.getSimilarity(pair));
                         e = Double.toString(similarityFunc5.getSimilarity(pair));
-                        rotulo = Boolean.toString(statistic.isDuplicate(pair));
+
+                        if (statistic.isDuplicate(pair)) {
+                            rotulo = "1.0";
+                        } else {
+                            rotulo = "0.0";
+                        }
 
                         try {
 //                            bwArqVetor.append(Integer.toString(id));
@@ -172,9 +177,9 @@ public class VetorSim extends DedupAlg {
             brDiverg.close();
         }
     }
-
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
+
     public void geraVetorMenor(File arqDiverg, File vetorSim) throws IOException {
 
 //O gabarito tem de estar sem aspas
@@ -204,7 +209,9 @@ public class VetorSim extends DedupAlg {
             vetorMenor = new File(diretorio + "\\" + nome + "_NEW.csv");
             bwVetorMenor = new BufferedWriter(escreveVetorMenor);
 
-            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+//            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+            //Ordem para o algoritmo de Peter Christen
+            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03\n");
 
             while ((Str = brDiverg.readLine()) != null) {
 

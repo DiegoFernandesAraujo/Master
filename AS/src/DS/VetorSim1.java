@@ -8,6 +8,7 @@
  */
 package DS;
 
+import AS.AnnStd;
 import dedupalgorithms.*;
 import dude.algorithm.Algorithm;
 import dude.datasource.CSVSource;
@@ -85,7 +86,7 @@ public class VetorSim1 extends DedupAlg {
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");
         LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("track03");
-        
+
         //Escrita do cabeçalho
         try {
             escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
@@ -120,22 +121,26 @@ public class VetorSim1 extends DedupAlg {
 
                     String firstSoundex = pair.getFirstElement().getAttributeValues("artist").toString();
                     String secondSoundex = pair.getSecondElement().getAttributeValues("artist").toString();
-                    
 
                     //Fecho transitivo
                     if ((pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2))
                             || (pair.getFirstElement().toString().contains(elemento2) && pair.getSecondElement().toString().contains(elemento1))) {
 
                         id++;
-                        
+
                         System.out.println(firstSoundex + "-" + secondSoundex);
 
                         a = Double.toString(similarityFunc.getSimilarity(pair));
-                        b = Double.toString(similarityFunc2.getSimilarity(firstSoundex,secondSoundex));
+                        b = Double.toString(similarityFunc2.getSimilarity(firstSoundex, secondSoundex));
                         c = Double.toString(similarityFunc3.getSimilarity(pair));
                         d = Double.toString(similarityFunc4.getSimilarity(pair));
                         e = Double.toString(similarityFunc5.getSimilarity(pair));
-                        rotulo = Boolean.toString(statistic.isDuplicate(pair));
+                        
+                        if (statistic.isDuplicate(pair)) {
+                            rotulo = "1.0";
+                        } else {
+                            rotulo = "0.0";
+                        }
 
                         try {
 //                            bwArqVetor.append(Integer.toString(id));
@@ -181,6 +186,101 @@ public class VetorSim1 extends DedupAlg {
             bwArqVetor.close();
 
             brDiverg.close();
+        }
+    }
+
+    //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
+    //existente no arquivo de divergências informado
+    public void geraVetorMenor(File arqDiverg, File vetorSim) throws IOException {
+
+//O gabarito tem de estar sem aspas
+        String Str;
+        String Str2;
+        String elementoDiverg1;
+        String elementoDiverg2;
+        String elementoVetorSim1;
+        String elementoVetorSim2;
+        String[] linhaAtual;
+        String[] linhaAtualVetor;
+
+        File vetorMenor = null;
+        BufferedReader brDiverg = null;
+        BufferedReader brVetorSim = null;
+        BufferedWriter bwVetorMenor = null;
+        FileWriter escreveVetorMenor;
+
+        try {
+            brDiverg = new BufferedReader(new FileReader(arqDiverg.getPath()));
+
+            String diretorio = arqDiverg.getParent();
+            String nome = arqDiverg.getName();
+            nome = nome.substring(0, nome.indexOf('.'));
+
+            escreveVetorMenor = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
+            vetorMenor = new File(diretorio + "\\" + nome + "_NEW.csv");
+            bwVetorMenor = new BufferedWriter(escreveVetorMenor);
+
+            //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+            
+            //Ordem para o algoritmo de Peter Christen
+            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03\n");
+
+            while ((Str = brDiverg.readLine()) != null) {
+
+                linhaAtual = Str.split(";");
+
+                elementoDiverg1 = linhaAtual[0];
+                elementoDiverg2 = linhaAtual[1];
+
+                brVetorSim = new BufferedReader(new FileReader(vetorSim.getPath()));
+
+//                System.out.println("elementoDiverg1: " + elementoDiverg1 + " - " + "elementoDiverg2: " + elementoDiverg2);
+                while ((Str2 = brVetorSim.readLine()) != null) {
+
+                    linhaAtualVetor = Str2.split(";");
+                    int cont = 0;
+
+                    elementoVetorSim1 = linhaAtualVetor[0];
+                    elementoVetorSim2 = linhaAtualVetor[1];
+
+//                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+                    if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
+
+                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+
+//                        System.out.println(linhaAtualVetor.length);
+                        for (String valor : linhaAtualVetor) {
+
+                            bwVetorMenor.append(valor);
+
+                            if (cont < linhaAtualVetor.length - 1) {
+
+                                bwVetorMenor.append(';');
+                            }
+
+                            cont++;
+                        }
+
+                        bwVetorMenor.append('\n');
+                        bwVetorMenor.flush();
+                        break;
+
+                    }
+                }
+
+                brVetorSim.close();
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em buscaGabarito()");
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            bwVetorMenor.flush();
+            bwVetorMenor.close();
+
+            brDiverg.close();
+            brVetorSim.close();
         }
     }
 

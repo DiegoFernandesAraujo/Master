@@ -51,47 +51,29 @@ public class AplicacaoASDS {
         objAS.setTamBaseOrig(9763); //Necessário!
         objDS.setGs(gs);
         objDS.setTamBaseOrig(9763); //Necessário!
-//
-//        int quantidadeAlg = 0;
-//
-//        List<Integer> aux2 = new ArrayList<Integer>();
-//
-//        //1000 experimentos aleatórios
-//        for (int i = 1; i <= 1000; i++) {
-//
-//            objAS.setPermutacao(i);
-//            objAS.limpaTudo();
-//            objDS.setPermutacao(i);
-//            objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
-//            System.out.println("Iteração " + i);
-//
-//            aux2 = geraResult(quantidadeAlg);
-//            for (int index : aux2) {
-//                objAS.comparaConjuntos(resultadosPadr[index]);
-//                objDS.comparaConjuntos(resultadosPadr[index]);
-//            }
-//
-//        }
+
         long seed = 500;
-        int qtdAlg = 10;
+        int qtdAlg = 10; //n algoritmos
         int qtdAmostras = 5;
 
         File algSort = new File("./src/csv/", "algoritmos.csv");
 
+        //Gerando amostras através de seleção aleatória de n algoritmos de deduplicação
         for (int i = 1; i <= qtdAmostras; i++) {
 
             ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlg, seed);
 
             if (!buscaAlgoritmos(algSort, listaAlg)) {
+                
                 gravaAlgoritmos(algSort, listaAlg);
 
                 objAS.setPermutacao(i);
+                objAS.setQtdAlg(qtdAlg);
                 objAS.limpaTudo();
                 objDS.setPermutacao(i);
+                objDS.setQtdAlg(qtdAlg);
                 objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
                 System.out.println("Iteração " + i);
-                //Gera AS com esses algoritmos
-                //Gera DS com esses algoritmos
                 
                 for (int index : listaAlg) {
                     objAS.comparaConjuntos(resultadosPadr[index]);
@@ -105,6 +87,7 @@ public class AplicacaoASDS {
 
     }
 
+    //Gera ordem aleatória de algoritmos sem repetição dessa
     public static ArrayList<Integer> geraOrdAlg(int qtdAlg, long seed) { //Esse static precisa mesmo?
 
         ArrayList<Integer> aux = new ArrayList<Integer>();
@@ -133,6 +116,8 @@ public class AplicacaoASDS {
 
     }
 
+    //Grava uma lista de algoritmos em um arquivo dedicado a manter o histórico de algoritmos selecionados 
+    //para compor a amostra para os experimentos
     public static void gravaAlgoritmos(File arqResult, ArrayList<Integer> lista) throws IOException {
 
         FileWriter escreveAlg = null;
@@ -165,6 +150,7 @@ public class AplicacaoASDS {
         }
     }
 
+    //Busca se a lista de algoritmos passados já existe no arquivo responsável por armazenar listas de algoritmos anteriormente gerados
     private static boolean buscaAlgoritmos(File busca, ArrayList<Integer> elemento) throws IOException, InterruptedException {
 
         if (!busca.exists()) {

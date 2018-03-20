@@ -26,11 +26,13 @@ import java.util.List;
 
 /**
  *
- * @author Diego
+ * @author Diego 
+ * Em relação à classe DgStd possui o método copiaArqDiverg(), um
+ * método para manter salvo o arquivo de divergências gerado
  */
 public class DgStd1 {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
 
     File estatisticas;
     File DA;
@@ -58,7 +60,7 @@ public class DgStd1 {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstat.write("algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
@@ -666,7 +668,7 @@ public class DgStd1 {
         } finally {
             bwDiverg.flush();
             bwDiverg.close();
-            
+
         }
 
         return divergencias;
@@ -818,6 +820,9 @@ public class DgStd1 {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
 
+                
+                bwEstat.append(Integer.toString(getQtdAlg()));
+                bwEstat.append(";");
                 bwEstat.append(Integer.toString(permutacao));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(iteracao));
@@ -967,6 +972,14 @@ public class DgStd1 {
     public int getInspManuais() throws IOException {
 
         return getTamNDM() + getTamDM();
+    }
+
+    public int getQtdAlg() {
+        return qtdAlg;
+    }
+
+    public void setQtdAlg(int qtdAlg) {
+        this.qtdAlg = qtdAlg;
     }
 
     public int getFN(File arqResult) throws IOException {
@@ -1141,10 +1154,9 @@ public class DgStd1 {
     }
 
     public void copiaArqDiverg() throws IOException {
-        
-        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg" + permutacao +".csv");
-        
-        
+
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg" + permutacao + ".csv");
+
         if (divergToAA.exists()) {
             divergToAA.delete();
         }

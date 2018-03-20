@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class AnnStd {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
 
     File estatisticas;
     File DA;
@@ -54,7 +54,7 @@ public class AnnStd {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstat.write("algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
@@ -369,7 +369,7 @@ public class AnnStd {
             try {
                 juncao.createNewFile();
                 new Thread().sleep(50);
-                
+
             } catch (FileNotFoundException ex) {
 
                 System.out.println("Não foi possível encontrar o arquivo " + juncao.getName());
@@ -747,6 +747,8 @@ public class AnnStd {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
 
+                bwEstat.append(Integer.toString(getQtdAlg()));
+                bwEstat.append(";");
                 bwEstat.append(Integer.toString(permutacao));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(iteracao));
@@ -896,6 +898,14 @@ public class AnnStd {
     public int getInspManuais() throws IOException {
 
         return getTamNDM() + getTamDM();
+    }
+
+    public int getQtdAlg() {
+        return qtdAlg;
+    }
+
+    public void setQtdAlg(int qtdAlg) {
+        this.qtdAlg = qtdAlg;
     }
 
     public int getFN(File arqResult) throws IOException {

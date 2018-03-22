@@ -135,7 +135,7 @@ public class VetorSim1 extends DedupAlg {
                         c = Double.toString(similarityFunc3.getSimilarity(pair));
                         d = Double.toString(similarityFunc4.getSimilarity(pair));
                         e = Double.toString(similarityFunc5.getSimilarity(pair));
-                        
+
                         if (statistic.isDuplicate(pair)) {
                             rotulo = "1.0";
                         } else {
@@ -221,7 +221,6 @@ public class VetorSim1 extends DedupAlg {
             bwVetorMenor = new BufferedWriter(escreveVetorMenor);
 
             //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
-            
             //Ordem para o algoritmo de Peter Christen
             bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03\n");
 

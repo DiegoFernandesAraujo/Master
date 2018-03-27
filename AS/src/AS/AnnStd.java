@@ -54,7 +54,7 @@ public class AnnStd {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
@@ -332,9 +332,10 @@ public class AnnStd {
 
                 //Juntar DA + DM para calcular precision, recall e f-measure para o TODO, O ANNEALING!
                 //Como é o baseline poderia ser calculado apenas com DA mesmo
-                juntaDADM(DA, DM);
-
-                comparaComGS(DADM);
+//                juntaDADM(DA, DM);
+//
+//                comparaComGS(DADM);
+                comparaComGS(DA);
 
             }
 
@@ -747,6 +748,10 @@ public class AnnStd {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
 
+                bwEstat.append("AS");
+                bwEstat.append(";");
+                bwEstat.append("only");
+                bwEstat.append(";");
                 bwEstat.append(Integer.toString(getQtdAlg()));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(permutacao));

@@ -53,7 +53,7 @@ public class AplicacaoDS {
         obj.setTamBaseOrig(9763); //Necessário!
 
         List<String> aux = new ArrayList<String>();
-        Random gerador = new Random();
+//        Random gerador = new Random(); //Pode ser desconsiderado, dado que a ordem aqui não importa
 
         //1000 experimentos aleatórios
 //        for (int i = 1; i <= 1000; i++) {

@@ -64,19 +64,31 @@ public class AplicacaoASDS {
             ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlg, seed);
 
             if (!buscaAlgoritmos(algSort, listaAlg)) {
-                
+
                 gravaAlgoritmos(algSort, listaAlg);
 
                 objAS.setPermutacao(i);
                 objAS.setQtdAlg(qtdAlg);
                 objAS.limpaTudo();
+
                 objDS.setPermutacao(i);
                 objDS.setQtdAlg(qtdAlg);
                 objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
                 System.out.println("Iteração " + i);
                 
+                int alg = 0;
+
                 for (int index : listaAlg) {
+                    
+                    alg++;
+                    
                     objAS.comparaConjuntos(resultadosPadr[index]);
+                    
+                    if (alg == listaAlg.size()) { //Gerar estatísticas so na última iteração
+                        System.out.println("último algoritmo: " + alg);
+                        objDS.setGeraEst(true);
+                    }
+                    
                     objDS.comparaConjuntos(resultadosPadr[index]);
                 }
             }

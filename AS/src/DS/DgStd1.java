@@ -26,13 +26,13 @@ import java.util.List;
 
 /**
  *
- * @author Diego 
- * Em relação à classe DgStd possui o método copiaArqDiverg(), um
+ * @author Diego Em relação à classe DgStd possui o método copiaArqDiverg(), um
  * método para manter salvo o arquivo de divergências gerado
  */
 public class DgStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
+    boolean geraEst = false;
 
     File estatisticas;
     File DA;
@@ -60,7 +60,7 @@ public class DgStd1 {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
 
-                    bwEstat.write("algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
@@ -248,7 +248,7 @@ public class DgStd1 {
 
                 brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
 
-                escreveDupAuto = new FileWriter(DA);
+                escreveDupAuto = new FileWriter(DA); //Dessa forma sobreescreve
                 bwDupAuto = new BufferedWriter(escreveDupAuto);
 
                 //Copiando do primeiro arquivo
@@ -341,8 +341,7 @@ public class DgStd1 {
 //                juntaDADM(DA, DM);
 //
 //                comparaComGS(DADM);
-                comparaComGS(DA);
-
+//                comparaComGS(DA);
             }
 
         }
@@ -360,14 +359,17 @@ public class DgStd1 {
              *a não ser que seja a quantidade de divergências.
              */
             remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
-            copiaArqDiverg();
+            copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
 
             //ATENÇÃO! Os arquivos DN e NDM devem ser povoados a partir do algoritmo de AA
 //            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
 //
 //            juntaDADM(DA, DM);
 //
-//            comparaComGS(DADM);
+            if (geraEst) {
+                comparaComGS(DA);
+                setGeraEst(false);
+            }
         }
     }
 
@@ -571,8 +573,9 @@ public class DgStd1 {
         return DA;
     }
 
-    //Para gerar DN e NM       
+    //Para gerar DN e NDM       
     public File filtraDivergencias(File arqDA) throws IOException {
+        //arqDA contém a junção do que está em DA com o último resltado (com dados repetidos, inclusive)
 
         String Str;
         String[] linhaAtual1;
@@ -652,6 +655,7 @@ public class DgStd1 {
 
                 if (jaExistia == false) {
                     //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
+                    //Isso está sendo feito com o método removeDup()
                     bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
 
                 }
@@ -820,7 +824,10 @@ public class DgStd1 {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
 
-                
+                bwEstat.append("DS");
+                bwEstat.append(";");
+                bwEstat.append("1 - acm diverg");
+                bwEstat.append(";");
                 bwEstat.append(Integer.toString(getQtdAlg()));
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(permutacao));
@@ -980,6 +987,10 @@ public class DgStd1 {
 
     public void setQtdAlg(int qtdAlg) {
         this.qtdAlg = qtdAlg;
+    }
+
+    public void setGeraEst(boolean geraEst) {
+        this.geraEst = geraEst;
     }
 
     public int getFN(File arqResult) throws IOException {

@@ -19,6 +19,7 @@ public class AplicacaoAS {
 
     public static void main(String[] args) throws IOException {
         AnnStd obj = new AnnStd();
+        long seed = 500;
 
         File[] resultados = new File[23];
         for (int i = 0; i < resultados.length; ++i) {
@@ -53,7 +54,7 @@ public class AplicacaoAS {
         obj.setTamBaseOrig(9763); //Necessário!
 
         List<String> aux = new ArrayList<String>();
-        Random gerador = new Random();
+        Random gerador = new Random(seed);
 
         //1000 experimentos aleatórios
         for (int i = 1; i <= 1000; i++) {

@@ -363,7 +363,7 @@ public class DgStd {
 
             
 //
-//            comparaComGS(DADM);
+            comparaComGS(DA);
         }
     }
 

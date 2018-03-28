@@ -40,6 +40,7 @@ public class ExecVetorSim {
 
                     if (nome.contains("diverg") && !nome.contains("_NEW")) {
                         obj.geraVetorMenor(arq, vetorSim);
+                        arq.delete(); //Exclui o arquivo depois de gerar os vetores de similaridade
                     }
 
                 }

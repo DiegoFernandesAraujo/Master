@@ -53,49 +53,60 @@ public class AplicacaoASDS {
         objDS.setTamBaseOrig(9763); //Necessário!
 
         long seed = 500;
-        int qtdAlg = 10; //n algoritmos
-        int qtdAmostras = 5;
+//        int qtdAlg = 10; //n algoritmos
+        int[] vQtdAlg = {10, 15, 20};//, 25}; //Adicionado depois
+        int qtdObservacoes = 5;
 
         File algSort = new File("./src/csv/", "algoritmos.csv");
+        
+        int sohParaTestar = 0;
 
-        //Gerando amostras através de seleção aleatória de n algoritmos de deduplicação
-        for (int i = 1; i <= qtdAmostras; i++) {
+        for (int qtdAlg : vQtdAlg) { //Adicionado depois
+            
+            System.out.println("Quantidade de algoritmos: " + qtdAlg);
 
-            ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlg, seed);
+            //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
+            for (int i = 1; i <= qtdObservacoes; i++) {
 
-            if (!buscaAlgoritmos(algSort, listaAlg)) {
+                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlg, seed);
 
-                gravaAlgoritmos(algSort, listaAlg);
+                if (!buscaAlgoritmos(algSort, listaAlg)) {
 
-                objAS.setPermutacao(i);
-                objAS.setQtdAlg(qtdAlg);
-                objAS.limpaTudo();
+                    gravaAlgoritmos(algSort, listaAlg);
 
-                objDS.setPermutacao(i);
-                objDS.setQtdAlg(qtdAlg);
-                objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
-                System.out.println("Iteração " + i);
-                
-                int alg = 0;
+                    objAS.setPermutacao(i);
+                    objAS.setQtdAlg(qtdAlg);
+                    objAS.limpaTudo();
 
-                for (int index : listaAlg) {
-                    
-                    alg++;
-                    
-                    objAS.comparaConjuntos(resultadosPadr[index]);
-                    
-                    if (alg == listaAlg.size()) { //Gerar estatísticas so na última iteração
-                        System.out.println("último algoritmo: " + alg);
-                        objDS.setGeraEst(true);
+                    objDS.setPermutacao(i);
+                    objDS.setQtdAlg(qtdAlg);
+                    objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
+                    System.out.println("Iteração " + i);
+
+                    int alg = 0;
+
+                    for (int index : listaAlg) {
+
+                        alg++;
+
+                        objAS.comparaConjuntos(resultadosPadr[index]);
+
+                        if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
+//                            System.out.println("último algoritmo: " + alg);
+                            System.out.println("Gerando estatísticas para a última iteração pela " + ++sohParaTestar + " vez!");
+                            objDS.setGeraEst(true);
+                        }
+
+                        objDS.comparaConjuntos(resultadosPadr[index]);
                     }
-                    
-                    objDS.comparaConjuntos(resultadosPadr[index]);
                 }
-            }
 
-            seed++;
+                seed++;
+            }
+            //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
+            java.awt.Toolkit.getDefaultToolkit().beep();
+
         }
-        java.awt.Toolkit.getDefaultToolkit().beep();
 
     }
 

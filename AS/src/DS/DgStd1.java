@@ -1166,7 +1166,7 @@ public class DgStd1 {
 
     public void copiaArqDiverg() throws IOException {
 
-        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg" + permutacao + ".csv");
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (divergToAA.exists()) {
             divergToAA.delete();

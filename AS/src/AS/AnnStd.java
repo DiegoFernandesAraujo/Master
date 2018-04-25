@@ -26,7 +26,9 @@ import java.util.List;
  */
 public class AnnStd {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
+
+    
 
     File estatisticas;
     File DA;
@@ -36,6 +38,7 @@ public class AnnStd {
     File gs;
     File DADM;
     FileWriter escreveEstat;
+    boolean dedup = false; //Para identificar se o experimento trata de uma ou mais bases
 
     public AnnStd() {
         tp = 0;
@@ -734,7 +737,7 @@ public class AnnStd {
 
             double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            int tn = getTN(tp, fp, fn, tamBaseOrig);
+            int tn = getTN(tp, fp, fn);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
@@ -799,6 +802,10 @@ public class AnnStd {
         } catch (IOException ex) {
             Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setDedup(boolean dedup) {
+        this.dedup = dedup;
     }
 
     public void setPermutacao(int permutacao) {
@@ -892,9 +899,22 @@ public class AnnStd {
 
     }
 
-    public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
+    public int getTN(int tp, int fp, int fn) throws IOException {
 
-        tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+        if (dedup) {
+
+//            tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+            int tamBase = getTamBaseOrig();
+            System.out.println("tamBase antes: " + tamBase);
+            tn = (((tamBase--) *  (tamBase))) / 2 - tp - fp - fn;
+            System.out.println("tamBase depois: " + tamBase);
+        
+        }else{
+            int tamBase = getTamBaseOrig();
+            int tamBase2 = getTamBaseOrig2();
+            
+            tn = (((tamBase) * (tamBase2)))  - tp - fp - fn;
+        }
 
         return tn;
 
@@ -911,6 +931,14 @@ public class AnnStd {
 
     public void setQtdAlg(int qtdAlg) {
         this.qtdAlg = qtdAlg;
+    }
+    
+    public int getTamBaseOrig() {
+        return tamBaseOrig;
+    }
+    
+    public int getTamBaseOrig2() {
+        return tamBaseOrig2;
     }
 
     public int getFN(File arqResult) throws IOException {
@@ -1063,6 +1091,11 @@ public class AnnStd {
 
     public void setTamBaseOrig(int tamBaseOrig) {
         this.tamBaseOrig = tamBaseOrig;
+    }
+
+    public void setTamBaseOrig(int tamBaseOrig, int tamBaseOrig2) {
+        this.tamBaseOrig = tamBaseOrig;
+        this.tamBaseOrig2 = tamBaseOrig2;
     }
 
     public void limpaTudo() {

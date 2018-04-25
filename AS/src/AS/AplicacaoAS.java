@@ -17,35 +17,11 @@ import java.util.Random;
  */
 public class AplicacaoAS {
 
-    int tamBase = 0;
-    int tamBase2 = 0;
-
-    
-    public int getTamBase() {
-        return tamBase;
-    }
-
-    public void setTamBase(int tamBase) {
-        this.tamBase = tamBase;
-    }
-        
-    public int getTamBase2() {
-        return tamBase2;
-    }
-
-    public void setTamBase2(int tamBase2) {
-        this.tamBase2 = tamBase2;
-    }
-
     public static void main(String[] args) throws IOException {
-        
-//        new AplicacaoAS().setTamBase(9763);
-//        
         AnnStd obj = new AnnStd();
         long seed = 500;
-        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades utilizados
 
-        File[] resultados = new File[qtdAlg];
+        File[] resultados = new File[23];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
@@ -54,7 +30,7 @@ public class AplicacaoAS {
         System.out.println("resultados.length: " + resultados.length);
 
         //Padronização dos arquivos
-        File[] resultadosPadr = new File[qtdAlg];
+        File[] resultadosPadr = new File[23];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
             resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
@@ -75,16 +51,7 @@ public class AplicacaoAS {
         
          */
         obj.setGs(gs);
-//        obj.setDedup(true);
-        obj.setDedup(false);
-        
-//        obj.setTamBaseOrig(9763); //Necessário!
-        obj.setTamBaseOrig(9763, 9762); //Necessário!
-
-        
-//        obj.setTamBaseOrig(new AplicacaoAS().getTamBase()); //Necessário!
-//      OR 
-//      obj.setTamBaseOrig(new AplicacaoAS().getTamBase(), new AplicacaoAS().getTamBase2()); //Necessário!
+        obj.setTamBaseOrig(9763); //Necessário!
 
         List<String> aux = new ArrayList<String>();
         Random gerador = new Random(seed);
@@ -96,7 +63,7 @@ public class AplicacaoAS {
             obj.limpaTudo();
             System.out.println("Iteração " + i);
 
-            while (aux.size() < qtdAlg) {
+            while (aux.size() < 23) {
 
                 int randomNum = gerador.nextInt(resultados.length);
 

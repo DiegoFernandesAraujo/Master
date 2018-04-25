@@ -14,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,8 +27,6 @@ import java.util.logging.Logger;
  * @author Diego
  */
 public class AplicacaoASDS {
-
-    File arqAlg = new File("./src/csv/algoritmos.csv");
 
     public static void main(String[] args) throws IOException, InterruptedException {
         AnnStd objAS = new AnnStd();
@@ -57,14 +54,15 @@ public class AplicacaoASDS {
 
         long seed = 500;
 //        int qtdAlg = 10; //n algoritmos
-        int[] vQtdAlg = {10, 15, 20, 23};//, 25}; //Adicionado depois
-        int qtdObservacoes = 1000;
+        int[] vQtdAlg = {10, 15, 20};//, 25}; //Adicionado depois
+        int qtdObservacoes = 5;
 
         File algSort = new File("./src/csv/", "algoritmos.csv");
+        
+        int sohParaTestar = 0;
 
-//        int sohParaTestar = 0;
         for (int qtdAlg : vQtdAlg) { //Adicionado depois
-
+            
             System.out.println("Quantidade de algoritmos: " + qtdAlg);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
@@ -95,51 +93,20 @@ public class AplicacaoASDS {
 
                         if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
 //                            System.out.println("último algoritmo: " + alg);
-//                            System.out.println("Gerando estatísticas para a última iteração pela " + ++sohParaTestar + " vez!");
+                            System.out.println("Gerando estatísticas para a última iteração pela " + ++sohParaTestar + " vez!");
                             objDS.setGeraEst(true);
                         }
 
                         objDS.comparaConjuntos(resultadosPadr[index]);
                     }
-                    
-                } else {
-                    i--;
                 }
-            seed++;
+
+                seed++;
+            }
+            //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
+            java.awt.Toolkit.getDefaultToolkit().beep();
+
         }
-        //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
-        java.awt.Toolkit.getDefaultToolkit().beep();
-
-    }
-
-}
-
-public int getTamAlg() throws IOException {
-
-        int tamAlg = 0;
-
-        LineNumberReader linhaLeitura1 = null;
-
-        try {
-            linhaLeitura1 = new LineNumberReader(new FileReader(arqAlg.getPath()));
-            linhaLeitura1.skip(arqAlg.length());
-            tamAlg = linhaLeitura1.getLineNumber();
-
-        
-
-} catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
-        
-
-} catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            linhaLeitura1.close();
-        }
-
-        return tamAlg;
 
     }
 
@@ -197,11 +164,8 @@ public int getTamAlg() throws IOException {
 
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
-        
-
-} catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwAlg.flush();
             bwAlg.close();
@@ -236,11 +200,8 @@ public int getTamAlg() throws IOException {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + busca.getName() + " em buscaGabarito()");
-        
-
-} catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }

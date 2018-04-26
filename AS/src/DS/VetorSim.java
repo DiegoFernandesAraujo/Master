@@ -19,7 +19,10 @@ import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.StatisticComponent;
+import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
+import dude.similarityfunction.contentbased.util.SoundEx;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedReader;
@@ -31,6 +34,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.MongeElkan;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
  *
@@ -38,10 +43,10 @@ import java.util.logging.Logger;
  */
 public class VetorSim extends DedupAlg {
 
-    File vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades.csv");
+    File vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-26-04.csv");
     FileWriter escreveArqVetor;
     BufferedWriter bwArqVetor = null;
-    String a, b, c, d, e, rotulo;
+    String a, b, c, d, e, f, g, rotulo;
 
     public VetorSim(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
@@ -74,26 +79,29 @@ public class VetorSim extends DedupAlg {
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
-        //Utilizando-se a função de similaridade Levensthein como base para gerar os vetores de similaridade.
-        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
-        LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("artist");
+        //Utilizando-se funções de similaridade que apresentaram bons resultados para gerar os vetores de similaridade.
+        MongeElkanFunction similarityFunc = new MongeElkanFunction("title");
+//        SoundExFunction similarityFunc2 = new SoundExFunction("artist");
+        Soundex similarityFunc2 = new Soundex();
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");
         LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("track03");
+        LevenshteinDistanceFunction similarityFunc6 = new LevenshteinDistanceFunction("track10");
+        LevenshteinDistanceFunction similarityFunc7 = new LevenshteinDistanceFunction("track11");
 
         //Escrita do cabeçalho
         try {
             escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-            bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+//            bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;track10;track11;duplicata\n"); //ERA ASSIM
+            bwArqVetor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
         } finally {
             bwArqVetor.flush();
             bwArqVetor.close();
-
         }
 
         //Escrita dos valores de similaridade
@@ -113,17 +121,24 @@ public class VetorSim extends DedupAlg {
                 System.out.println("Buscando elemento1: " + elemento1 + " - elemento2: " + elemento2);
                 for (DuDeObjectPair pair : algorithm) {
 
+                    String firstSoundex = pair.getFirstElement().getAttributeValues("artist").toString();
+                    String secondSoundex = pair.getSecondElement().getAttributeValues("artist").toString();
+
                     //Fecho transitivo
                     if ((pair.getFirstElement().toString().contains(elemento1) && pair.getSecondElement().toString().contains(elemento2))
                             || (pair.getFirstElement().toString().contains(elemento2) && pair.getSecondElement().toString().contains(elemento1))) {
 
                         id++;
 
+                        System.out.println(firstSoundex + "-" + secondSoundex);
+
                         a = Double.toString(similarityFunc.getSimilarity(pair));
-                        b = Double.toString(similarityFunc2.getSimilarity(pair));
+                        b = Double.toString(similarityFunc2.getSimilarity(firstSoundex, secondSoundex));
                         c = Double.toString(similarityFunc3.getSimilarity(pair));
                         d = Double.toString(similarityFunc4.getSimilarity(pair));
                         e = Double.toString(similarityFunc5.getSimilarity(pair));
+                        f = Double.toString(similarityFunc6.getSimilarity(pair));
+                        g = Double.toString(similarityFunc7.getSimilarity(pair));
 
                         if (statistic.isDuplicate(pair)) {
                             rotulo = "1.0";
@@ -138,6 +153,8 @@ public class VetorSim extends DedupAlg {
                             bwArqVetor.append(';');
                             bwArqVetor.append(elemento2);
                             bwArqVetor.append(';');
+                            bwArqVetor.append(rotulo);
+                            bwArqVetor.append(';');
                             bwArqVetor.append(a);
                             bwArqVetor.append(';');
                             bwArqVetor.append(b);
@@ -148,7 +165,9 @@ public class VetorSim extends DedupAlg {
                             bwArqVetor.append(';');
                             bwArqVetor.append(e);
                             bwArqVetor.append(';');
-                            bwArqVetor.append(rotulo);
+                            bwArqVetor.append(f);
+                            bwArqVetor.append(';');
+                            bwArqVetor.append(g);
                             bwArqVetor.append('\n');
                             bwArqVetor.flush();
 
@@ -177,9 +196,9 @@ public class VetorSim extends DedupAlg {
             brDiverg.close();
         }
     }
+
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
-
     public void geraVetorMenor(File arqDiverg, File vetorSim) throws IOException {
 
 //O gabarito tem de estar sem aspas
@@ -211,7 +230,7 @@ public class VetorSim extends DedupAlg {
 
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
             //Ordem para o algoritmo de Peter Christen
-            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03\n");
+            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
             while ((Str = brDiverg.readLine()) != null) {
 
@@ -234,7 +253,7 @@ public class VetorSim extends DedupAlg {
 //                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
                     if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
 
-//                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
 
 //                        System.out.println(linhaAtualVetor.length);
                         for (String valor : linhaAtualVetor) {
@@ -272,5 +291,4 @@ public class VetorSim extends DedupAlg {
         }
     }
 
-//        return existe;
 }

@@ -31,7 +31,10 @@ import java.util.List;
  */
 public class DgStd1 {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
+    boolean dedup = false;
+    
+    
     boolean geraEst = false;
 
     File estatisticas;
@@ -810,7 +813,7 @@ public class DgStd1 {
 
             double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            int tn = getTN(tp, fp, fn, tamBaseOrig);
+            int tn = getTN(tp, fp, fn);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
@@ -905,6 +908,30 @@ public class DgStd1 {
     public void setGs(File gs) {
         this.gs = gs;
     }
+    
+    public int getTamBaseOrig() {
+        return tamBaseOrig;
+    }
+
+    public void setTamBaseOrig(int tamBaseOrig) {
+        this.tamBaseOrig = tamBaseOrig;
+    }
+
+    public int getTamBaseOrig2() {
+        return tamBaseOrig2;
+    }
+
+    public void setTamBaseOrig2(int tamBaseOrig2) {
+        this.tamBaseOrig2 = tamBaseOrig2;
+    }
+
+    public boolean isDedup() {
+        return dedup;
+    }
+
+    public void setDedup(boolean dedup) {
+        this.dedup = dedup;
+    }
 
     public int getTamDA() throws IOException {
 
@@ -968,11 +995,24 @@ public class DgStd1 {
 
     }
 
-    public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
+    public int getTN(int tp, int fp, int fn) throws IOException {
 
-        tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+        int tamBase = getTamBaseOrig();
+        
+        if (isDedup()) {
 
-        return tn;
+            tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+
+            return tn;
+
+        } else {
+            
+            int tamBase2 = getTamBaseOrig2();
+
+            tn = (tamBase * tamBase2)  - tp - fp - fn;
+            
+            return tn;
+        }
 
     }
 
@@ -1139,10 +1179,6 @@ public class DgStd1 {
 
     public void setIteracao(int iteracao) {
         this.iteracao = iteracao;
-    }
-
-    public void setTamBaseOrig(int tamBaseOrig) {
-        this.tamBaseOrig = tamBaseOrig;
     }
 
     public void limpaTudo() {

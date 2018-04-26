@@ -19,9 +19,25 @@ public class AplicacaoAS {
 
     public static void main(String[] args) throws IOException {
         AnnStd obj = new AnnStd();
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
+
+        obj.setGs(gs);
+
+        obj.setDedup(true);
+//        obj.setDedup(false);
+
+        obj.setTamBaseOrig(9763); //Necessário!
+//        obj.setTamBaseOrig2(9763); //Necessário!
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+
         long seed = 500;
 
-        File[] resultados = new File[23];
+        File[] resultados = new File[qtdAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
@@ -30,13 +46,11 @@ public class AplicacaoAS {
         System.out.println("resultados.length: " + resultados.length);
 
         //Padronização dos arquivos
-        File[] resultadosPadr = new File[23];
+        File[] resultadosPadr = new File[qtdAlg];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
             resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
         }
-
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
         /* Para retornar o path do projeto
         try {
@@ -50,9 +64,6 @@ public class AplicacaoAS {
         }
         
          */
-        obj.setGs(gs);
-        obj.setTamBaseOrig(9763); //Necessário!
-
         List<String> aux = new ArrayList<String>();
         Random gerador = new Random(seed);
 
@@ -63,7 +74,7 @@ public class AplicacaoAS {
             obj.limpaTudo();
             System.out.println("Iteração " + i);
 
-            while (aux.size() < 23) {
+            while (aux.size() < qtdAlg) {
 
                 int randomNum = gerador.nextInt(resultados.length);
 

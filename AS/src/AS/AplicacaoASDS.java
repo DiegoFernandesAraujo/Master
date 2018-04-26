@@ -35,53 +35,86 @@ public class AplicacaoASDS {
         AnnStd objAS = new AnnStd();
         DgStd1 objDS = new DgStd1();
 
-        File[] resultados = new File[23];
+        long seed = 500;
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
+
+        objAS.setGs(gs);
+        objDS.setGs(gs);
+
+        objAS.setDedup(true);
+        objDS.setDedup(true);
+
+//        objAS.setDedup(false);
+//        objDS.setDedup(false);
+        objAS.setTamBaseOrig(9763); //Necessário!
+//        objAS.setTamBaseOrig2(9763); //Necessário!
+        objDS.setTamBaseOrig(9763); //Necessário!
+//        objAS.setTamBaseOrig2(9763); //Necessário!
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+        File[] resultados = new File[qtdAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos
-        File[] resultadosPadr = new File[23];
+        File[] resultadosPadr = new File[qtdAlg];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
             resultadosPadr[i] = objAS.padronizaCsvFile(resultados[i]);
         }
 
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
-
-        objAS.setGs(gs);
-        objAS.setTamBaseOrig(9763); //Necessário!
-        objDS.setGs(gs);
-        objDS.setTamBaseOrig(9763); //Necessário!
-
-        long seed = 500;
 //        int qtdAlg = 10; //n algoritmos
-        int[] vQtdAlg = {10, 15, 20, 23};//, 25}; //Adicionado depois
-        int qtdObservacoes = 1000;
+        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
+//        int qtdObservacoes = 1000; //Quantidade de observações a serem geradas para os experimentos
+        int qtdObservacoes = 5; //Quantidade de observações a serem geradas para os experimentos
 
-        File algSort = new File("./src/csv/", "algoritmos.csv");
+        File algSort10 = new File("./src/csv/", "algoritmos10.csv");
+        File algSort15 = new File("./src/csv/", "algoritmos15.csv");
+        File algSort20 = new File("./src/csv/", "algoritmos20.csv");
+
+        ArrayList<File> algSorts = new ArrayList<File>();
+        algSorts.add(algSort10);
+        algSorts.add(algSort15);
+        algSorts.add(algSort20);
 
 //        int sohParaTestar = 0;
-        for (int qtdAlg : vQtdAlg) { //Adicionado depois
+        for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
-            System.out.println("Quantidade de algoritmos: " + qtdAlg);
+            File algSort = null;
+            
+            for (File file : algSorts) {
+
+                if (file.getName().contains(Integer.toString(qtdAlgUt))) {
+                    
+                    algSort = file;
+                    break;
+                    
+                }
+            }
+
+            System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
             for (int i = 1; i <= qtdObservacoes; i++) {
 
-                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlg, seed);
+                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed);
 
                 if (!buscaAlgoritmos(algSort, listaAlg)) {
 
                     gravaAlgoritmos(algSort, listaAlg);
 
                     objAS.setPermutacao(i);
-                    objAS.setQtdAlg(qtdAlg);
+                    objAS.setQtdAlg(qtdAlgUt);
                     objAS.limpaTudo();
 
                     objDS.setPermutacao(i);
-                    objDS.setQtdAlg(qtdAlg);
+                    objDS.setQtdAlg(qtdAlgUt);
                     objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
                     System.out.println("Iteração " + i);
 
@@ -101,20 +134,20 @@ public class AplicacaoASDS {
 
                         objDS.comparaConjuntos(resultadosPadr[index]);
                     }
-                    
+
                 } else {
                     i--;
                 }
-            seed++;
+                seed++;
+            }
+            //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
+            java.awt.Toolkit.getDefaultToolkit().beep();
+
         }
-        //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
-        java.awt.Toolkit.getDefaultToolkit().beep();
 
     }
 
-}
-
-public int getTamAlg() throws IOException {
+    public int getTamAlg() throws IOException {
 
         int tamAlg = 0;
 
@@ -125,16 +158,13 @@ public int getTamAlg() throws IOException {
             linhaLeitura1.skip(arqAlg.length());
             tamAlg = linhaLeitura1.getLineNumber();
 
-        
-
-} catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
-        
+                    .getName()).log(Level.SEVERE, null, ex);
 
-} catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -197,11 +227,10 @@ public int getTamAlg() throws IOException {
 
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
-        
 
-} catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwAlg.flush();
             bwAlg.close();
@@ -236,11 +265,10 @@ public int getTamAlg() throws IOException {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + busca.getName() + " em buscaGabarito()");
-        
 
-} catch (IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(AnnStd.class
-.getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }

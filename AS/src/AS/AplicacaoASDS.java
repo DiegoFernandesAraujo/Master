@@ -16,9 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +35,7 @@ public class AplicacaoASDS {
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
-        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -70,31 +67,36 @@ public class AplicacaoASDS {
         }
 
 //        int qtdAlg = 10; //n algoritmos
-        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
-//        int qtdObservacoes = 1000; //Quantidade de observações a serem geradas para os experimentos
-        int qtdObservacoes = 5; //Quantidade de observações a serem geradas para os experimentos
+//        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
+        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 
+        int qtdObservacoes = 1; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+
+        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
         File algSort15 = new File("./src/csv/", "algoritmos15.csv");
         File algSort20 = new File("./src/csv/", "algoritmos20.csv");
+//        File algSort23 = new File("./src/csv/", "algoritmos23.csv");
 
         ArrayList<File> algSorts = new ArrayList<File>();
-        algSorts.add(algSort10);
-        algSorts.add(algSort15);
-        algSorts.add(algSort20);
+        algSorts.add(algSort3);
+//        algSorts.add(algSort10);
+//        algSorts.add(algSort15);
+//        algSorts.add(algSort20);
+//        algSorts.add(algSort23);
 
 //        int sohParaTestar = 0;
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
             File algSort = null;
-            
+
             for (File file : algSorts) {
 
                 if (file.getName().contains(Integer.toString(qtdAlgUt))) {
-                    
+
                     algSort = file;
                     break;
-                    
+
                 }
             }
 
@@ -181,7 +183,7 @@ public class AplicacaoASDS {
 
         while (aux.size() < qtdAlg) {
 
-            int randomNum = gerador.nextInt(23);
+            int randomNum = gerador.nextInt(qtdAlg);
 
             if (!aux.contains(randomNum)) {
                 aux.add(randomNum);

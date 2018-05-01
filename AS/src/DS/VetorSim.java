@@ -81,7 +81,6 @@ public class VetorSim extends DedupAlg {
 
         //Utilizando-se funções de similaridade que apresentaram bons resultados para gerar os vetores de similaridade.
         MongeElkanFunction similarityFunc = new MongeElkanFunction("title");
-//        SoundExFunction similarityFunc2 = new SoundExFunction("artist");
         Soundex similarityFunc2 = new Soundex();
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");

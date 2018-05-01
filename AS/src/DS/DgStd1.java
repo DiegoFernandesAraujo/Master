@@ -33,13 +33,12 @@ public class DgStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
     boolean dedup = false;
-    
-    
+
     boolean geraEst = false;
 
     File estatisticas;
     File DA;
-    File divergencias;
+    File divergencias, divergencias2;
     File DM;
     File NDM;
     File gs;
@@ -110,27 +109,57 @@ public class DgStd1 {
                 //Aqui usamos o método split que divide a linha lida em um array de String
                 //passando como parametro o divisor ";".
 
-                linhaAtual = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
+//                linhaAtual = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
+//                cont = 0;
+//
+//                for (String cell : linhaAtual) {
+//
+//                    cont++;
+//
+//                    index_c1 = cell.indexOf('[');
+//                    index_c2 = cell.indexOf(']');
+//
+//                    Str2 = cell.substring(index_c1 + 1, index_c2);
+//
+//                    escreveArqPadr.append(Str2);
+//
+//                    if (cont == 1) {
+//                        escreveArqPadr.append(';');
+//                    } else {
+//                        escreveArqPadr.append('\n');
+//                    }
+//
+//                }//FIM DO FOR APRIMORADO
+                //Considerando valores de similaridade além dos identificadores dos pares.
+                linhaAtual = Str.split(";", 3); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
 
-                for (String cell : linhaAtual) {
+                for (int i = 0; i < linhaAtual.length; i++) {
 
+                    String cell = linhaAtual[i];
                     cont++;
+//                    System.out.println("cell: " + cell);
 
-                    index_c1 = cell.indexOf('[');
-                    index_c2 = cell.indexOf(']');
+                    if (i <= 1) {
 
-                    Str2 = cell.substring(index_c1 + 1, index_c2);
+                        index_c1 = cell.indexOf('[');
+                        index_c2 = cell.indexOf(']');
 
-                    escreveArqPadr.append(Str2);
-
-                    if (cont == 1) {
-                        escreveArqPadr.append(';');
+                        Str2 = cell.substring(index_c1 + 1, index_c2);
+//                        System.out.println("Str2: " + Str2);
                     } else {
-                        escreveArqPadr.append('\n');
+                        Str2 = cell;
+
+//                        System.out.println("Str2 = cell: " + Str2);
                     }
 
-                }
+                    escreveArqPadr.append(Str2);
+                    escreveArqPadr.append(';');
+
+                    if (cont > 2) {
+                        escreveArqPadr.append('\n');
+                    }
+                }//FIM DO FOR
             }
 
         } catch (FileNotFoundException ex) {
@@ -162,7 +191,7 @@ public class DgStd1 {
 
             while ((Str = brResult.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -202,7 +231,7 @@ public class DgStd1 {
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -257,7 +286,7 @@ public class DgStd1 {
                 //Copiando do primeiro arquivo
                 while ((Str = brArqResult.readLine()) != null) {
 
-                    linhaAtual = Str.split(";", 2);
+                    linhaAtual = Str.split(";", 3);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
                 }
@@ -415,15 +444,15 @@ public class DgStd1 {
             //Copiando do primeiro arquivo
             while ((Str = brDA.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
             //Copiando do segundo arquivo
             while ((Str = brArq2.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
-                bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
+                linhaAtual = Str.split(";", 3);
+                bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + "exemplo\n");
 
             }
 
@@ -466,14 +495,14 @@ public class DgStd1 {
             //Copiando do primeiro arquivo
             while ((Str = brDA.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
             //Copiando do segundo arquivo
             while ((Str = brDM.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
@@ -526,14 +555,14 @@ public class DgStd1 {
 
                 brArqDup2 = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
 
-                linhaAtual1 = Str.split(";", 2);
+                linhaAtual1 = Str.split(";", 3);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
 
                 while ((Str2 = brArqDup2.readLine()) != null) {
 
-                    linhaAtual2 = Str2.split(";", 2);
+                    linhaAtual2 = Str2.split(";", 3);
 
                     elementoA = linhaAtual2[0];
                     elementoB = linhaAtual2[1];
@@ -578,7 +607,7 @@ public class DgStd1 {
 
     //Para gerar DN e NDM       
     public File filtraDivergencias(File arqDA) throws IOException {
-        //arqDA contém a junção do que está em DA com o último resltado (com dados repetidos, inclusive)
+        //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
 
         String Str;
         String[] linhaAtual1;
@@ -587,12 +616,14 @@ public class DgStd1 {
         int cont = 0;
 
         divergencias = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
+        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
 
         if (!divergencias.exists()) {
             System.out.println("Não existe arquivo NAO_DA.csv.");
 
             try {
                 divergencias.createNewFile();
+                divergencias2.createNewFile();
                 new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
@@ -612,6 +643,9 @@ public class DgStd1 {
         BufferedReader brDA = null;
         FileWriter escreveDiverg = null;
         BufferedWriter bwDiverg = null;
+        
+        FileWriter escreveDiverg2 = null;
+        BufferedWriter bwDiverg2 = null;
 
         try {
 
@@ -619,6 +653,9 @@ public class DgStd1 {
 
             escreveDiverg = new FileWriter(divergencias, true); //Dessa forma NÃO sobrescreve
             bwDiverg = new BufferedWriter(escreveDiverg);
+            
+            escreveDiverg2 = new FileWriter(divergencias2, true); //Dessa forma NÃO sobrescreve
+            bwDiverg2 = new BufferedWriter(escreveDiverg2);
 
             String elemento1;
             String elemento2;
@@ -631,14 +668,14 @@ public class DgStd1 {
                 cont = 0;
                 BufferedReader brDA2 = new BufferedReader(new FileReader(arqDA.getPath()));
 
-                linhaAtual1 = Str.split(";", 2);
+                linhaAtual1 = Str.split(";", 3);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
 
                 while ((Str = brDA2.readLine()) != null) {
 
-                    linhaAtual2 = Str.split(";", 2);
+                    linhaAtual2 = Str.split(";", 3);
 
                     elementoA = linhaAtual2[0];
                     elementoB = linhaAtual2[1];
@@ -656,10 +693,11 @@ public class DgStd1 {
 
                 brDA2.close();
 
-                if (jaExistia == false) {
+                if (jaExistia == false) {//NAO_DA é atualizado aqui
                     //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
                     //Isso está sendo feito com o método removeDup()
                     bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
+                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + ";" +   "teste\n");
 
                 }
             }
@@ -675,6 +713,9 @@ public class DgStd1 {
         } finally {
             bwDiverg.flush();
             bwDiverg.close();
+            
+            bwDiverg2.flush();
+            bwDiverg2.close();
 
         }
 
@@ -713,7 +754,7 @@ public class DgStd1 {
 
         //Tratamento da lista sem repetições
         BufferedWriter bwDiverg = null;
-        Collection lista2 = new LinkedHashSet(lista);
+        Collection lista2 = new LinkedHashSet(lista); //Aqui é removida a duplicidade
 
         try {//        File arquivo = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
             bwDiverg = new BufferedWriter(new FileWriter(divergencias));
@@ -765,7 +806,7 @@ public class DgStd1 {
 
             while ((Str = brDiverg.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -908,7 +949,7 @@ public class DgStd1 {
     public void setGs(File gs) {
         this.gs = gs;
     }
-    
+
     public int getTamBaseOrig() {
         return tamBaseOrig;
     }
@@ -998,7 +1039,7 @@ public class DgStd1 {
     public int getTN(int tp, int fp, int fn) throws IOException {
 
         int tamBase = getTamBaseOrig();
-        
+
         if (isDedup()) {
 
             tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
@@ -1006,11 +1047,11 @@ public class DgStd1 {
             return tn;
 
         } else {
-            
+
             int tamBase2 = getTamBaseOrig2();
 
-            tn = (tamBase * tamBase2)  - tp - fp - fn;
-            
+            tn = (tamBase * tamBase2) - tp - fp - fn;
+
             return tn;
         }
 
@@ -1052,7 +1093,7 @@ public class DgStd1 {
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -1093,7 +1134,7 @@ public class DgStd1 {
 
             while ((Str = brArqResult.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -1129,7 +1170,7 @@ public class DgStd1 {
 
             while ((Str = brDM.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elementoDM_NDM1 = linhaAtual[0];
                 elementoDM_NDM2 = linhaAtual[1];
@@ -1155,7 +1196,7 @@ public class DgStd1 {
 
             while ((Str = brNDM.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(";", 3);
 
                 elementoDM_NDM1 = linhaAtual[0];
                 elementoDM_NDM2 = linhaAtual[1];

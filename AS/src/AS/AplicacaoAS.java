@@ -8,6 +8,7 @@ package AS;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -21,7 +22,7 @@ public class AplicacaoAS {
         AnnStd obj = new AnnStd();
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
-        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -49,42 +50,49 @@ public class AplicacaoAS {
         File[] resultadosPadr = new File[qtdAlg];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
+//            System.out.println(resultados[i].getName());
             resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
         }
-
-        /* Para retornar o path do projeto
-        try {
-
-            System.out.println(".. -> " + new File("..").getCanonicalPath());
-            System.out.println(".  -> " + new File(".").getCanonicalPath());
-            System.out.println(System.getProperty("user.dir"));
-            
-        } catch (IOException e) {
-            e.printStackTrace();
+        
+        for (int i = 0; i < resultadosPadr.length; ++i) {
+            System.out.println(resultadosPadr[i].getName());
         }
         
-         */
         List<String> aux = new ArrayList<String>();
         Random gerador = new Random(seed);
 
         //1000 experimentos aleatórios
-        for (int i = 1; i <= 1000; i++) {
+        for (int i = 1; i <= 1; i++) {
 
             obj.setPermutacao(i);
             obj.limpaTudo();
             System.out.println("Iteração " + i);
+            int cont = 0;
 
             while (aux.size() < qtdAlg) {
 
-                int randomNum = gerador.nextInt(resultados.length);
+//                int randomNum = gerador.nextInt(resultados.length);
+//
+//                if (!aux.contains(Integer.toString(randomNum))) {
+//
+//                    aux.add(Integer.toString(randomNum));
+//                    obj.comparaConjuntos(resultadosPadr[randomNum]);
+//
+//                }
+                aux.add(Integer.toString(cont));
 
-                if (!aux.contains(Integer.toString(randomNum))) {
+                obj.comparaConjuntos(resultadosPadr[cont]);
 
-                    aux.add(Integer.toString(randomNum));
-                    obj.comparaConjuntos(resultadosPadr[randomNum]);
+                cont++;
 
-                }
+            }
+            
+//            aux.sort(null);
+            
+            Iterator it = aux.iterator();
 
+            while (it.hasNext()) {
+                System.out.print(it.next() + ", ");
             }
 
             aux.clear();

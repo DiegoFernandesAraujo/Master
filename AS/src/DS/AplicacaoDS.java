@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -20,38 +21,33 @@ import java.util.Random;
 public class AplicacaoDS {
 
     public static void main(String[] args) throws IOException {
-        DgStd obj = new DgStd();
+//        DgStd obj = new DgStd();
+        DgStd1 obj = new DgStd1();
+        
+        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
-        File[] resultados = new File[23];
+        obj.setGs(gs);
+        
+        obj.setDedup(true);
+//        obj.setDedup(false);
+
+        obj.setTamBaseOrig(9763); //Necessário!
+
+        File[] resultados = new File[qtdAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
             resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos
-        File[] resultadosPadr = new File[23];
+        File[] resultadosPadr = new File[qtdAlg];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
             resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
         }
-
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
-
-        /* Para retornar o path do projeto
-        try {
-
-            System.out.println(".. -> " + new File("..").getCanonicalPath());
-            System.out.println(".  -> " + new File(".").getCanonicalPath());
-            System.out.println(System.getProperty("user.dir"));
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         
-         */
-        obj.setGs(gs);
-        obj.setTamBaseOrig(9763); //Necessário!
-
         List<String> aux = new ArrayList<String>();
 //        Random gerador = new Random(); //Pode ser desconsiderado, dado que a ordem aqui não importa
 
@@ -65,7 +61,7 @@ public class AplicacaoDS {
 
             int cont = 0;
 
-            while (aux.size() < 23) {
+            while (aux.size() < qtdAlg) {
 
 //                int randomNum = gerador.nextInt(resultados.length);
 //
@@ -76,10 +72,23 @@ public class AplicacaoDS {
 //
 //                }
                 aux.add(Integer.toString(cont));
+
+                if (aux.size() == qtdAlg-1) { //Gerar estatísticas só na última iteração
+                    obj.setGeraEst(true);
+                }
+
                 obj.comparaConjuntos(resultadosPadr[cont]);
-                
+
                 cont++;
 
+            }
+
+            
+            //Impressão dos algoritmos utilizados
+            Iterator it = aux.iterator();
+
+            while (it.hasNext()) {
+                System.out.print(it.next() + ", ");
             }
 
             aux.clear();
@@ -88,7 +97,6 @@ public class AplicacaoDS {
 
 //        obj.remDupDiverg();
         java.awt.Toolkit.getDefaultToolkit().beep();
-        
 
     }
 

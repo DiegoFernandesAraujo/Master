@@ -43,7 +43,8 @@ public class TesteSimilaridade extends DedupAlg {
     File estatisticasCSV;
     File estatisticasTXT;
 
-    String a, b, c, d, e, f, g, rotulo;
+    String c, d, e, f, g, rotulo;
+    double a, b;
 
     public TesteSimilaridade(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
@@ -88,9 +89,9 @@ public class TesteSimilaridade extends DedupAlg {
         statistic.setStartTime();
 
         NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
-        
+
         int cont = 0;
-        
+
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
             final double similarity = similarityFunc.getSimilarity(pair);
@@ -104,6 +105,10 @@ public class TesteSimilaridade extends DedupAlg {
 
             } else {
                 statistic.addNonDuplicate(pair);
+            }
+            
+            if(cont > 30){
+                break;
             }
         }
 
@@ -131,11 +136,14 @@ public class TesteSimilaridade extends DedupAlg {
 
             try {
 
-                a = Double.toString(similarityFunc.getSimilarity(pair));
+//                a = Double.toString(similarityFunc.getSimilarity(pair));
+                a = similarityFunc.getSimilarity(pair);
 //                System.out.println("a: " + a);
-                b = Double.toString(similarityFunc2.getSimilarity(pair));
+//                b = Double.toString(similarityFunc2.getSimilarity(pair));
+                b = similarityFunc2.getSimilarity(pair);
 //                c = Double.toString(similarityFunc3.getSimilarity(pair));
 //                d = Double.toString(similarityFunc4.getSimilarity(pair));
+                final double simNorm = (a + b) / 2;
 
                 bwSim.append(pair.getFirstElement().toString());
                 bwSim.append(';');
@@ -143,7 +151,7 @@ public class TesteSimilaridade extends DedupAlg {
                 bwSim.append(';');
                 bwSim.append(rotulo);
                 bwSim.append(';');
-                bwSim.append(a);
+                bwSim.append(Double.toString(simNorm));
 //                bwSim.append(';');
 //                bwSim.append(b);
 //                bwSim.append(';');
@@ -155,10 +163,10 @@ public class TesteSimilaridade extends DedupAlg {
 
             } catch (IOException ex) {
                 System.out.println("ERRO!");
-            } 
+            }
 
         }
-        
+
         bwSim.close(); //Fecha arquivo
 
         statistic.setEndTime();

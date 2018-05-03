@@ -316,17 +316,17 @@ public class DgStd1 {
 
                 //Copiando do primeiro arquivo
                 System.out.println("Primeiro DA");
-                
+
                 while ((Str = brArqResult.readLine()) != null) {
 
                     linhaAtual = Str.split(";", 4);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
-                    
+
                     System.out.println("linhaAtual[1]: " + linhaAtual[1]);
                     System.out.println("linhaAtual[2]: " + linhaAtual[2]);
-                    
+
                     System.out.println(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2]);
-                    
+
                     bwHist.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
                 }
@@ -432,7 +432,7 @@ public class DgStd1 {
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
 
             atualizaHistDA(arqResult);
-            
+
             atualizaHistNAODA(aux);
 
             /*
@@ -685,7 +685,7 @@ public class DgStd1 {
 
     /**
      * Armazena no arquivo historicoDA todas as ocorrências dos pares originais
-     * do arquivo DA, mesmo que tenho sido removidos deste durante o processo.
+     * do arquivo DA, mesmo que tenham sido removidos deste durante o processo.
      *
      * @param arqResult recebe o conjunto de duplicatas da atual iteração.
      * @return
@@ -716,6 +716,7 @@ public class DgStd1 {
 
             String elemento1;
             String elemento2;
+            String similaridade;
             String elementoA;
             String elementoB;
 
@@ -723,10 +724,13 @@ public class DgStd1 {
 
                 brHist = new BufferedReader(new FileReader(historicoDA.getPath()));
 
-                linhaAtual1 = Str.split(";", 3);
+                linhaAtual1 = Str.split(";", 4);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
+                similaridade = linhaAtual1[2];
+
+                System.out.println("similaridade no HISTÓRICO: " + similaridade);
 
                 while ((Str2 = brHist.readLine()) != null) {
 
@@ -755,7 +759,16 @@ public class DgStd1 {
 
         return historicoDA;
     }
-    
+
+    /**
+     * Armazena no arquivo historicoNAO_DA todas as ocorrências dos pares que apresentaram alguma divergência com
+     * o arquivo DA. 
+     * <b>Importante:</b> Aqueles pares que tenham pertencido ao conjunto DA anteriormente 
+     * terão seu histórico considerado a partir da sua primeira divergência.
+     * @param arqDA
+     * @return
+     * @throws IOException
+     */
     public File atualizaHistNAODA(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
 
@@ -1011,7 +1024,8 @@ public class DgStd1 {
         String[] linhaAtual1;
         String[] linhaAtual2;
         boolean jaExistia = false;
-        int cont = 0;
+        int qtdAlg = 0;
+        double max, min, med, soma;
 
 //        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
         estatDA = new File("./src/csv/conjuntosDS", "estatDA.csv");
@@ -1051,19 +1065,26 @@ public class DgStd1 {
 
             String elemento1;
             String elemento2;
+            String similaridade;
             String elementoA;
             String elementoB;
+
+            bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
 
             while ((Str = brHistDA.readLine()) != null) {
 
                 jaExistia = false;
-                cont = 0;
+                qtdAlg = 0;
                 BufferedReader brHistDA2 = new BufferedReader(new FileReader(arqHistDA.getPath()));
 
-                linhaAtual1 = Str.split(";", 3);
+                linhaAtual1 = Str.split(";", 4);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
+
+                min = 10.0;
+                max = 0.0;
+                soma = 0.0;
 
                 //BUSCA NA LISTA DE EXISTENTES
                 //SE EXISTE, continue;
@@ -1087,10 +1108,21 @@ public class DgStd1 {
 
                         elementoA = linhaAtual2[0];
                         elementoB = linhaAtual2[1];
+                        similaridade = linhaAtual2[2];
 
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
-                            cont++; //Coletando as estatísticas...
+                            qtdAlg++; //Coletando as estatísticas...
+
+                            System.out.println("qtdAlg: " + qtdAlg);
+
+                            min = min(qtdAlg, similaridade, min);
+                            max = max(qtdAlg, similaridade, max);
+
+                            System.out.println("max: " + max);
+
+                            soma = soma + Double.parseDouble(similaridade);
+
                         }
 //
 //                    if (cont >= 2) {
@@ -1099,7 +1131,10 @@ public class DgStd1 {
 //                    }
                     }
 
+                    med = soma / qtdAlg;
+
 //                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
+                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
                 }
                 brHistDA2.close();
 
@@ -1107,8 +1142,7 @@ public class DgStd1 {
                 //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
                 //Isso está sendo feito com o método removeDup()
 //                    bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
-                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
-
+//                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + Double.toString(min) + ";" + Double.toString(max) + "\n");
 //                }
             }
             brHistDA.close();
@@ -1132,6 +1166,11 @@ public class DgStd1 {
 //        return divergencias;
     }
 
+    /**
+     *
+     * @param arqHistNAODA
+     * @throws IOException
+     */
     public void contabilizaEstatNAODA(File arqHistNAODA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
 
@@ -1141,7 +1180,8 @@ public class DgStd1 {
         String[] linhaAtual1;
         String[] linhaAtual2;
         boolean jaExistia = false;
-        int cont = 0;
+        int qtdAlg = 0;
+        double max, min, med, soma;
 
 //        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
         estatNAODA = new File("./src/csv/conjuntosDS", "estatNAO_DA.csv");
@@ -1181,13 +1221,20 @@ public class DgStd1 {
 
             String elemento1;
             String elemento2;
+            String similaridade;
             String elementoA;
             String elementoB;
+
+            bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
 
             while ((Str = brHistDA.readLine()) != null) {
 
                 jaExistia = false;
-                cont = 0;
+                qtdAlg = 0;
+                min = 10.0;
+                max = 0.0;
+                soma = 0.0;
+
                 BufferedReader brHistDA2 = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
 
                 linhaAtual1 = Str.split(";", 3);
@@ -1213,14 +1260,24 @@ public class DgStd1 {
                     //FIM_NOVO
                     while ((Str = brHistDA2.readLine()) != null) {
 
-                        linhaAtual2 = Str.split(";", 3);
+                        linhaAtual2 = Str.split(";", 4);
 
                         elementoA = linhaAtual2[0];
                         elementoB = linhaAtual2[1];
+                        similaridade = linhaAtual2[2];
 
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
-                            cont++; //Coletando as estatísticas...
+                            qtdAlg++; //Coletando as estatísticas...
+                            System.out.println("qtdAlg: " + qtdAlg);
+
+                            min = min(qtdAlg, similaridade, min);
+                            max = max(qtdAlg, similaridade, max);
+
+                            System.out.println("max: " + max);
+
+                            soma = soma + Double.parseDouble(similaridade);
+
                         }
 //
 //                    if (cont >= 2) {
@@ -1230,6 +1287,10 @@ public class DgStd1 {
                     }
 
 //                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
+                    med = soma / qtdAlg;
+
+//                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
+                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
                 }
                 brHistDA2.close();
 
@@ -1237,8 +1298,11 @@ public class DgStd1 {
                 //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
                 //Isso está sendo feito com o método removeDup()
 //                    bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
-                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
-
+//                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + "\n");
+//                med = soma / qtdAlg;
+//
+////                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
+//                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
 //                }
             }
             brHistDA.close();
@@ -1523,10 +1587,18 @@ public class DgStd1 {
 //        TODO
     }
 
+    /**
+     *
+     * @return
+     */
     public File getHistoricoDA() {
         return historicoDA;
     }
-    
+
+    /**
+     *
+     * @return
+     */
     public File getHistoricoNAODA() {
         return historicoNAODA;
     }
@@ -1957,4 +2029,68 @@ public class DgStd1 {
         }
     }
 
+    /**
+     *
+     * @param qtdAlg
+     * @param sim
+     * @param atualMin
+     * @return
+     */
+    public double min(int qtdAlg, String sim, double atualMin) {
+//        double minimo = 1.0;
+        double minimo = 1;
+        double similaridade = Double.parseDouble(sim);
+
+        if (qtdAlg == 1) {
+//            if (similaridade <= 1.0) {
+            if (similaridade <= 10) {
+                minimo = similaridade;
+            } else {
+                minimo = atualMin;
+            }
+        } else {
+            if (similaridade <= atualMin) {
+
+                minimo = similaridade;
+            } else {
+                minimo = atualMin;
+            }
+        }
+        return minimo;
+
+    }
+
+    /**
+     *
+     * @param qtdAlg
+     * @param sim
+     * @param atualMax
+     * @return
+     */
+    public double max(int qtdAlg, String sim, double atualMax) {
+//        double minimo = 1.0;
+        double maximo = 0;
+        double similaridade = Double.parseDouble(sim);
+
+        if (qtdAlg == 1) {
+//            if (similaridade <= 1.0) {
+            if (similaridade >= 0.0) {
+                maximo = similaridade;
+            }
+//            else {
+//                maximo = atualMax;
+//            }
+        } else {
+            if (similaridade >= atualMax) {
+                maximo = similaridade;
+                System.out.println("Entrei aqui: maximo = similaridade; com qtdAlg igual a " + qtdAlg);
+                System.out.println("similaridade igual a " + similaridade);
+                System.out.println("maximo igual a " + maximo);
+            } else {
+                maximo = atualMax;
+            }
+        }
+        return maximo;
+
+    }
 }

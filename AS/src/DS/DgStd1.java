@@ -44,6 +44,7 @@ public class DgStd1 {
 
     File divergencias, divergencias2;
     File estatDA, estatNAODA;
+
     File DM;
     File NDM;
     File gs;
@@ -761,10 +762,12 @@ public class DgStd1 {
     }
 
     /**
-     * Armazena no arquivo historicoNAO_DA todas as ocorrências dos pares que apresentaram alguma divergência com
-     * o arquivo DA. 
-     * <b>Importante:</b> Aqueles pares que tenham pertencido ao conjunto DA anteriormente 
-     * terão seu histórico considerado a partir da sua primeira divergência.
+     * Armazena no arquivo historicoNAO_DA todas as ocorrências dos pares que
+     * apresentaram alguma divergência com o arquivo DA.
+     * <b>Importante:</b> Aqueles pares que tenham pertencido ao conjunto DA
+     * anteriormente terão seu histórico considerado a partir da sua primeira
+     * divergência.
+     *
      * @param arqDA
      * @return
      * @throws IOException
@@ -886,6 +889,96 @@ public class DgStd1 {
         return historicoNAODA;
     }
 
+    public File filtraDivergencias_NEW(File estatDA, File estatNAO_DA) throws IOException {
+
+        String Str;
+        String Str2;
+        String[] linhaAtual1;
+        String[] linhaAtual2;
+        List<String> dupEncontradas = new ArrayList<String>();
+        boolean existe = false;
+        int cont = 0;
+
+//        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+
+        FileWriter escreveDiverg;
+
+        BufferedReader brEstatDA = null;
+        BufferedReader brEstatNAO_DA = null;
+        BufferedWriter bwDiverg = null;
+
+        try {
+
+//            brEstatDA = new BufferedReader(new FileReader(estatDA.getPath()));
+            brEstatNAO_DA = new BufferedReader(new FileReader(estatNAO_DA.getPath()));
+
+            escreveDiverg = new FileWriter(divergencias2, true); //Dessa forma não sobreescreve
+            bwDiverg = new BufferedWriter(escreveDiverg);
+
+            String elemento1NAO_DA;
+            String elemento2NAO_DA;
+            String similaridade;
+            String elemento1DA;
+            String elemento2DA;
+
+//            while ((Str = brEstatDA.readLine()) != null) {
+            bwDiverg.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
+
+            while ((Str = brEstatNAO_DA.readLine()) != null) {
+
+                if (Str.contains("elemento1")) {
+                    continue;
+                }
+
+                existe = false;
+
+//                brEstatNAO_DA = new BufferedReader(new FileReader(estatNAO_DA.getPath()));
+                brEstatDA = new BufferedReader(new FileReader(estatDA.getPath()));
+
+                linhaAtual1 = Str.split(";", 6);
+
+                elemento1NAO_DA = linhaAtual1[0];
+                elemento2NAO_DA = linhaAtual1[1];
+                similaridade = linhaAtual1[2];
+
+//                while ((Str2 = brEstatNAO_DA.readLine()) != null) {
+                while ((Str2 = brEstatDA.readLine()) != null) {
+
+                    if (Str2.contains("First Object")) {
+                        continue;
+                    }
+
+                    linhaAtual2 = Str2.split(";", 6);
+
+                    elemento1DA = linhaAtual2[0];
+                    elemento2DA = linhaAtual2[1];
+
+                    if (((elemento1NAO_DA.equals(elemento1DA)) && (elemento2NAO_DA.equals(elemento2DA))) || ((elemento1NAO_DA.equals(elemento2DA)) && ((elemento2NAO_DA.equals(elemento1DA))))) {
+                        bwDiverg.write(linhaAtual2[0] + ";" + linhaAtual2[1] + ";" + linhaAtual2[2] + ";" + linhaAtual2[3] +  ";" + linhaAtual2[4] +  ";" + linhaAtual2[5] + "\n");
+                        existe = true;
+                        break;
+                    }
+
+                }
+                brEstatDA.close();
+
+                if (existe == false) {
+                    bwDiverg.write(linhaAtual1[0] + ";" + linhaAtual1[1] + ";" + linhaAtual1[2] + ";" + linhaAtual1[3] +  ";" + linhaAtual1[4] +  ";" + linhaAtual1[5] +  "\n");
+                }
+
+            }
+            brEstatNAO_DA.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwDiverg.flush();
+            bwDiverg.close();
+        }
+
+        return historicoDA;
+    }
+
     //Para gerar DN e NDM       
     /**
      *
@@ -905,14 +998,14 @@ public class DgStd1 {
         int cont = 0;
 
         divergencias = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
-//        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
 
         if (!divergencias.exists()) {
             System.out.println("Não existe arquivo NAO_DA.csv.");
 
             try {
                 divergencias.createNewFile();
-//                divergencias2.createNewFile();
+                divergencias2.createNewFile();
                 new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
@@ -1601,6 +1694,14 @@ public class DgStd1 {
      */
     public File getHistoricoNAODA() {
         return historicoNAODA;
+    }
+    
+    public File getEstatDA() {
+        return estatDA;
+    }
+
+    public File getEstatNAODA() {
+        return estatNAODA;
     }
 
     /**

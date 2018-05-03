@@ -29,7 +29,7 @@ public class AplicacaoDS {
 //        DgStd obj = new DgStd();
         DgStd1 obj = new DgStd1();
         
-        int qtdAlg = 4; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
         
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -90,6 +90,8 @@ public class AplicacaoDS {
             
             obj.contabilizaEstatDA(obj.getHistoricoDA());
             obj.contabilizaEstatNAODA(obj.getHistoricoNAODA());
+            
+            obj.filtraDivergencias_NEW(obj.getEstatDA(), obj.getEstatNAODA());
 
             
             //Impressão dos algoritmos utilizados

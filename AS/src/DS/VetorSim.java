@@ -48,6 +48,15 @@ public class VetorSim extends DedupAlg {
     BufferedWriter bwArqVetor = null;
     String a, b, c, d, e, f, g, rotulo;
 
+    /**
+     *
+     * @param baseDados1
+     * @param chavePrimaria
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param result
+     */
     public VetorSim(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
 
@@ -64,6 +73,11 @@ public class VetorSim extends DedupAlg {
         }
     }
 
+    /**
+     *
+     * @param arqDiverg
+     * @throws IOException
+     */
     public void geraVetor(File arqDiverg) throws IOException {
 
         String Str;
@@ -198,6 +212,13 @@ public class VetorSim extends DedupAlg {
 
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
+
+    /**
+     *
+     * @param arqDiverg
+     * @param vetorSim
+     * @throws IOException
+     */
     public void geraVetorMenor(File arqDiverg, File vetorSim) throws IOException {
 
 //O gabarito tem de estar sem aspas

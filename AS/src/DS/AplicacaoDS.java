@@ -20,11 +20,16 @@ import java.util.Random;
  */
 public class AplicacaoDS {
 
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 //        DgStd obj = new DgStd();
         DgStd1 obj = new DgStd1();
         
-        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        int qtdAlg = 4; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
         
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
@@ -82,6 +87,9 @@ public class AplicacaoDS {
                 cont++;
 
             }
+            
+            obj.contabilizaEstatDA(obj.getHistoricoDA());
+            obj.contabilizaEstatNAODA(obj.getHistoricoNAODA());
 
             
             //Impressão dos algoritmos utilizados

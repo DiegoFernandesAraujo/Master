@@ -38,6 +38,9 @@ public class DgStd {
     File DADM;
     FileWriter escreveEstat;
 
+    /**
+     *
+     */
     public DgStd() {
         tp = 0;
         fp = 0;
@@ -72,6 +75,12 @@ public class DgStd {
 
     }
 
+    /**
+     *
+     * @param arq
+     * @return
+     * @throws IOException
+     */
     public File padronizaCsvFile(File arq) throws IOException {
 
         File arqPadr = null;
@@ -135,6 +144,11 @@ public class DgStd {
         return arqPadr;
     }
 
+    /**
+     *
+     * @param arqResult
+     * @throws IOException
+     */
     public void comparaComGS(File arqResult) throws IOException {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
@@ -216,6 +230,11 @@ public class DgStd {
         return existe;
     }
 
+    /**
+     *
+     * @param arqResult
+     * @throws IOException
+     */
     public void comparaConjuntos(File arqResult) throws IOException {
 
         String Str;
@@ -336,6 +355,7 @@ public class DgStd {
 //                juntaDADM(DA, DM);
 //
 //                comparaComGS(DADM);
+                System.out.println("Entrou no baseline true!");
                 comparaComGS(DA);
 
             }
@@ -343,6 +363,8 @@ public class DgStd {
         }
 
         if (baseline == false) {
+            
+            System.out.println("Entrou no baseline false!");
 
             aux = juntaArquivos(DA, arqResult); //Isso é feito para que se possa ver a união e intersecção do resultado atual com o DA
 
@@ -367,6 +389,13 @@ public class DgStd {
         }
     }
 
+    /**
+     *
+     * @param arqDA
+     * @param arq2
+     * @return
+     * @throws IOException
+     */
     public File juntaArquivos(File arqDA, File arq2) throws IOException {
 
         File juncao = new File("./src/csv/conjuntosDS", "juncao.csv");
@@ -435,6 +464,12 @@ public class DgStd {
         return juncao;
     }
 
+    /**
+     *
+     * @param arqDA
+     * @param arqDM
+     * @throws IOException
+     */
     public void juntaDADM(File arqDA, File arqDM) throws IOException {
 
         FileWriter escreveDADM;
@@ -485,6 +520,12 @@ public class DgStd {
 //        return DADM;
     }
 
+    /**
+     *
+     * @param arqDuplicatas
+     * @return
+     * @throws IOException
+     */
     public File atualizaDA(File arqDuplicatas) throws IOException {
 
         String Str;
@@ -568,6 +609,13 @@ public class DgStd {
     }
 
     //Para gerar DN e NM       
+
+    /**
+     *
+     * @param arqDA
+     * @return
+     * @throws IOException
+     */
     public File filtraDivergencias(File arqDA) throws IOException {
 
         String Str;
@@ -671,6 +719,12 @@ public class DgStd {
     }
 
     //Remove a duplicidade dos registros no conjunto de pares divergentes acumulados
+
+    /**
+     *
+     * @param divergencias
+     * @throws IOException
+     */
     @SuppressWarnings("unchecked")
     public void remDupDiverg(File divergencias) throws IOException {
 
@@ -796,6 +850,13 @@ public class DgStd {
         }
     }
 
+    /**
+     *
+     * @param tp
+     * @param fp
+     * @param gs
+     * @param arqResult
+     */
     public void gravaEstatisticas(int tp, int fp, File gs, File arqResult) {
 
         try {
@@ -863,35 +924,73 @@ public class DgStd {
         }
     }
 
+    /**
+     *
+     * @param permutacao
+     */
     public void setPermutacao(int permutacao) {
         this.permutacao = permutacao;
     }
 
+    /**
+     *
+     * @param tp
+     * @param fp
+     * @return
+     */
     public double getPrecision(int tp, int fp) {
         return (double) tp / (tp + fp);
     }
 
+    /**
+     *
+     * @param tp
+     * @param fn
+     * @return
+     */
     public double getRecall(int tp, int fn) {
 
         return (double) tp / (tp + fn);
     }
 
+    /**
+     *
+     * @param precision
+     * @param recall
+     * @return
+     */
     public double getF1(double precision, double recall) {
         return 2 * recall * precision / (recall + precision);
     }
 
+    /**
+     *
+     */
     public void fechaExecucao() {
 //        TODO
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIteracao() {
         return iteracao;
     }
 
+    /**
+     *
+     * @param gs
+     */
     public void setGs(File gs) {
         this.gs = gs;
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public int getTamDA() throws IOException {
 
         int tamDA = 0;
@@ -915,6 +1014,11 @@ public class DgStd {
 
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public int getTamDM() throws IOException {
         int tamDM = 0;
         LineNumberReader linhaLeitura1 = null;
@@ -935,6 +1039,11 @@ public class DgStd {
 
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public int getTamNDM() throws IOException {
         int tamNDM = 0;
         LineNumberReader linhaLeitura1 = null;
@@ -954,6 +1063,15 @@ public class DgStd {
 
     }
 
+    /**
+     *
+     * @param tp
+     * @param fp
+     * @param fn
+     * @param tamBase
+     * @return
+     * @throws IOException
+     */
     public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
 
         tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
@@ -962,11 +1080,22 @@ public class DgStd {
 
     }
 
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
     public int getInspManuais() throws IOException {
 
         return getTamNDM() + getTamDM();
     }
 
+    /**
+     *
+     * @param arqResult
+     * @return
+     * @throws IOException
+     */
     public int getFN(File arqResult) throws IOException {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
@@ -1111,14 +1240,25 @@ public class DgStd {
         return existe;
     }
 
+    /**
+     *
+     * @param iteracao
+     */
     public void setIteracao(int iteracao) {
         this.iteracao = iteracao;
     }
 
+    /**
+     *
+     * @param tamBaseOrig
+     */
     public void setTamBaseOrig(int tamBaseOrig) {
         this.tamBaseOrig = tamBaseOrig;
     }
 
+    /**
+     *
+     */
     public void limpaTudo() {
 
         File dir = new File("./src/csv/conjuntosDS");

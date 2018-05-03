@@ -17,6 +17,10 @@ import java.util.logging.Logger;
  */
 public class ExecVetorSim {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
 //        VetorSim1 obj = new VetorSim1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");

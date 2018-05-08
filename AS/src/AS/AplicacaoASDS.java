@@ -107,6 +107,7 @@ public class AplicacaoASDS {
 
                 ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed);
 
+                //Verifica se a sequência gerada não já foi utilizada antes
                 if (!buscaAlgoritmos(algSort, listaAlg)) {
 
                     gravaAlgoritmos(algSort, listaAlg);
@@ -117,7 +118,7 @@ public class AplicacaoASDS {
 
                     objDS.setPermutacao(i);
                     objDS.setQtdAlg(qtdAlgUt);
-                    objDS.limpaTudo(); //Acho que não devo limpar, mas sim salvar NAO_DA(número da iteração)
+                    objDS.limpaTudo();
                     System.out.println("Iteração " + i);
 
                     int alg = 0;
@@ -142,7 +143,6 @@ public class AplicacaoASDS {
                 }
                 seed++;
             }
-            //Dar um jeito de excluir os arquivos "diverg" que não contém "_NEW", para poupar espaço em disco
             java.awt.Toolkit.getDefaultToolkit().beep();
 
         }

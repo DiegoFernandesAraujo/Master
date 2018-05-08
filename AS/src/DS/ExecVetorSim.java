@@ -34,6 +34,9 @@ public class ExecVetorSim {
         try {
             obj.geraVetor(diverg); //Para gerar o vetor base dos demais
 
+            
+            //Para gerar os vetores de similaridade específicos
+            
 //            if (dir.isDirectory()) {
 //                File[] divergs = dir.listFiles();
 //

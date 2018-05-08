@@ -29,6 +29,7 @@ import java.util.List;
  *
  * @author Diego Em relação à classe DgStd possui o método copiaArqDiverg(), um
  * método para manter salvo o arquivo de divergências gerado
+ * <b>CORRIGIR o nome do arquivo estatisticaInicialDS.csv!!!!</b>
  */
 public class DgStd1 {
 
@@ -59,7 +60,8 @@ public class DgStd1 {
         fp = 0;
         iteracao = 0;
 
-        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
+//        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
+        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); //CO
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
@@ -405,8 +407,7 @@ public class DgStd1 {
                 Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
 
-                System.out.println("Entrou no baseline true!");
-
+//                System.out.println("Entrou no baseline true!");
                 brArqResult.close();
                 bwDupAuto.flush(); //Alterei DA aqui!!!!!
                 bwDupAuto.close();
@@ -426,8 +427,7 @@ public class DgStd1 {
 
         if (baseline == false) {
 
-            System.out.println("Entrou no baseline false!");
-
+//            System.out.println("Entrou no baseline false!");
             aux = juntaArquivos(DA, arqResult); //Isso é feito para que se possa ver a união e intersecção do resultado atual com o DA
 
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
@@ -731,8 +731,7 @@ public class DgStd1 {
                 elemento2 = linhaAtual1[1];
                 similaridade = linhaAtual1[2];
 
-                System.out.println("similaridade no HISTÓRICO: " + similaridade);
-
+//                System.out.println("similaridade no HISTÓRICO: " + similaridade);
                 while ((Str2 = brHist.readLine()) != null) {
 
                     linhaAtual2 = Str2.split(";", 3);
@@ -900,7 +899,6 @@ public class DgStd1 {
         int cont = 0;
 
 //        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
-
         FileWriter escreveDiverg;
 
         BufferedReader brEstatDA = null;
@@ -954,7 +952,7 @@ public class DgStd1 {
                     elemento2DA = linhaAtual2[1];
 
                     if (((elemento1NAO_DA.equals(elemento1DA)) && (elemento2NAO_DA.equals(elemento2DA))) || ((elemento1NAO_DA.equals(elemento2DA)) && ((elemento2NAO_DA.equals(elemento1DA))))) {
-                        bwDiverg.write(linhaAtual2[0] + ";" + linhaAtual2[1] + ";" + linhaAtual2[2] + ";" + linhaAtual2[3] +  ";" + linhaAtual2[4] +  ";" + linhaAtual2[5] + "\n");
+                        bwDiverg.write(linhaAtual2[0] + ";" + linhaAtual2[1] + ";" + linhaAtual2[2] + ";" + linhaAtual2[3] + ";" + linhaAtual2[4] + ";" + linhaAtual2[5] + "\n");
                         existe = true;
                         break;
                     }
@@ -963,7 +961,7 @@ public class DgStd1 {
                 brEstatDA.close();
 
                 if (existe == false) {
-                    bwDiverg.write(linhaAtual1[0] + ";" + linhaAtual1[1] + ";" + linhaAtual1[2] + ";" + linhaAtual1[3] +  ";" + linhaAtual1[4] +  ";" + linhaAtual1[5] +  "\n");
+                    bwDiverg.write(linhaAtual1[0] + ";" + linhaAtual1[1] + ";" + linhaAtual1[2] + ";" + linhaAtual1[3] + ";" + linhaAtual1[4] + ";" + linhaAtual1[5] + "\n");
                 }
 
             }
@@ -1695,7 +1693,7 @@ public class DgStd1 {
     public File getHistoricoNAODA() {
         return historicoNAODA;
     }
-    
+
     public File getEstatDA() {
         return estatDA;
     }
@@ -2090,7 +2088,9 @@ public class DgStd1 {
         if (dir.isDirectory()) {
             File[] sun = dir.listFiles();
             for (File toDelete : sun) {
-                toDelete.delete();
+                if (!dir.isDirectory()) {
+                    toDelete.delete();
+                }
             }
         }
 
@@ -2108,7 +2108,8 @@ public class DgStd1 {
      */
     public void copiaArqDiverg() throws IOException {
 
-        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (divergToAA.exists()) {
             divergToAA.delete();

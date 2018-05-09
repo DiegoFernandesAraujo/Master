@@ -60,8 +60,8 @@ public class DgStd1 {
         fp = 0;
         iteracao = 0;
 
-//        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
-        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); //CO
+        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
+//        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); 
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
@@ -2108,8 +2108,8 @@ public class DgStd1 {
      */
     public void copiaArqDiverg() throws IOException {
 
-//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
-        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (divergToAA.exists()) {
             divergToAA.delete();

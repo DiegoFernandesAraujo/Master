@@ -81,7 +81,7 @@ public class AplicacaoDS {
                 if (aux.size() == qtdAlg - 1) { //Gerar estatísticas só na última iteração
                     obj.setGeraEst(true);
                 }
-
+                
                 obj.comparaConjuntos(resultadosPadr[cont]);
 
                 cont++;

@@ -22,21 +22,24 @@ public class ExecVetorSim {
      * @param args
      */
     public static void main(String[] args) {
-        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
+        File vetorSim = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-10-05.csv");
+//        File vetorSim = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "vetorSimilaridades-10-05.csv"); //Esse arquivo tem que possuir todas as divergências
+
+//        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
+        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSim);
+
 //        VetorSim1 obj = new VetorSim1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
 //        VetorSim2 obj = new VetorSim2("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
         File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
 //        File diverg = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg1.csv"); //Esse arquivo tem que possuir todas as divergências
 //        File vetorSim = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "vetorSimilaridades-14-03.csv"); //Esse arquivo tem que possuir todas as divergências
-        File vetorSim = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "vetorSimilaridades-26-04.csv"); //Esse arquivo tem que possuir todas as divergências
 
         File dir = new File("./src/csv/conjuntosDS/conjuntosDiverg/");
+
         try {
             obj.geraVetor(diverg); //Para gerar o vetor base dos demais
 
-            
             //Para gerar os vetores de similaridade específicos
-            
 //            if (dir.isDirectory()) {
 //                File[] divergs = dir.listFiles();
 //
@@ -53,7 +56,6 @@ public class ExecVetorSim {
 //
 //                }
 //            }
-
         } catch (IOException ex) {
             Logger.getLogger(ExecVetorSim.class.getName()).log(Level.SEVERE, null, ex);
         }

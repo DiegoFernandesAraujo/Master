@@ -35,14 +35,14 @@ public class AplicacaoASDS {
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
-        int qtdAlg = 3; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+        int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
         objAS.setGs(gs);
         objDS.setGs(gs);
 
-        objAS.setDedup(true);
+//        objAS.setDedup(true);
         objDS.setDedup(true);
 
 //        objAS.setDedup(false);
@@ -64,25 +64,27 @@ public class AplicacaoASDS {
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
             resultadosPadr[i] = objAS.padronizaCsvFile(resultados[i]);
+//            resultadosPadr[i] = objDS.padronizaCsvFile(resultados[i]);
         }
 
 //        int qtdAlg = 10; //n algoritmos
-//        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
-        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
+        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
+//        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
+//        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
         int qtdObservacoes = 1; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
-        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
+//        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
         File algSort15 = new File("./src/csv/", "algoritmos15.csv");
         File algSort20 = new File("./src/csv/", "algoritmos20.csv");
 //        File algSort23 = new File("./src/csv/", "algoritmos23.csv");
 
         ArrayList<File> algSorts = new ArrayList<File>();
-        algSorts.add(algSort3);
-//        algSorts.add(algSort10);
-//        algSorts.add(algSort15);
-//        algSorts.add(algSort20);
+//        algSorts.add(algSort3);
+        algSorts.add(algSort10);
+        algSorts.add(algSort15);
+        algSorts.add(algSort20);
 //        algSorts.add(algSort23);
 
 //        int sohParaTestar = 0;
@@ -105,7 +107,9 @@ public class AplicacaoASDS {
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
             for (int i = 1; i <= qtdObservacoes; i++) {
 
-                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed);
+                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg);
+//                objAS.limpaTudo();
+//                objDS.limpaTudo();
 
                 //Verifica se a sequência gerada não já foi utilizada antes
                 if (!buscaAlgoritmos(algSort, listaAlg)) {
@@ -125,6 +129,7 @@ public class AplicacaoASDS {
 
                     for (int index : listaAlg) {
 
+//                        System.out.println(index + ",");
                         alg++;
 
                         objAS.comparaConjuntos(resultadosPadr[index]);
@@ -134,11 +139,13 @@ public class AplicacaoASDS {
 //                            System.out.println("Gerando estatísticas para a última iteração pela " + ++sohParaTestar + " vez!");
                             objDS.setGeraEst(true);
                         }
-
-                        objDS.comparaConjuntos(resultadosPadr[index]);
+//                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
+//                        objDS.comparaConjuntos(resultadosPadr[index]);
                     }
+//                    System.out.println("");
 
                 } else {
+//                    System.out.println("Entrou no else");
                     i--;
                 }
                 seed++;
@@ -176,14 +183,14 @@ public class AplicacaoASDS {
     }
 
     //Gera ordem aleatória de algoritmos sem repetição dessa
-    public static ArrayList<Integer> geraOrdAlg(int qtdAlg, long seed) { //Esse static precisa mesmo?
+    public static ArrayList<Integer> geraOrdAlg(int qtdAlgUt, long seed, int maxAlgUt) { //Esse static precisa mesmo?
 
         ArrayList<Integer> aux = new ArrayList<Integer>();
         Random gerador = new Random(seed);
 
-        while (aux.size() < qtdAlg) {
+        while (aux.size() < qtdAlgUt) {
 
-            int randomNum = gerador.nextInt(qtdAlg);
+            int randomNum = gerador.nextInt(maxAlgUt);
 
             if (!aux.contains(randomNum)) {
                 aux.add(randomNum);
@@ -191,8 +198,22 @@ public class AplicacaoASDS {
 
         }
 
-        aux.sort(null);
-
+//        System.out.println("Lista não ordenada");
+//        
+//        for (Integer valor : aux) {
+//            
+//            System.out.print(valor + " ");
+//        }
+//        
+//        aux.sort(null);
+//        System.out.println("");
+//        System.out.println("Lista ordenada");
+//        
+//        for (Integer valor : aux) {
+//            
+//            System.out.print(valor + " ");
+//        }
+//        System.out.println("");
 //        for (Integer valor : aux) {
 //            System.out.print(valor + " ");
 //        }

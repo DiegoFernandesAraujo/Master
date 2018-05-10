@@ -26,8 +26,7 @@ import java.util.List;
  */
 public class AnnStd {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
-    boolean dedup = false;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
 
     File estatisticas;
     File DA;
@@ -102,57 +101,27 @@ public class AnnStd {
                 //Aqui usamos o método split que divide a linha lida em um array de String
                 //passando como parametro o divisor ";".
 
-//                linhaAtual = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
-//                cont = 0;
-//
-//                for (String cell : linhaAtual) {
-//
-//                    cont++;
-//
-//                    index_c1 = cell.indexOf('[');
-//                    index_c2 = cell.indexOf(']');
-//
-//                    Str2 = cell.substring(index_c1 + 1, index_c2);
-//
-//                    escreveArqPadr.append(Str2);
-//
-//                    if (cont == 1) {
-//                        escreveArqPadr.append(';');
-//                    } else {
-//                        escreveArqPadr.append('\n');
-//                    }
-//
-//                }//FIM DO FOR APRIMORADO
-                //Considerando valores de similaridade além dos identificadores dos pares.
-                linhaAtual = Str.split(";", 3); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
+                linhaAtual = Str.split(";", 2); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
 
-                for (int i = 0; i < linhaAtual.length; i++) {
+                for (String cell : linhaAtual) {
 
-                    String cell = linhaAtual[i];
                     cont++;
-//                    System.out.println("cell: " + cell);
 
-                    if (i <= 1) {
+                    index_c1 = cell.indexOf('[');
+                    index_c2 = cell.indexOf(']');
 
-                        index_c1 = cell.indexOf('[');
-                        index_c2 = cell.indexOf(']');
-
-                        Str2 = cell.substring(index_c1 + 1, index_c2);
-//                        System.out.println("Str2: " + Str2);
-                    } else {
-                        Str2 = cell;
-
-//                        System.out.println("Str2 = cell: " + Str2);
-                    }
+                    Str2 = cell.substring(index_c1 + 1, index_c2);
 
                     escreveArqPadr.append(Str2);
-                    escreveArqPadr.append(';');
 
-                    if (cont > 2) {
+                    if (cont == 1) {
+                        escreveArqPadr.append(';');
+                    } else {
                         escreveArqPadr.append('\n');
                     }
-                }//FIM DO FOR
+
+                }
             }
 
         } catch (FileNotFoundException ex) {
@@ -184,8 +153,7 @@ public class AnnStd {
 
             while ((Str = brResult.readLine()) != null) {
 
-//                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -203,10 +171,8 @@ public class AnnStd {
 //            gravaEstatisticas(tp, fp, gs, arqResult);
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brResult.close();
             gravaEstatisticas(tp, fp, gs, arqResult);
@@ -227,8 +193,7 @@ public class AnnStd {
 
             while ((Str = brGS.readLine()) != null) {
 
-//                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -241,10 +206,8 @@ public class AnnStd {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }
@@ -285,8 +248,7 @@ public class AnnStd {
                 //Copiando do primeiro arquivo
                 while ((Str = brArqResult.readLine()) != null) {
 
-                    //                linhaAtual = Str.split(";", 2);
-                    linhaAtual = Str.split(";", 3);
+                    linhaAtual = Str.split(";", 2);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
                 }
@@ -307,10 +269,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
-
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -330,10 +290,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
-
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -354,10 +312,8 @@ public class AnnStd {
                     } catch (IOException ex) {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
-
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -366,10 +322,8 @@ public class AnnStd {
 
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
-
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
 
                 brArqResult.close();
@@ -422,10 +376,8 @@ public class AnnStd {
                 System.out.println("Não foi possível encontrar o arquivo " + juncao.getName());
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
-
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -444,28 +396,23 @@ public class AnnStd {
             //Copiando do primeiro arquivo
             while ((Str = brDA.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
             //Copiando do segundo arquivo
             while ((Str = brArq2.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
             brArq2.close();
@@ -500,28 +447,23 @@ public class AnnStd {
             //Copiando do primeiro arquivo
             while ((Str = brDA.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
             //Copiando do segundo arquivo
             while ((Str = brDM.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
 
             }
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
             brDM.close();
@@ -565,16 +507,14 @@ public class AnnStd {
 
                 brArqDup2 = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
 
-                //                linhaAtual1 = Str.split(";", 2);
-                linhaAtual1 = Str.split(";", 3);
+                linhaAtual1 = Str.split(";", 2);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
 
                 while ((Str2 = brArqDup2.readLine()) != null) {
 
-                    //                linhaAtual2 = Str.split(";", 2);
-                linhaAtual2 = Str.split(";", 3);
+                    linhaAtual2 = Str2.split(";", 2);
 
                     elementoA = linhaAtual2[0];
                     elementoB = linhaAtual2[1];
@@ -608,8 +548,7 @@ public class AnnStd {
             brArqDup.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDA.flush();
             bwDA.close();
@@ -644,10 +583,8 @@ public class AnnStd {
             } catch (IOException ex) {
                 Logger.getLogger(AnnStd.class
                         .getName()).log(Level.SEVERE, null, ex);
-
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -674,16 +611,14 @@ public class AnnStd {
                 cont = 0;
                 BufferedReader brDA2 = new BufferedReader(new FileReader(arqDA.getPath()));
 
-                //                linhaAtual1 = Str.split(";", 2);
-                linhaAtual1 = Str.split(";", 3);
+                linhaAtual1 = Str.split(";", 2);
 
                 elemento1 = linhaAtual1[0];
                 elemento2 = linhaAtual1[1];
 
                 while ((Str = brDA2.readLine()) != null) {
 
-                    //                linhaAtual2 = Str.split(";", 2);
-                linhaAtual2 = Str.split(";", 3);
+                    linhaAtual2 = Str.split(";", 2);
 
                     elementoA = linhaAtual2[0];
                     elementoB = linhaAtual2[1];
@@ -701,7 +636,7 @@ public class AnnStd {
 
                 brDA2.close();
 
-                if (jaExistia == false) { //Atualização de NAO_DA
+                if (jaExistia == false) {
                     bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
                 }
             }
@@ -751,8 +686,7 @@ public class AnnStd {
 
             while ((Str = brDiverg.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -770,7 +704,6 @@ public class AnnStd {
                         bwDM.write(elemento1 + ";" + elemento2 + "\n");
                     } else {
                         brNDM.write(elemento1 + ";" + elemento2 + "\n");
-
                     }
 
                 }
@@ -801,7 +734,7 @@ public class AnnStd {
 
             double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            int tn = getTN(tp, fp, fn);
+            int tn = getTN(tp, fp, fn, tamBaseOrig);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
@@ -863,10 +796,8 @@ public class AnnStd {
 
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName());
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -899,30 +830,6 @@ public class AnnStd {
         this.gs = gs;
     }
 
-    public int getTamBaseOrig() {
-        return tamBaseOrig;
-    }
-
-    public void setTamBaseOrig(int tamBaseOrig) {
-        this.tamBaseOrig = tamBaseOrig;
-    }
-
-    public int getTamBaseOrig2() {
-        return tamBaseOrig2;
-    }
-
-    public void setTamBaseOrig2(int tamBaseOrig2) {
-        this.tamBaseOrig2 = tamBaseOrig2;
-    }
-
-    public boolean isDedup() {
-        return dedup;
-    }
-
-    public void setDedup(boolean dedup) {
-        this.dedup = dedup;
-    }
-
     public int getTamDA() throws IOException {
 
         int tamDA = 0;
@@ -935,12 +842,9 @@ public class AnnStd {
             tamDA = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -958,12 +862,9 @@ public class AnnStd {
             tamDM = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -979,14 +880,10 @@ public class AnnStd {
             linhaLeitura1 = new LineNumberReader(new FileReader(NDM.getPath()));
             linhaLeitura1.skip(NDM.length());
             tamNDM = linhaLeitura1.getLineNumber();
-
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
         }
@@ -995,24 +892,11 @@ public class AnnStd {
 
     }
 
-    public int getTN(int tp, int fp, int fn) throws IOException {
+    public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
 
-        int tamBase = getTamBaseOrig();
+        tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
 
-        if (isDedup()) {
-
-            tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
-
-            return tn;
-
-        } else {
-
-            int tamBase2 = getTamBaseOrig2();
-
-            tn = (tamBase * tamBase2) - tp - fp - fn;
-
-            return tn;
-        }
+        return tn;
 
     }
 
@@ -1048,8 +932,7 @@ public class AnnStd {
 
             while ((Str = brGS.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -1068,10 +951,8 @@ public class AnnStd {
 
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em getFN()");
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
         }
@@ -1092,8 +973,7 @@ public class AnnStd {
 
             while ((Str = brArqResult.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -1107,10 +987,8 @@ public class AnnStd {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaFN()");
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brArqResult.close();
         }
@@ -1131,8 +1009,7 @@ public class AnnStd {
 
             while ((Str = brDM.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elementoDM_NDM1 = linhaAtual[0];
                 elementoDM_NDM2 = linhaAtual[1];
@@ -1145,10 +1022,8 @@ public class AnnStd {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDM.close();
 
@@ -1160,8 +1035,7 @@ public class AnnStd {
 
             while ((Str = brNDM.readLine()) != null) {
 
-                //                linhaAtual = Str.split(";", 2);
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(";", 2);
 
                 elementoDM_NDM1 = linhaAtual[0];
                 elementoDM_NDM2 = linhaAtual[1];
@@ -1174,10 +1048,8 @@ public class AnnStd {
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
-
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             brNDM.close();
         }
@@ -1187,6 +1059,10 @@ public class AnnStd {
 
     public void setIteracao(int iteracao) {
         this.iteracao = iteracao;
+    }
+
+    public void setTamBaseOrig(int tamBaseOrig) {
+        this.tamBaseOrig = tamBaseOrig;
     }
 
     public void limpaTudo() {

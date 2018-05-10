@@ -151,6 +151,7 @@ public class DgStd1 {
                 linhaAtual = Str.split(";", 3); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
 
+                System.out.println("PADRONIZA_CSV_NO_DS");
                 for (int i = 0; i < linhaAtual.length; i++) {
 
                     String cell = linhaAtual[i];
@@ -301,9 +302,11 @@ public class DgStd1 {
         }
 
         if (!DA.exists()) {
+            
             BufferedReader brArqResult = null;
             BufferedWriter bwDupAuto = null;
             BufferedWriter bwHist = null;
+            System.out.println("Não existe arquivo " + DA.getName());
             try {
                 DA.createNewFile();
                 historicoDA.createNewFile();
@@ -323,12 +326,13 @@ public class DgStd1 {
                 while ((Str = brArqResult.readLine()) != null) {
 
                     linhaAtual = Str.split(";", 4);
+//                    System.out.println("Str: " + Str);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
-                    System.out.println("linhaAtual[1]: " + linhaAtual[1]);
-                    System.out.println("linhaAtual[2]: " + linhaAtual[2]);
-
-                    System.out.println(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2]);
+//                    System.out.println("linhaAtual[1]: " + linhaAtual[1]);
+//                    System.out.println("linhaAtual[2]: " + linhaAtual[2]);
+//
+//                    System.out.println(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2]);
 
                     bwHist.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
@@ -336,7 +340,7 @@ public class DgStd1 {
 
                 //DM e NDM são criados obrigatoriamente quando DA é criado
                 if (!DM.exists()) {
-                    System.out.println("Não existe arquivo " + DM.getName());
+                    System.out.println("Não existe arquivo " + DM.getName() + " em conjuntosDS");
 
                     try {
                         DM.createNewFile();
@@ -432,10 +436,13 @@ public class DgStd1 {
 
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
 
-            atualizaHistDA(arqResult);
-
-            atualizaHistNAODA(aux);
-
+            //ATENÇÃO! Apenas para a abordagem de AA
+//            {
+//            atualizaHistDA(arqResult);
+//
+//            atualizaHistNAODA(aux);
+//            }
+            
             /*
              *ATENÇÃO! Como as estatísticas só são gravadas quando chamadas de dentro do método comparaComGS,
              *esta etapa só está gravando as estatísticas do primeiro algoritmo de deduplicação.
@@ -2088,11 +2095,13 @@ public class DgStd1 {
         if (dir.isDirectory()) {
             File[] sun = dir.listFiles();
             for (File toDelete : sun) {
-                if (!dir.isDirectory()) {
+                if (!toDelete.isDirectory()) {
                     toDelete.delete();
                 }
             }
         }
+        
+//        System.out.println("limpaTudo DS"); 
 
         tp = 0;
         fp = 0;

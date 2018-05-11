@@ -28,6 +28,7 @@ public class AplicacaoDS {
     public static void main(String[] args) throws IOException {
 //        DgStd obj = new DgStd();
         DgStd1 obj = new DgStd1();
+        AnnStd obj1 = new AnnStd();
 
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
@@ -40,6 +41,12 @@ public class AplicacaoDS {
 
         obj.setTamBaseOrig(9763); //Necessário!
 
+        obj1.setGs(gs);
+
+//        obj1.setDedup(true);
+//        obj.setDedup(false);
+        obj1.setTamBaseOrig(9763); //Necessário!
+
         File[] resultados = new File[qtdAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
@@ -50,7 +57,8 @@ public class AplicacaoDS {
         File[] resultadosPadr = new File[qtdAlg];
 
         for (int i = 0; i < resultadosPadr.length; ++i) {
-            resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
+//            resultadosPadr[i] = obj.padronizaCsvFile(resultados[i]);
+            resultadosPadr[i] = obj1.padronizaCsvFile(resultados[i]);
         }
 
         List<String> aux = new ArrayList<String>();
@@ -81,7 +89,7 @@ public class AplicacaoDS {
                 if (aux.size() == qtdAlg - 1) { //Gerar estatísticas só na última iteração
                     obj.setGeraEst(true);
                 }
-                
+
                 obj.comparaConjuntos(resultadosPadr[cont]);
 
                 cont++;
@@ -95,7 +103,6 @@ public class AplicacaoDS {
 //
 //                obj.filtraDivergencias_NEW(obj.getEstatDA(), obj.getEstatNAODA());
 //            }
-
             //Impressão dos algoritmos utilizados
             Iterator it = aux.iterator();
 

@@ -151,7 +151,7 @@ public class DgStd1 {
                 linhaAtual = Str.split(";", 3); //Nesse caso considera apenas as duas primeiras colunas (as que interessam)
                 cont = 0;
 
-                System.out.println("PADRONIZA_CSV_NO_DS");
+//                System.out.println("PADRONIZA_CSV_NO_DS");
                 for (int i = 0; i < linhaAtual.length; i++) {
 
                     String cell = linhaAtual[i];

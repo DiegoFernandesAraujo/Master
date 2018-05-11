@@ -140,7 +140,7 @@ public class AplicacaoASDS {
                             objDS.setGeraEst(true);
                         }
 //                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
-//                        objDS.comparaConjuntos(resultadosPadr[index]);
+                        objDS.comparaConjuntos(resultadosPadr[index]);
                     }
 //                    System.out.println("");
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -44,7 +45,7 @@ public class DgStd1 {
     File historicoNAODA;
 
     File divergencias, divergencias2;
-    File estatDA, estatNAODA;
+    File estatDA, estatNAODA, estatNAODAIncr;
 
     File DM;
     File NDM;
@@ -302,7 +303,7 @@ public class DgStd1 {
         }
 
         if (!DA.exists()) {
-            
+
             BufferedReader brArqResult = null;
             BufferedWriter bwDupAuto = null;
             BufferedWriter bwHist = null;
@@ -333,7 +334,6 @@ public class DgStd1 {
 //                    System.out.println("linhaAtual[2]: " + linhaAtual[2]);
 //
 //                    System.out.println(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2]);
-
                     bwHist.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
                 }
@@ -419,6 +419,7 @@ public class DgStd1 {
                 bwHist.flush();
                 bwHist.close();
 
+//                JOptionPane.showMessageDialog(null, "Veja o arquivo historicoDA!");
                 //Juntar DA + DM para calcular precision, recall e f-measure para o TODO, O ANNEALING!
                 //Como é o baseline poderia ser calculado apenas com DA mesmo
 //                juntaDADM(DA, DM);
@@ -437,12 +438,13 @@ public class DgStd1 {
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
 
             //ATENÇÃO! Apenas para a abordagem de AA
-//            {
-//            atualizaHistDA(arqResult);
-//
-//            atualizaHistNAODA(aux);
-//            }
-            
+            {
+                atualizaHistDA(arqResult);
+
+                atualizaHistNAODA(aux);
+            }
+
+//            JOptionPane.showMessageDialog(null, "Veja o arquivo historicoDA!");
             /*
              *ATENÇÃO! Como as estatísticas só são gravadas quando chamadas de dentro do método comparaComGS,
              *esta etapa só está gravando as estatísticas do primeiro algoritmo de deduplicação.
@@ -1557,6 +1559,88 @@ public class DgStd1 {
         }
     }
 
+    public void incrementaEstatNAO_DA() throws IOException {
+        tp = 0;
+        fp = 0;
+
+        String Str = "";
+        String elemento1 = "";
+        String elemento2 = "";
+        String[] linhaAtual;
+        boolean existeGS = false;
+        boolean existe = false;
+
+        FileWriter escreveEstatNaoDAIncr = null;
+        FileWriter escreveNDM = null;
+        BufferedReader brEstatNaoDA = null;
+        BufferedWriter bwEstatNaoDAIncr = null;
+        BufferedWriter brNDM = null;
+
+        estatNAODAIncr = new File("./src/csv/conjuntosDS", "estatNAODAIncr.csv");
+
+        if (!estatNAODAIncr.exists()) {
+            System.out.println("Não existe arquivo estatNAODAIncr.csv.");
+
+            try {
+                estatNAODAIncr.createNewFile();
+
+                try {
+                    brEstatNaoDA = new BufferedReader(new FileReader(estatNAODA.getPath()));
+
+                    escreveEstatNaoDAIncr = new FileWriter(estatNAODAIncr, true); //Sem sobrescrever
+
+                    escreveEstatNaoDAIncr.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + ";" + "duplicata" + "\n");
+
+                    bwEstatNaoDAIncr = new BufferedWriter(escreveEstatNaoDAIncr);
+
+//                    escreveNDM = new FileWriter(NDM, true); //Sem sobrescrever
+//                    brNDM = new BufferedWriter(escreveNDM);
+                    while ((Str = brEstatNaoDA.readLine()) != null) {
+
+                        if (Str.contains("elemento1")) {
+                            continue;
+                        }
+
+                        linhaAtual = Str.split(";", 6);
+
+                        elemento1 = linhaAtual[0];
+                        elemento2 = linhaAtual[1];
+
+                        existe = buscaGabarito(elemento1, elemento2, gs);
+
+                        //Só entra se já não existir em DM ou NDM
+                        if (existe) {
+//                            bwEstatNaoDAIncr.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + ";" + linhaAtual[3] + ";" + linhaAtual[4] + ";" + linhaAtual[5] + true + "\n");
+                            bwEstatNaoDAIncr.write(Str + ";" + true + "\n");
+                        } else {
+//                            bwEstatNaoDAIncr.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + ";" + linhaAtual[3] + ";" + linhaAtual[4] + ";" + linhaAtual[5] + false + "\n");
+                            bwEstatNaoDAIncr.write(Str + ";" + false + "\n");
+
+                        }
+
+                    }
+
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(DgStd1.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                } catch (IOException ex) {
+                    Logger.getLogger(DgStd1.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    brEstatNaoDA.close();
+
+                    bwEstatNaoDAIncr.flush();
+                    bwEstatNaoDAIncr.close();
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo estatisticas.csv.");
+            }
+        }
+    }
+
     /**
      *
      * @param tp
@@ -2100,9 +2184,8 @@ public class DgStd1 {
                 }
             }
         }
-        
-//        System.out.println("limpaTudo DS"); 
 
+//        System.out.println("limpaTudo DS"); 
         tp = 0;
         fp = 0;
         tn = 0;

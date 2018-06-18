@@ -89,6 +89,8 @@ public class AplicacaoDS {
                 if (aux.size() == qtdAlg - 1) { //Gerar estatísticas só na última iteração
                     obj.setGeraEst(true);
                 }
+                
+                System.out.println(resultadosPadr[cont].getName());
 
                 obj.comparaConjuntos(resultadosPadr[cont]);
 
@@ -97,12 +99,14 @@ public class AplicacaoDS {
             }
 
 //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
-//            {
-//                obj.contabilizaEstatDA(obj.getHistoricoDA());
-//                obj.contabilizaEstatNAODA(obj.getHistoricoNAODA());
-//
-//                obj.filtraDivergencias_NEW(obj.getEstatDA(), obj.getEstatNAODA());
-//            }
+            {
+                obj.contabilizaEstatDA(obj.getHistoricoDA());
+                obj.contabilizaEstatNAODA(obj.getHistoricoNAODA());
+
+                obj.filtraDivergencias_NEW(obj.getEstatDA(), obj.getEstatNAODA());
+                
+                obj.incrementaEstatNAO_DA();
+            }
             //Impressão dos algoritmos utilizados
             Iterator it = aux.iterator();
 

@@ -38,8 +38,10 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.MongeElkan;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
- * Método geraVetor() gera os vetores de similaridades juntamente com as estatísticas (méd, mín, máx) necessárias
- * para a execução da abordagem AA baseada em monotonicidade.
+ * Método geraVetor() gera os vetores de similaridades juntamente com as
+ * estatísticas (méd, mín, máx) necessárias para a execução da abordagem AA
+ * baseada em monotonicidade.
+ *
  * @author Diego
  */
 public class VetorSimEstat extends DedupAlg {
@@ -73,7 +75,7 @@ public class VetorSimEstat extends DedupAlg {
 
         }
     }
-    
+
     /**
      *
      * @param baseDados1
@@ -86,9 +88,8 @@ public class VetorSimEstat extends DedupAlg {
      */
     public VetorSimEstat(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, File vetor) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
-        
+
         vetorSimilaridade = vetor;
-        
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");
@@ -160,8 +161,8 @@ public class VetorSimEstat extends DedupAlg {
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
-                
-                if(elemento1.contains("elemento1")){
+
+                if (elemento1.contains("elemento1")) {
                     continue;
                 }
 
@@ -244,7 +245,6 @@ public class VetorSimEstat extends DedupAlg {
 
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
-
     /**
      *
      * @param arqDiverg
@@ -282,7 +282,8 @@ public class VetorSimEstat extends DedupAlg {
 
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
             //Ordem para o algoritmo de Peter Christen
-            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+//            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+            bwVetorMenor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
             while ((Str = brDiverg.readLine()) != null) {
 
@@ -306,7 +307,6 @@ public class VetorSimEstat extends DedupAlg {
                     if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
 
 //                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
-
 //                        System.out.println(linhaAtualVetor.length);
                         for (String valor : linhaAtualVetor) {
 

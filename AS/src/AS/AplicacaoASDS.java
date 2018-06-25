@@ -72,7 +72,7 @@ public class AplicacaoASDS {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 1; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 1000; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -148,7 +148,7 @@ public class AplicacaoASDS {
 //                    System.out.println("Entrou no else");
                     i--;
                 }
-                seed++;
+                seed+=10;
             }
             java.awt.Toolkit.getDefaultToolkit().beep();
 

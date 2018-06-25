@@ -86,10 +86,11 @@ public class AplicacaoDS {
 //                }
                 aux.add(Integer.toString(cont));
 
-                if (aux.size() == qtdAlg - 1) { //Gerar estatísticas só na última iteração
+//                if (aux.size() == qtdAlg - 1) { //Gerar estatísticas só na última iteração
+                if (aux.size() == qtdAlg) { //Gerar estatísticas só na última iteração
                     obj.setGeraEst(true);
                 }
-                
+
                 System.out.println(resultadosPadr[cont].getName());
 
                 obj.comparaConjuntos(resultadosPadr[cont]);

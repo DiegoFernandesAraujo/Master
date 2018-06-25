@@ -30,7 +30,6 @@ import javax.swing.JOptionPane;
  *
  * @author Diego Em relação à classe DgStd possui o método copiaArqDiverg(), um
  * método para manter salvo o arquivo de divergências gerado
- * <b>CORRIGIR o nome do arquivo estatisticaInicialDS.csv!!!!</b>
  */
 public class DgStd1 {
 
@@ -202,6 +201,7 @@ public class DgStd1 {
 
         tp = 0;
         fp = 0;
+//        int cont = 0;
 
         String Str;
         String elemento1;
@@ -216,6 +216,9 @@ public class DgStd1 {
             while ((Str = brResult.readLine()) != null) {
 
                 linhaAtual = Str.split(";", 3);
+//                System.out.println(Str);
+//                cont++;
+                
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -238,6 +241,7 @@ public class DgStd1 {
         } finally {
             brResult.close();
             gravaEstatisticas(tp, fp, gs, arqResult);
+//            System.out.println("cont: " + cont);
         }
     }
 
@@ -1611,10 +1615,10 @@ public class DgStd1 {
                         //Só entra se já não existir em DM ou NDM
                         if (existe) {
 //                            bwEstatNaoDAIncr.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + ";" + linhaAtual[3] + ";" + linhaAtual[4] + ";" + linhaAtual[5] + true + "\n");
-                            bwEstatNaoDAIncr.write(Str + ";" + true + "\n");
+                            bwEstatNaoDAIncr.write(Str + ";" + "1.0" + "\n");
                         } else {
 //                            bwEstatNaoDAIncr.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + ";" + linhaAtual[3] + ";" + linhaAtual[4] + ";" + linhaAtual[5] + false + "\n");
-                            bwEstatNaoDAIncr.write(Str + ";" + false + "\n");
+                            bwEstatNaoDAIncr.write(Str + ";" + "0.0" + "\n");
 
                         }
 

@@ -72,7 +72,7 @@ public class AplicacaoASDS {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 1000; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 10; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -128,6 +128,8 @@ public class AplicacaoASDS {
                     int alg = 0;
 
                     for (int index : listaAlg) {
+                        
+//                        System.out.println("AQUI");||
 
 //                        System.out.println(index + ",");
                         alg++;
@@ -142,13 +144,25 @@ public class AplicacaoASDS {
 //                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
                         objDS.comparaConjuntos(resultadosPadr[index]);
                     }
+
+                    //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
+                    {
+                        objDS.contabilizaEstatDA(objDS.getHistoricoDA());
+                        objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
+
+                        objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+
+                        objDS.incrementaEstatNAO_DA();
+                        
+//                        objDS.copiaArqDivergAA();
+                    }
 //                    System.out.println("");
 
                 } else {
 //                    System.out.println("Entrou no else");
                     i--;
                 }
-                seed+=10;
+                seed += 10;
             }
             java.awt.Toolkit.getDefaultToolkit().beep();
 

@@ -333,7 +333,7 @@ public class DgStd1 {
                     linhaAtual = Str.split(";", 4);
 //                    System.out.println("Str: " + Str);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
-
+                    
 //                    System.out.println("linhaAtual[1]: " + linhaAtual[1]);
 //                    System.out.println("linhaAtual[2]: " + linhaAtual[2]);
 //
@@ -1163,6 +1163,8 @@ public class DgStd1 {
         try {
 
             brHistDA = new BufferedReader(new FileReader(arqHistDA.getPath()));
+            
+            System.out.println("arqHistDA.getPath() " + arqHistDA.getPath());
 
             escreveDiverg2 = new FileWriter(estatDA, true); //Dessa forma NÃO sobrescreve
             bwDiverg2 = new BufferedWriter(escreveDiverg2);
@@ -2204,6 +2206,7 @@ public class DgStd1 {
      */
     public void copiaArqDiverg() throws IOException {
 
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
         File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
@@ -2214,6 +2217,32 @@ public class DgStd1 {
         FileChannel destinationChannel = null;
         try {
             sourceChannel = new FileInputStream(divergencias).getChannel();
+            destinationChannel = new FileOutputStream(divergToAA).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen()) {
+                sourceChannel.close();
+            }
+            if (destinationChannel != null && destinationChannel.isOpen()) {
+                destinationChannel.close();
+            }
+        }
+    }
+    
+    public void copiaArqDivergAA() throws IOException {
+
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+
+        if (divergToAA.exists()) {
+            divergToAA.delete();
+        }
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+        try {
+            sourceChannel = new FileInputStream(estatNAODAIncr).getChannel();
             destinationChannel = new FileOutputStream(divergToAA).getChannel();
             sourceChannel.transferTo(0, sourceChannel.size(),
                     destinationChannel);
@@ -2238,6 +2267,7 @@ public class DgStd1 {
 //        double minimo = 1.0;
         double minimo = 1;
         double similaridade = Double.parseDouble(sim);
+        System.out.println("similaridade: " + similaridade);
 
         if (qtdAlg == 1) {
 //            if (similaridade <= 1.0) {

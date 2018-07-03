@@ -35,6 +35,7 @@ public class DgStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
     boolean dedup = false;
+    boolean copiaArqDiverg = false;
 
     boolean geraEst = false;
 
@@ -218,7 +219,6 @@ public class DgStd1 {
                 linhaAtual = Str.split(";", 3);
 //                System.out.println(Str);
 //                cont++;
-                
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -333,11 +333,12 @@ public class DgStd1 {
                     linhaAtual = Str.split(";", 4);
 //                    System.out.println("Str: " + Str);
                     bwDupAuto.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
-                    
+
 //                    System.out.println("linhaAtual[1]: " + linhaAtual[1]);
 //                    System.out.println("linhaAtual[2]: " + linhaAtual[2]);
 //
 //                    System.out.println(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2]);
+                    linhaAtual[2] = linhaAtual[2].replaceAll("\"", "");
                     bwHist.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
                 }
@@ -460,8 +461,9 @@ public class DgStd1 {
             //!!!!!!!!!!!!!!!
 //            contabilizaEstatDA(aux);
             remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
-            copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
-
+            if (isCopiaArqDiverg()) {
+                copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
+            }
             //ATENÇÃO! Os arquivos DN e NDM devem ser povoados a partir do algoritmo de AA
 //            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
 //
@@ -753,6 +755,7 @@ public class DgStd1 {
                     elementoB = linhaAtual2[1];
 
                     if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
+                        linhaAtual1[2] = linhaAtual1[2].replaceAll("\"", "");
                         bwHist.write(linhaAtual1[0] + ";" + linhaAtual1[1] + ";" + linhaAtual1[2] + "\n");
                         break;
                     }
@@ -1163,7 +1166,7 @@ public class DgStd1 {
         try {
 
             brHistDA = new BufferedReader(new FileReader(arqHistDA.getPath()));
-            
+
             System.out.println("arqHistDA.getPath() " + arqHistDA.getPath());
 
             escreveDiverg2 = new FileWriter(estatDA, true); //Dessa forma NÃO sobrescreve
@@ -1199,7 +1202,7 @@ public class DgStd1 {
                 par = elemento1 + elemento2;
 
                 if (listaElementos.contains(par)) {
-                    System.out.println("Contém " + par);
+//                    System.out.println("Contém " + par);
                     jaExistia = true;
                     continue; //Dessa forma permite que pesquise por um determinado par apenas na sua primeira aparição
 //                    break;
@@ -1220,12 +1223,12 @@ public class DgStd1 {
 
                             qtdAlg++; //Coletando as estatísticas...
 
-                            System.out.println("qtdAlg: " + qtdAlg);
+//                            System.out.println("qtdAlg: " + qtdAlg);
 
                             min = min(qtdAlg, similaridade, min);
                             max = max(qtdAlg, similaridade, max);
 
-                            System.out.println("max: " + max);
+//                            System.out.println("max: " + max);
 
                             soma = soma + Double.parseDouble(similaridade);
 
@@ -1355,7 +1358,7 @@ public class DgStd1 {
                 par = elemento1 + elemento2;
 
                 if (listaElementos.contains(par)) {
-                    System.out.println("Contém " + par);
+//                    System.out.println("Contém " + par);
                     jaExistia = true;
                     continue; //Dessa forma permite que pesquise por um determinado par apenas na sua primeira aparição
 //                    break;
@@ -1375,12 +1378,12 @@ public class DgStd1 {
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
                             qtdAlg++; //Coletando as estatísticas...
-                            System.out.println("qtdAlg: " + qtdAlg);
+//                            System.out.println("qtdAlg: " + qtdAlg);
 
                             min = min(qtdAlg, similaridade, min);
                             max = max(qtdAlg, similaridade, max);
 
-                            System.out.println("max: " + max);
+//                            System.out.println("max: " + max);
 
                             soma = soma + Double.parseDouble(similaridade);
 
@@ -1727,6 +1730,14 @@ public class DgStd1 {
             Logger.getLogger(DgStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public boolean isCopiaArqDiverg() {
+        return copiaArqDiverg;
+    }
+
+    public void setCopiaArqDiverg(boolean copiaArqDiverg) {
+        this.copiaArqDiverg = copiaArqDiverg;
     }
 
     /**
@@ -2229,7 +2240,7 @@ public class DgStd1 {
             }
         }
     }
-    
+
     public void copiaArqDivergAA() throws IOException {
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
@@ -2267,7 +2278,7 @@ public class DgStd1 {
 //        double minimo = 1.0;
         double minimo = 1;
         double similaridade = Double.parseDouble(sim);
-        System.out.println("similaridade: " + similaridade);
+//        System.out.println("similaridade: " + similaridade);
 
         if (qtdAlg == 1) {
 //            if (similaridade <= 1.0) {
@@ -2311,9 +2322,9 @@ public class DgStd1 {
         } else {
             if (similaridade >= atualMax) {
                 maximo = similaridade;
-                System.out.println("Entrei aqui: maximo = similaridade; com qtdAlg igual a " + qtdAlg);
-                System.out.println("similaridade igual a " + similaridade);
-                System.out.println("maximo igual a " + maximo);
+//                System.out.println("Entrei aqui: maximo = similaridade; com qtdAlg igual a " + qtdAlg);
+//                System.out.println("similaridade igual a " + similaridade);
+//                System.out.println("maximo igual a " + maximo);
             } else {
                 maximo = atualMax;
             }

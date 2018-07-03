@@ -22,7 +22,7 @@ public class ExecVetorSim {
      * @param args
      */
     public static void main(String[] args) {
-        File vetorSim = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-24-06.csv");
+        File vetorSim = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-TESTE.csv");
 //        File vetorSim = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "vetorSimilaridades-10-05.csv"); //Esse arquivo tem que possuir todas as divergências
 
 //        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
@@ -34,28 +34,29 @@ public class ExecVetorSim {
 //        File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
         File diverg = new File("./src/csv/conjuntosDS/", "estatNAODAIncr.csv"); //Esse arquivo tem que possuir todas as divergências      
 
-        File dir = new File("./src/csv/conjuntosDS/conjuntosDiverg/");
+//        File dir = new File("./src/csv/conjuntosDS/conjuntosDiverg/");
+        File dir = new File("./src/csv/conjuntosDS/conjuntosDivergAA/");
 
         try {
-            obj.geraVetor(diverg); //Para gerar o vetor base dos demais
+//            obj.geraVetor(diverg); //Para gerar o vetor base dos demais
 
             //Para gerar os vetores de similaridade específicos
-//            if (dir.isDirectory()) {
-//                File[] divergs = dir.listFiles();
-//
-//                for (File arq : divergs) {
-//
-//                    String nome = arq.getName();
-//
-//                    System.out.println("Nome do arquivo: " + nome);
-//
-//                    if (nome.contains("diverg") && !nome.contains("_NEW")) {
-//                        obj.geraVetorMenor(arq, vetorSim);
-//                        arq.delete(); //Exclui o arquivo depois de gerar os vetores de similaridade
-//                    }
-//
-//                }
-//            }
+            if (dir.isDirectory()) {
+                File[] divergs = dir.listFiles();
+
+                for (File arq : divergs) {
+
+                    String nome = arq.getName();
+
+                    System.out.println("Nome do arquivo: " + nome);
+
+                    if (nome.contains("diverg") && !nome.contains("_NEW")) {
+                        obj.geraVetorMenor(arq, vetorSim);
+                        arq.delete(); //Exclui o arquivo depois de gerar os vetores de similaridade
+                    }
+
+                }
+            }
         } catch (IOException ex) {
             Logger.getLogger(ExecVetorSim.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -32,6 +32,16 @@ public class AplicacaoASDS {
         AnnStd objAS = new AnnStd();
         DgStd1 objDS = new DgStd1();
 
+        String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
+
+        //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
+        //pois será necessário copiar os arquivos de diergência com as estatísticas (méd, mín, máx).
+        if (abordagemAA.equals("Dg")) { 
+            objDS.setCopiaArqDiverg(false);
+        } else {
+            objDS.setCopiaArqDiverg(true);
+        }
+        
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
@@ -72,7 +82,7 @@ public class AplicacaoASDS {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 10; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 1; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -128,9 +138,8 @@ public class AplicacaoASDS {
                     int alg = 0;
 
                     for (int index : listaAlg) {
-                        
-//                        System.out.println("AQUI");||
 
+//                        System.out.println("AQUI");||
 //                        System.out.println(index + ",");
                         alg++;
 
@@ -146,15 +155,17 @@ public class AplicacaoASDS {
                     }
 
                     //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
-                    {
+                    if (abordagemAA.equals("Dg")) {
+                        
                         objDS.contabilizaEstatDA(objDS.getHistoricoDA());
                         objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
 
                         objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
 
                         objDS.incrementaEstatNAO_DA();
-                        
-//                        objDS.copiaArqDivergAA();
+
+                        objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
+                        //de AA proposta.
                     }
 //                    System.out.println("");
 

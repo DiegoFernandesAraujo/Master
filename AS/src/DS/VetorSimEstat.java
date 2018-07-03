@@ -138,8 +138,8 @@ public class VetorSimEstat extends DedupAlg {
             escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-//            bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;track10;track11;duplicata\n"); //ERA ASSIM
-            bwArqVetor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+            bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;track10;track11;duplicata\n"); //ERA ASSIM
+//            bwArqVetor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
@@ -282,10 +282,13 @@ public class VetorSimEstat extends DedupAlg {
 
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
             //Ordem para o algoritmo de Peter Christen
-//            bwVetorMenor.write("elemento1;elemento2;duplicata;title;artist;track01;track02;track03;track10;track11\n");
             bwVetorMenor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
-
+            
             while ((Str = brDiverg.readLine()) != null) {
+                
+                if (Str.contains("elemento1")) {
+                    continue;
+                }
 
                 linhaAtual = Str.split(";");
 
@@ -297,7 +300,8 @@ public class VetorSimEstat extends DedupAlg {
 //                System.out.println("elementoDiverg1: " + elementoDiverg1 + " - " + "elementoDiverg2: " + elementoDiverg2);
                 while ((Str2 = brVetorSim.readLine()) != null) {
 
-                    linhaAtualVetor = Str2.split(";");
+//                    linhaAtualVetor = Str2.split(";");
+                    linhaAtualVetor = Str2.split(";", 3);
                     int cont = 0;
 
                     elementoVetorSim1 = linhaAtualVetor[0];
@@ -308,18 +312,17 @@ public class VetorSimEstat extends DedupAlg {
 
 //                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
 //                        System.out.println(linhaAtualVetor.length);
-                        for (String valor : linhaAtualVetor) {
+//                        for (String valor : linhaAtualVetor) {
+//                            bwVetorMenor.append(valor);
+                        bwVetorMenor.append(Str);
+                        bwVetorMenor.append(';');
+                        bwVetorMenor.append(linhaAtualVetor[2]);
 
-                            bwVetorMenor.append(valor);
-
-                            if (cont < linhaAtualVetor.length - 1) {
-
-                                bwVetorMenor.append(';');
-                            }
-
-                            cont++;
-                        }
-
+//                            if (cont < linhaAtualVetor.length - 1) {
+//                                bwVetorMenor.append(';');
+//                            }
+//                            cont++;
+//                        }
                         bwVetorMenor.append('\n');
                         bwVetorMenor.flush();
                         break;

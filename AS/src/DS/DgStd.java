@@ -100,8 +100,8 @@ public class DgStd {
             String nome = arq.getName();
             nome = nome.substring(0, nome.indexOf('.'));
 
-            escreveArqPadr = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
-            arqPadr = new File(diretorio + "\\" + nome + "_NEW.csv");
+            escreveArqPadr = new FileWriter(diretorio + "/" + nome + "_NEW.csv", false);
+            arqPadr = new File(diretorio + "/" + nome + "_NEW.csv");
 
             while ((Str = brArq.readLine()) != null) {
 

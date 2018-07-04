@@ -225,8 +225,8 @@ public class VetorSim0 extends DedupAlg {
             String nome = arqDiverg.getName();
             nome = nome.substring(0, nome.indexOf('.'));
 
-            escreveVetorMenor = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
-            vetorMenor = new File(diretorio + "\\" + nome + "_NEW.csv");
+            escreveVetorMenor = new FileWriter(diretorio + "/" + nome + "_NEW.csv", false);
+            vetorMenor = new File(diretorio + "/" + nome + "_NEW.csv");
             bwVetorMenor = new BufferedWriter(escreveVetorMenor);
 
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");

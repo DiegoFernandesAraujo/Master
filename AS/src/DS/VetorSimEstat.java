@@ -138,7 +138,7 @@ public class VetorSimEstat extends DedupAlg {
             escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-            bwArqVetor.write("id;elemento1;elemento2;title;artist;track01;track02;track03;track10;track11;duplicata\n"); //ERA ASSIM
+            bwArqVetor.write("elemento1;elemento2;title;artist;track01;track02;track03;track10;track11\n"); //ERA ASSIM
 //            bwArqVetor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
         } catch (IOException ex) {
@@ -188,19 +188,23 @@ public class VetorSimEstat extends DedupAlg {
                         f = Double.toString(similarityFunc6.getSimilarity(pair));
                         g = Double.toString(similarityFunc7.getSimilarity(pair));
 
-                        if (statistic.isDuplicate(pair)) {
-                            rotulo = "1.0";
-                        } else {
-                            rotulo = "0.0";
-                        }
+//                        if (statistic.isDuplicate(pair)) {
+//                            rotulo = "1.0";
+//                        } else {
+//                            rotulo = "0.0";
+//                        }
 
                         try {
 //                            bwArqVetor.append(Integer.toString(id));
 //                            bwArqVetor.append(';');
-                            bwArqVetor.append(Str);
-                            bwArqVetor.append(';');
+//                            bwArqVetor.append(Str);
+//                            bwArqVetor.append(';');
 //                            bwArqVetor.append(rotulo);
 //                            bwArqVetor.append(';');
+                            bwArqVetor.append(elemento1);
+                            bwArqVetor.append(';');
+                            bwArqVetor.append(elemento2);
+                            bwArqVetor.append(';');
                             bwArqVetor.append(a);
                             bwArqVetor.append(';');
                             bwArqVetor.append(b);
@@ -276,8 +280,8 @@ public class VetorSimEstat extends DedupAlg {
             String nome = arqDiverg.getName();
             nome = nome.substring(0, nome.indexOf('.'));
 
-            escreveVetorMenor = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
-            vetorMenor = new File(diretorio + "\\" + nome + "_NEW.csv");
+            escreveVetorMenor = new FileWriter(diretorio + "/" + nome + "_NEW.csv", false);
+            vetorMenor = new File(diretorio + "/" + nome + "_NEW.csv");
             bwVetorMenor = new BufferedWriter(escreveVetorMenor);
 
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
@@ -287,7 +291,9 @@ public class VetorSimEstat extends DedupAlg {
             while ((Str = brDiverg.readLine()) != null) {
                 
                 if (Str.contains("elemento1")) {
+                    System.out.println("Entrei no Str.contains");
                     continue;
+                    
                 }
 
                 linhaAtual = Str.split(";");
@@ -306,11 +312,13 @@ public class VetorSimEstat extends DedupAlg {
 
                     elementoVetorSim1 = linhaAtualVetor[0];
                     elementoVetorSim2 = linhaAtualVetor[1];
+                    
+//                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
 
 //                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
                     if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
 
-//                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
 //                        System.out.println(linhaAtualVetor.length);
 //                        for (String valor : linhaAtualVetor) {
 //                            bwVetorMenor.append(valor);

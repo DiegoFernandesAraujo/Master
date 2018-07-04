@@ -116,8 +116,8 @@ public class DgStd1 {
             String nome = arq.getName();
             nome = nome.substring(0, nome.indexOf('.'));
 
-            escreveArqPadr = new FileWriter(diretorio + "\\" + nome + "_NEW.csv", false);
-            arqPadr = new File(diretorio + "\\" + nome + "_NEW.csv");
+            escreveArqPadr = new FileWriter(diretorio + "/" + nome + "_NEW.csv", false);
+            arqPadr = new File(diretorio + "/" + nome + "_NEW.csv");
 
             while ((Str = brArq.readLine()) != null) {
 
@@ -1167,7 +1167,7 @@ public class DgStd1 {
 
             brHistDA = new BufferedReader(new FileReader(arqHistDA.getPath()));
 
-            System.out.println("arqHistDA.getPath() " + arqHistDA.getPath());
+//            System.out.println("arqHistDA.getPath() " + arqHistDA.getPath());
 
             escreveDiverg2 = new FileWriter(estatDA, true); //Dessa forma NÃO sobrescreve
             bwDiverg2 = new BufferedWriter(escreveDiverg2);
@@ -1373,7 +1373,8 @@ public class DgStd1 {
 
                         elementoA = linhaAtual2[0];
                         elementoB = linhaAtual2[1];
-                        similaridade = linhaAtual2[2];
+                        similaridade = linhaAtual2[2].replaceAll("\"", "");
+                        
 
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
@@ -2242,7 +2243,13 @@ public class DgStd1 {
     }
 
     public void copiaArqDivergAA() throws IOException {
+        
+        File dirDivergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/");
 
+        if (!dirDivergToAA.exists()) {
+            dirDivergToAA.mkdir();
+        }
+        
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
         File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");

@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Diego
  */
-public class AnnStd {
+public class AnnStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
 
@@ -38,7 +38,7 @@ public class AnnStd {
     File DADM;
     FileWriter escreveEstat;
 
-    public AnnStd() {
+    public AnnStd1() {
         tp = 0;
         fp = 0;
         iteracao = 0;
@@ -204,7 +204,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + arqResult.getName());
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brResult.close();
@@ -241,7 +241,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
@@ -302,15 +302,15 @@ public class AnnStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -325,15 +325,15 @@ public class AnnStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -349,15 +349,15 @@ public class AnnStd {
 
                     } catch (FileNotFoundException ex) {
 
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (IOException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
+                        Logger.getLogger(AnnStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
                     }
 
@@ -369,7 +369,7 @@ public class AnnStd {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
 
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
+                Logger.getLogger(AnnStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
             } finally {
 
@@ -426,7 +426,7 @@ public class AnnStd {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
 
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
+                Logger.getLogger(AnnStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -460,11 +460,11 @@ public class AnnStd {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
@@ -514,11 +514,11 @@ public class AnnStd {
 
         } catch (FileNotFoundException ex) {
 
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDA.close();
@@ -604,7 +604,7 @@ public class AnnStd {
             brArqDup.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDA.flush();
@@ -634,15 +634,15 @@ public class AnnStd {
 
             } catch (FileNotFoundException ex) {
 
-                Logger.getLogger(AnnStd.class
+                Logger.getLogger(AnnStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
 
             } catch (IOException ex) {
-                Logger.getLogger(AnnStd.class
+                Logger.getLogger(AnnStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
 
             } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
+                Logger.getLogger(AnnStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -702,11 +702,11 @@ public class AnnStd {
             brDA.close();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDiverg.flush();
@@ -771,11 +771,11 @@ public class AnnStd {
             }
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDiverg.close();
@@ -858,7 +858,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName());
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -904,11 +904,11 @@ public class AnnStd {
             tamDA = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
@@ -927,11 +927,11 @@ public class AnnStd {
             tamDM = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
@@ -950,11 +950,11 @@ public class AnnStd {
             tamNDM = linhaLeitura1.getLineNumber();
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             linhaLeitura1.close();
@@ -1025,7 +1025,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em getFN()");
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
@@ -1063,7 +1063,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaFN()");
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brArqResult.close();
@@ -1100,7 +1100,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brDM.close();
@@ -1128,7 +1128,7 @@ public class AnnStd {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
 
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
+            Logger.getLogger(AnnStd1.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brNDM.close();

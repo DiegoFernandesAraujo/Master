@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.LineNumberReader;
+import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -2339,4 +2340,19 @@ public class DgStd1 {
         return maximo;
 
     }
+    
+//    Para imprimir todos os métodos desta classe
+//    public static void main(String args[])
+//    {
+//        System.out.println("");
+//        try {
+//            Class c = DgStd1.class;
+//            Method[] m = c.getDeclaredMethods();
+//            for (int i = 0; i < m.length; i++)
+//            System.out.println(m[i].toString());
+//        } catch (Throwable e) {
+//            System.err.println(e);
+//        }
+//    }
+    
 }

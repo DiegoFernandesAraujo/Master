@@ -1,1 +1,0 @@
-Similaridades calculadas pelo DuDe. Incluindo valores negativos para os casos de fecho transitivo.

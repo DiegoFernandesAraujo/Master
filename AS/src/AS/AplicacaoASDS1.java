@@ -69,7 +69,9 @@ public class AplicacaoASDS1 {
         File[] resultados = new File[qtdAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
-            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
+            //O diretório que segue abaixo tem que ser setado de acordo com a base de dados utilizada
+//            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
+            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos

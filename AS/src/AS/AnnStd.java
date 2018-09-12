@@ -27,7 +27,8 @@ import java.util.List;
  */
 public class AnnStd {
 
-    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, qtdAlg;
+    int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
+    boolean dedup = false;
 
     File estatisticas;
     File DA;
@@ -794,7 +795,7 @@ public class AnnStd {
 
             double precision = getPrecision(tp, fp);
             int fn = getFN(arqResult);
-            int tn = getTN(tp, fp, fn, tamBaseOrig);
+            int tn = getTN(tp, fp, fn);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
             int inspecoes = getInspManuais();
@@ -964,11 +965,31 @@ public class AnnStd {
 
     }
 
-    public int getTN(int tp, int fp, int fn, int tamBase) throws IOException {
+    /**
+     *
+     * @param tp
+     * @param fp
+     * @param fn
+     * @return
+     * @throws IOException
+     */
+    public int getTN(int tp, int fp, int fn) throws IOException {
 
-        tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+        int tamBase = getTamBaseOrig();
 
-        return tn;
+        if (isDedup()) {
+
+            tn = (((tamBase--) * (tamBase))) / 2 - tp - fp - fn;
+
+            return tn;
+
+        } else {
+            int tamBase2 = getTamBaseOrig2();
+
+            tn = (tamBase * tamBase2) - tp - fp - fn;
+
+            return tn;
+        }
 
     }
 
@@ -1141,8 +1162,48 @@ public class AnnStd {
         this.iteracao = iteracao;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getTamBaseOrig() {
+        return tamBaseOrig;
+    }
+
     public void setTamBaseOrig(int tamBaseOrig) {
         this.tamBaseOrig = tamBaseOrig;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public int getTamBaseOrig2() {
+        return tamBaseOrig2;
+    }
+
+    /**
+     *
+     * @param tamBaseOrig2
+     */    
+    public void setTamBaseOrig2(int tamBaseOrig2) {
+        this.tamBaseOrig2 = tamBaseOrig2;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isDedup() {
+        return dedup;
+    }
+
+    /**
+     *
+     * @param dedup
+     */
+    public void setDedup(boolean dedup) {
+        this.dedup = dedup;
     }
 
     public void limpaTudo() {

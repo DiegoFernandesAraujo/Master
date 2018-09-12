@@ -15,6 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,24 +25,28 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class AplicacaoASDS1 {
+public class AplicacaoASDS11 {
+    
+    
 
     File arqAlg = new File("./src/csv/algoritmos.csv");
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        
+        Map<ArrayList<Integer>, ArrayList<Integer>> algsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
         AnnStd objAS = new AnnStd();
         DgStd1 objDS = new DgStd1();
 
         String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
 
         //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
-        //pois será necessário copiar os arquivos de diergência com as estatísticas (méd, mín, máx).
-        if (abordagemAA.equals("Dg")) {
+        //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
+        if (abordagemAA.equals("Dg")) { 
             objDS.setCopiaArqDiverg(false);
         } else {
             objDS.setCopiaArqDiverg(true);
         }
-
+        
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
@@ -66,8 +72,8 @@ public class AplicacaoASDS1 {
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
             //O diretório que segue abaixo tem que ser setado de acordo com a base de dados utilizada
-//            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv");
-            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv");
+//            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv"); 
+            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv"); 
         }
 
         //Padronização dos arquivos
@@ -83,7 +89,7 @@ public class AplicacaoASDS1 {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 3; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 50; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -97,7 +103,7 @@ public class AplicacaoASDS1 {
         algSorts.add(algSort15);
         algSorts.add(algSort20);
 //        algSorts.add(algSort23);
-        algSorts.hashCode();
+
 //        int sohParaTestar = 0;
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
@@ -105,135 +111,81 @@ public class AplicacaoASDS1 {
 
             for (File file : algSorts) {
 
-                if (file.getName().contains(Integer.toString(qtdAlgUt))) { //Pra que isso mesmo?
+                if (file.getName().contains(Integer.toString(qtdAlgUt))) {
 
                     algSort = file;
                     break;
 
                 }
             }
-            
-            System.out.println(algSort.getName());
 
+           
             System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
-//            for (int i = 1; i <= qtdObservacoes; i++) {
-            BufferedReader brArq = null;
+            for (int i = 1; i <= qtdObservacoes; i++) {
 
-//            List<String> listaAlgStr = new ArrayList<String>();
-
-            try {
-                brArq = new BufferedReader(new FileReader(algSort.getPath()));
-
-                String Str = "";
-//                int cont = 0;
-//                String[] linhaAtual;
-
-                int i = 0;
-
-                ArrayList<Integer> listaAlg = new ArrayList<Integer>();
-
-//                while ((Str = brArq.readLine()) != null) {
-                while (((Str = brArq.readLine()) != null) && (i<=3)) {
-
-//                    System.out.println(Str);
-                    Str = Str.replace("[", " ");
-                    Str = Str.replace("]", " ");
-                    Str = Str.replace(" ", "");
-                    listaAlg.clear();
-
-                    String elementos[] = Str.split(",");
-//                    
-
-                    for (String num : elementos) {
-                        if (!num.equals("[") & !num.equals("]") & !num.equals(",") & !num.equals(" ")) {
-
-                            listaAlg.add(Integer.parseInt(num));
-                        }
-                    }
-//                    System.out.println("");
-//                    for (int j = 0; j < Str.length(); j++) {
-//                        
-//                        
-//
-//                        String sub = Str.substring(j, j + 1);
-//
-//                        if (!sub.equals("[") & !sub.equals("]") & !sub.equals(",") & !sub.equals(" ")) {
-//
-//                            aux.add(Integer.parseInt(sub));
-//                        }
-//                    }
-                    System.out.println(listaAlg);
-
-//                    stringList.stream().map(Integer::parseInt).collect(Collectors.toList());
-//                    listaAlgStr.add(Str.toString());
-//                    listaAlgStr.add(Str.toString());
-                    i++;
-//                for (int i = 1; i <= qtdObservacoes; i++) {
-
-//                    List<Integer> listaAlg = new ArrayList<Integer>();
-//                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg); //AQUI Ó!!!!
-                    //Pegar a lista de algoritmos direto do arquivo sequencialmente
+                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg);
 //                objAS.limpaTudo();
 //                objDS.limpaTudo();
-                    //Verifica se a sequência gerada não já foi utilizada antes
+
+                //Verifica se a sequência gerada não já foi utilizada antes
+                if(!algsGerados.containsKey(listaAlg)){
+                    
+                    algsGerados.put(listaAlg, listaAlg);
+                
 //                if (!buscaAlgoritmos(algSort, listaAlg)) {
-                    if (true) {
 
-//                    gravaAlgoritmos(algSort, listaAlg);
-                        objAS.setPermutacao(i);
-                        objAS.setQtdAlg(qtdAlgUt);
-                        objAS.limpaTudo();
+                    gravaAlgoritmos(algSort, listaAlg);
 
-                        objDS.setPermutacao(i);
-                        objDS.setQtdAlg(qtdAlgUt);
-                        objDS.limpaTudo();
-                        System.out.println("Iteração " + i);
+                    objAS.setPermutacao(i);
+                    objAS.setQtdAlg(qtdAlgUt);
+                    objAS.limpaTudo();
 
-                        int alg = 0;
+                    objDS.setPermutacao(i);
+                    objDS.setQtdAlg(qtdAlgUt);
+                    objDS.limpaTudo();
+                    System.out.println("Iteração " + i);
 
-                        for (int index : listaAlg) {
+                    int alg = 0;
+
+                    for (int index : listaAlg) {
 
 //                        System.out.println("AQUI");||
 //                        System.out.println(index + ",");
-                            alg++;
+                        alg++;
 
-                            objAS.comparaConjuntos(resultadosPadr[index]);
+                        objAS.comparaConjuntos(resultadosPadr[index]);
 
-                            if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
+                        if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
 //                            System.out.println("último algoritmo: " + alg);
 //                            System.out.println("Gerando estatísticas para a última iteração pela " + ++sohParaTestar + " vez!");
-                                objDS.setGeraEst(true);
-                            }
+                            objDS.setGeraEst(true);
+                        }
 //                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
-                            objDS.comparaConjuntos(resultadosPadr[index]);
-                        }
+                        objDS.comparaConjuntos(resultadosPadr[index]);
+                    }
 
-                        //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
-                        if (abordagemAA.equals("Dg")) {
+                    //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
+                    if (abordagemAA.equals("Dg")) {
+                        
+                        objDS.contabilizaEstatDA(objDS.getHistoricoDA());
+                        objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
 
-                            objDS.contabilizaEstatDA(objDS.getHistoricoDA());
-                            objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
+                        objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
 
-                            objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+                        objDS.incrementaEstatNAO_DA();
 
-                            objDS.incrementaEstatNAO_DA();
-
-                            objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
-                            //de AA proposta.
-                        }
+                        objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
+                        //de AA proposta.
+                    }
 //                    System.out.println("");
 
-                    } else {
+                } else {
 //                    System.out.println("Entrou no else");
-//                        i--;
-                    }
-                    seed += 10;
-                      
+                    i--;
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(AplicacaoASDS1.class.getName()).log(Level.SEVERE, null, ex);
+                seed += 10;
             }
             
             

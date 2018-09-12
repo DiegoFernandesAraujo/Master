@@ -5,7 +5,6 @@
  */
 package AS;
 
-import DS.DgStd;
 import DS.DgStd1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -35,7 +34,7 @@ public class AplicacaoASDS {
         String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
 
         //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
-        //pois será necessário copiar os arquivos de diergência com as estatísticas (méd, mín, máx).
+        //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
         if (abordagemAA.equals("Dg")) { 
             objDS.setCopiaArqDiverg(false);
         } else {
@@ -52,7 +51,7 @@ public class AplicacaoASDS {
         objAS.setGs(gs);
         objDS.setGs(gs);
 
-//        objAS.setDedup(true);
+        objAS.setDedup(true);
         objDS.setDedup(true);
 
 //        objAS.setDedup(false);
@@ -84,7 +83,7 @@ public class AplicacaoASDS {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 3; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 1; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -114,6 +113,7 @@ public class AplicacaoASDS {
                 }
             }
 
+          
             System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação

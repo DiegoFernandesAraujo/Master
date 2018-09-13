@@ -27,7 +27,7 @@ public class ExecVetorSim {
 
 //        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
 //        VetorSim obj = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSim);
-        VetorSimEstat obj = new VetorSimEstat("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSim);
+        VetorSimEstat obj = new VetorSimEstat("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSim, ';');
 
 //        VetorSim1 obj = new VetorSim1("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");
 //        VetorSim2 obj = new VetorSim2("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result");

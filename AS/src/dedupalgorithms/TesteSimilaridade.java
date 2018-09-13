@@ -47,7 +47,7 @@ public class TesteSimilaridade extends DedupAlg {
     double a, b;
 
     public TesteSimilaridade(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
         estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".txt");

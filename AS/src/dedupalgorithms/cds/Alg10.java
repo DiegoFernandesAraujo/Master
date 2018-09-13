@@ -43,8 +43,8 @@ public class Alg10 extends DedupAlg {
     File estatisticasTXT;
     String dir = "resultsDedup/cds";
 
-    public Alg10(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+    public Alg10(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
@@ -130,12 +130,12 @@ public class Alg10 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg10 obj1 = new Alg10("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 10);
-//        try {
-//            obj1.executaDedupAlg();
-//        } catch (IOException ex) {
-//            Logger.getLogger(Alg10.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        Alg10 obj1 = new Alg10("cd", "pk", "cd_gold", "disc1_id", "disc2_id", 10);
+        try {
+            obj1.executaDedupAlg();
+        } catch (IOException ex) {
+            Logger.getLogger(Alg10.class.getName()).log(Level.SEVERE, null, ex);
+        }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }
 

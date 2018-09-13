@@ -110,7 +110,7 @@ public class Demo {
         
         {
             File vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-DEMO.csv");
-            VetorSim objVS = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSimilaridade);
+            VetorSim objVS = new VetorSim("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", vetorSimilaridade, ';');
             File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
             
             File dir = new File("./src/csv/conjuntosDS/conjuntosDiverg/");

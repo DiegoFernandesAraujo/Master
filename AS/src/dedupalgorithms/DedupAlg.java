@@ -39,16 +39,20 @@ public class DedupAlg {
     private String baseDados1;
     private String baseDados2;
     private String chavePrimaria;
+    private String chavePrimaria1;
+    private String chavePrimaria2;
     private String gold;
     private String goldId1;
     private String goldId2;
     private String idBaseDados;
+    private char separator;
+
     private Algorithm algorithm;
     private CSVSource source1;
     private CSVSource source2;
     private GoldStandard goldStandard;
-    
-    public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
+
+    public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
 
         this.result = baseDados1;
@@ -58,10 +62,11 @@ public class DedupAlg {
         this.goldId1 = goldId1;
         this.goldId2 = goldId2;
         this.idBaseDados = idBaseDados;
+        this.separator = separator;
         deduplication();
     }
 
-    public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
+    public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, String result) {
 
         System.out.println("baseDados2= " + baseDados2);
@@ -69,34 +74,36 @@ public class DedupAlg {
 
         this.baseDados1 = baseDados1;
         this.baseDados2 = baseDados2;
-//        this.chavePrimaria = chavePrimaria;
+        this.chavePrimaria1 = chavePrimaria1;
+        this.chavePrimaria2 = chavePrimaria2;
         this.gold = gold;
         this.goldId1 = goldId1;
         this.goldId2 = goldId2;
         this.idBaseDados = idBaseDados;
         this.result = baseDados1 + baseDados2;
+        this.separator = separator;
         recordLinkage();
     }
-    
-    
+
     public void deduplication() {
         String literalGS = baseDados1;
         try {
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
-    
+
             //Vejamos se funcionam essas 2 linhas:
             source1.withQuoteCharacter('"');
-            source1.withSeparatorCharacter(';');
-            
+//            source1.withSeparatorCharacter(';');
+            source1.withSeparatorCharacter(getSeparator());
+
             source1.enableHeader();
-            
+
             source1.addIdAttributes(chavePrimaria);
-            
+
             File file = new File("./src/csv/datasets", baseDados1 + ".csv");
             System.out.println(file.getAbsolutePath());
             System.out.println(file.getPath());
             System.out.println(file.getName());
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,7 +111,7 @@ public class DedupAlg {
         algorithm = new NaiveDuplicateDetection();
 
         algorithm.addDataSource(source1);
-        
+
         setGoldStandard(literalGS);
 
     }
@@ -116,14 +123,23 @@ public class DedupAlg {
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
             source2 = new CSVSource(baseDados2, new File("./src/csv/datasets", baseDados2 + ".csv"));
 
+            source1.withQuoteCharacter('"');
+            source2.withQuoteCharacter('"');
+            
+            source1.withSeparatorCharacter(getSeparator());
+            source2.withSeparatorCharacter(getSeparator());
+
             source1.enableHeader();
             source2.enableHeader();
             
+            source1.addIdAttributes(chavePrimaria1);
+            source2.addIdAttributes(chavePrimaria2);
+
             File file = new File("./src/csv/datasets", baseDados1 + ".csv");
             System.out.println(file.getAbsolutePath());
             System.out.println(file.getPath());
             System.out.println(file.getName());
-            
+
             File file2 = new File("./src/csv/datasets", baseDados2 + ".csv");
             System.out.println(file2.getAbsolutePath());
             System.out.println(file2.getPath());
@@ -133,12 +149,12 @@ public class DedupAlg {
             Logger.getLogger(DedupAlg.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-                
+
         algorithm = new NaiveRecordLinkage();
 
         algorithm.addDataSource(source1);
         algorithm.addDataSource(source2);
-        
+
         setGoldStandard(literalGS);
 
     }
@@ -148,35 +164,40 @@ public class DedupAlg {
         try {
             goldStandardSource = new CSVSource("goldstandard", new File("./src/csv/datasets", gold + ".csv"));
             goldStandardSource.enableHeader();
-            
+
             File file = new File("./src/csv/datasets", gold + ".csv");
             System.out.println(file.getAbsolutePath());
             System.out.println(file.getPath());
             System.out.println(file.getName());
-            
-            
+
             goldStandard = new GoldStandard(goldStandardSource);
-            
+
             goldStandardSource.enableHeader();
+            
+            goldStandardSource.withSeparatorCharacter(getSeparator());
 
             goldStandard.setSourceIdLiteral(literalGS);
             goldStandard.setFirstElementsObjectIdAttributes(goldId1);
             goldStandard.setSecondElementsObjectIdAttributes(goldId2);
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
+    public char getSeparator() {
+        return separator;
+    }
+
     public Algorithm getAlg() {
         return algorithm;
     }
-    
-    public GoldStandard getGS(){
+
+    public GoldStandard getGS() {
         return goldStandard;
     }
-    
+
     public String getResult() {
         return result;
     }
@@ -196,11 +217,9 @@ public class DedupAlg {
     public String getIdBaseDados() {
         return idBaseDados;
     }
-    
-    
 
     public void executaDedupAlg() throws Exception {
 
     }
-    
+
 }

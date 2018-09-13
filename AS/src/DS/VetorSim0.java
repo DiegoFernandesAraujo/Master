@@ -52,8 +52,27 @@ public class VetorSim0 extends DedupAlg {
      * @param goldId2
      * @param result
      */
-    public VetorSim0(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+    public VetorSim0(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, char separator) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
+
+        if (!vetorSimilaridade.exists()) {
+            System.out.println("Não existe arquivo vetorSimilaridade.csv.");
+
+            try {
+                vetorSimilaridade.createNewFile();
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo vetorSimilaridade.csv.");
+            }
+
+        }
+    }
+    
+    public VetorSim0(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, File vetor, char separator) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
+        
+        vetorSimilaridade = vetor;
+        
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");

@@ -309,9 +309,10 @@ public class DuDeObject implements Comparable<DuDeObject>, Jsonable {
 	 */
 	public JsonValue getAttributeValues(String attributeName) {
 		if (attributeName == null || !this.hasData()) {
-			return null;
+                        return null;
 		}
-
+//                System.out.println(this.data.searchFor(attributeName));
+//                System.out.println("attributeName: " + attributeName);
 		return this.data.searchFor(attributeName);
 	}
 

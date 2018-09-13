@@ -42,8 +42,8 @@ public class Alg8 extends DedupAlg {
     File estatisticasTXT;
     String dir = "resultsDedup/cds";
 
-    public Alg8(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+    public Alg8(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
@@ -133,7 +133,7 @@ public class Alg8 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg8 obj1 = new Alg8("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 8);
+        Alg8 obj1 = new Alg8("cd", "pk", "cd_gold", "disc1_id", "disc2_id", 8);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {

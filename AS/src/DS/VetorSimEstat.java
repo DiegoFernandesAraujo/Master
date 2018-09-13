@@ -60,8 +60,8 @@ public class VetorSimEstat extends DedupAlg {
      * @param goldId2
      * @param result
      */
-    public VetorSimEstat(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+    public VetorSimEstat(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, char separator) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");
@@ -75,21 +75,12 @@ public class VetorSimEstat extends DedupAlg {
 
         }
     }
-
-    /**
-     *
-     * @param baseDados1
-     * @param chavePrimaria
-     * @param gold
-     * @param goldId1
-     * @param goldId2
-     * @param result
-     * @param vetor
-     */
-    public VetorSimEstat(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, File vetor) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
-
+    
+    public VetorSimEstat(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, File vetor, char separator) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
+        
         vetorSimilaridade = vetor;
+        
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");

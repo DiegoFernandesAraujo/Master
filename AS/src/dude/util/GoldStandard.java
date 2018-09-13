@@ -383,6 +383,7 @@ public class GoldStandard implements AutoJsonable {
 			final JsonArray objectId1 = new JsonArray();
 			for (final String objectIdAttribute : this.getFirstElementsObjectIdAttributes()) {
 				final JsonValue value = data.getAttributeValues(objectIdAttribute);
+//                                System.out.println("Dados do objectId1: " + data.getAttributeValues(objectIdAttribute));
 
 				if (value == null)
 					throw new ExtractionFailedException("Value for '" + objectIdAttribute + "' is missing.");
@@ -394,7 +395,8 @@ public class GoldStandard implements AutoJsonable {
 			final JsonArray objectId2 = new JsonArray();
 			for (final String objectIdAttribute : this.getSecondElementsObjectIdAttributes()) {
 				final JsonValue value = data.getAttributeValues(objectIdAttribute);
-
+//                                System.out.println("Dados do objectId2: " + data.getAttributeValues(objectIdAttribute));
+                                
 				if (value == null)
 					throw new ExtractionFailedException("Value for '" + objectIdAttribute + "' is missing.");
 

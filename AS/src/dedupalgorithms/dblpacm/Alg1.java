@@ -21,10 +21,16 @@ import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFun
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.GoldStandard;
+import dude.util.data.DuDeObject;
 import dude.util.data.DuDeObjectPair;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -93,6 +99,8 @@ public class Alg1 extends DedupAlg {
 
         NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
 
+//        Vector<DuDeObjectPair> pairs = new Vector<DuDeObjectPair>();
+        
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
 
@@ -110,10 +118,11 @@ public class Alg1 extends DedupAlg {
             if ((similarity >= 0.75) && (similarity2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
-//                fechoTrans.add(pair);
-                statistic.addDuplicate(pair);
-                output.write(pair);
-                System.out.println("Existe no GS: " + existeNoGS(pair));
+                fechoTrans.add(pair);
+//                pairs.add(pair);
+//                statistic.addDuplicate(pair);
+//                output.write(pair);
+//                System.out.println("Existe no GS: " + existeNoGS(pair));
 //                System.out.println("Elemento 1: " + pair.getFirstElement() + " - " + "Elemento 2: " + pair.getSecondElement());
 //                System.out.println("Similaridade: " + pair.getSimilarity());
 //                System.out.println("");
@@ -126,13 +135,35 @@ public class Alg1 extends DedupAlg {
                 }
             }
         }
-
-//        for (DuDeObjectPair pair : fechoTrans) {
-//
-//            statistic.addDuplicate(pair);
-//            output.write(pair);
-//
+        
+//        NaiveTransitiveClosureGenerator transClosGenerator = new NaiveTransitiveClosureGenerator();
+//        transClosGenerator.add(pairs);
+//        Collection<Collection<DuDeObject>> duplicates = (Collection<Collection<DuDeObject>>) transClosGenerator.getTransitiveClosures();
+//        //iterate over each cluster to generate duplicate pairs
+//        Iterator<Collection<DuDeObject>> it1 = duplicates.iterator();
+//        while (it1.hasNext()) {
+//            Collection<DuDeObject> cluster = it1.next(); //take cluster
+//            Iterator<DuDeObject> it2 = cluster.iterator();
+//            List<DuDeObject> li = new LinkedList<DuDeObject>();
+//            while (it2.hasNext()) {
+//                li.add(it2.next());
+//            }
+//            //generate Duplicate pairs from transitive Closure to add to statisticComponent
+//            for (int i = 0; i < li.size(); i++) {
+//                for (int j = i + 1; j < li.size(); j++) {
+//                    DuDeObjectPair pair = new DuDeObjectPair(li.get(i), li.get(j));
+//                    statistic.addDuplicate(pair);
+//                    output.write(pair);
+//                }
+//            }
 //        }
+
+        for (DuDeObjectPair pair : fechoTrans) {
+
+            statistic.addDuplicate(pair);
+            output.write(pair);
+
+        }
         statistic.setEndTime();
 
         statisticOutputCSV.writeStatistics();

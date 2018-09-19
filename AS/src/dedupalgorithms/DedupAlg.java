@@ -179,20 +179,22 @@ public class DedupAlg {
             goldStandardSource.withQuoteCharacter('"');
             goldStandardSource.withSeparatorCharacter(getSeparator());
 //            goldStandardSource.withSeparatorCharacter(';');
-            
+
             goldStandard = new GoldStandard(goldStandardSource);
-            
-//            goldStandard.setFirstElementsObjectIdAttributes("DBLP2");
-//            goldStandard.setSecondElementsObjectIdAttributes("ACM");
+
+            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
+            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
 
             goldStandard.setSourceIdLiteral(literalGS);
             
+            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
+
     //Para record linkage
     public void setGoldStandard(String literalGS1, String literalGS2) {
         CSVSource goldStandardSource = null;
@@ -210,23 +212,23 @@ public class DedupAlg {
             goldStandardSource.withQuoteCharacter('"');
             goldStandardSource.withSeparatorCharacter(getSeparator());
 //            goldStandardSource.withSeparatorCharacter(';');
-            
+
             goldStandard = new GoldStandard(goldStandardSource);
-            
-//            goldStandard.setFirstElementsObjectIdAttributes("DBLP2");
-//            goldStandard.setSecondElementsObjectIdAttributes("ACM");
+
+            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
+            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
 
 //            goldStandard.setSourceIdLiteral(literalGS);
-            goldStandard.setFirstElementsObjectIdAttributes(literalGS1);
-            goldStandard.setSecondElementsObjectIdAttributes(literalGS2);
+            goldStandard.setFirstElementsSourceIdLiteral(literalGS1);
+            goldStandard.setSecondElementsSourceIdLiteral(literalGS2);
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
-    
-    public boolean existeNoGS(DuDeObjectPair par){
+
+    public boolean existeNoGS(DuDeObjectPair par) {
         return getGS().contains(par);
     }
 

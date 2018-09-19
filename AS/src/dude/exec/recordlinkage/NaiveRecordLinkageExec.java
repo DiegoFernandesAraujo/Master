@@ -129,9 +129,10 @@ public class NaiveRecordLinkageExec {
 		out.setSeparator('\t');
 
 		for (DuDeObjectPair pair : algorithm) {
-			if (similarityFunction.getSimilarity(pair) > 0.9) {
-				out.write(pair);
-			}
+                    System.out.println(similarityFunction.getSimilarity(pair));
+//			if (similarityFunction.getSimilarity(pair) > 0.9) {
+//				out.write(pair);
+//			}
 		}
 	}
 

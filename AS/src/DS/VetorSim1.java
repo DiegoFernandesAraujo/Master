@@ -11,18 +11,9 @@ package DS;
 import AS.AnnStd;
 import dedupalgorithms.*;
 import dude.algorithm.Algorithm;
-import dude.datasource.CSVSource;
-import dude.output.CSVOutput;
-import dude.output.DuDeOutput;
-import dude.output.JsonOutput;
-import dude.output.statisticoutput.CSVStatisticOutput;
-import dude.output.statisticoutput.SimpleStatisticOutput;
-import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
-import dude.similarityfunction.contentbased.util.SoundEx;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedReader;
@@ -34,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.MongeElkan;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**

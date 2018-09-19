@@ -86,7 +86,7 @@ public class DedupAlg {
     }
 
     public void deduplication() {
-        String literalGS = baseDados1;
+//        String literalGS = baseDados1;
         try {
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
 
@@ -112,29 +112,33 @@ public class DedupAlg {
 
         algorithm.addDataSource(source1);
 
-        setGoldStandard(literalGS);
+        setGoldStandard(baseDados1);
 
     }
 
     public void recordLinkage() {
-        String literalGS = baseDados1 + baseDados2;
+//        String literalGS = baseDados1 + baseDados2;
         try {
 
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
             source2 = new CSVSource(baseDados2, new File("./src/csv/datasets", baseDados2 + ".csv"));
+//            source2 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
+//            source1 = new CSVSource(baseDados2, new File("./src/csv/datasets", baseDados2 + ".csv"));
 
             source1.withQuoteCharacter('"');
             source2.withQuoteCharacter('"');
-            
+
             source1.withSeparatorCharacter(getSeparator());
             source2.withSeparatorCharacter(getSeparator());
 
             source1.enableHeader();
             source2.enableHeader();
-            
+
             source1.addIdAttributes(chavePrimaria1);
             source2.addIdAttributes(chavePrimaria2);
 
+//            source1.addIdAttributes(chavePrimaria2);
+//            source2.addIdAttributes(chavePrimaria1);
             File file = new File("./src/csv/datasets", baseDados1 + ".csv");
             System.out.println(file.getAbsolutePath());
             System.out.println(file.getPath());
@@ -155,7 +159,7 @@ public class DedupAlg {
         algorithm.addDataSource(source1);
         algorithm.addDataSource(source2);
 
-        setGoldStandard(literalGS);
+        setGoldStandard(baseDados1, baseDados2);
 
     }
 
@@ -170,20 +174,60 @@ public class DedupAlg {
             System.out.println(file.getPath());
             System.out.println(file.getName());
 
-            goldStandard = new GoldStandard(goldStandardSource);
-
             goldStandardSource.enableHeader();
-            
+
+            goldStandardSource.withQuoteCharacter('"');
             goldStandardSource.withSeparatorCharacter(getSeparator());
+//            goldStandardSource.withSeparatorCharacter(';');
+            
+            goldStandard = new GoldStandard(goldStandardSource);
+            
+//            goldStandard.setFirstElementsObjectIdAttributes("DBLP2");
+//            goldStandard.setSecondElementsObjectIdAttributes("ACM");
 
             goldStandard.setSourceIdLiteral(literalGS);
-            goldStandard.setFirstElementsObjectIdAttributes(goldId1);
-            goldStandard.setSecondElementsObjectIdAttributes(goldId2);
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    //Para record linkage
+    public void setGoldStandard(String literalGS1, String literalGS2) {
+        CSVSource goldStandardSource = null;
+        try {
+            goldStandardSource = new CSVSource("goldstandard", new File("./src/csv/datasets", gold + ".csv"));
+            goldStandardSource.enableHeader();
+
+            File file = new File("./src/csv/datasets", gold + ".csv");
+            System.out.println(file.getAbsolutePath());
+            System.out.println(file.getPath());
+            System.out.println(file.getName());
+
+            goldStandardSource.enableHeader();
+
+            goldStandardSource.withQuoteCharacter('"');
+            goldStandardSource.withSeparatorCharacter(getSeparator());
+//            goldStandardSource.withSeparatorCharacter(';');
+            
+            goldStandard = new GoldStandard(goldStandardSource);
+            
+//            goldStandard.setFirstElementsObjectIdAttributes("DBLP2");
+//            goldStandard.setSecondElementsObjectIdAttributes("ACM");
+
+//            goldStandard.setSourceIdLiteral(literalGS);
+            goldStandard.setFirstElementsObjectIdAttributes(literalGS1);
+            goldStandard.setSecondElementsObjectIdAttributes(literalGS2);
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    public boolean existeNoGS(DuDeObjectPair par){
+        return getGS().contains(par);
     }
 
     public char getSeparator() {

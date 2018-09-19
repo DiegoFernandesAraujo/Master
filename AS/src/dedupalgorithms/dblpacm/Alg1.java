@@ -16,15 +16,10 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.aggregators.Average;
-import dude.similarityfunction.aggregators.Maximum;
-import dude.similarityfunction.aggregators.Minimum;
-import dude.similarityfunction.contentbased.impl.SoundExFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.JaroDistanceFunction;
+import dude.similarityfunction.contentbased.impl.AbsoluteNumberDiffFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.SmithWatermanFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.SmithWatermanFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.File;
@@ -32,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.simmetrics.metrics.functions.AffineGap;
 
 /**
  *
@@ -73,8 +67,16 @@ public class Alg1 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("title");
-        
+        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
+        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
+        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
+        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
+
+//        similarityFunc.ignoreCapitalization();
+//        similarityFunc2.ignoreCapitalization();
+//        similarityFunc3.ignoreCapitalization();
+//        similarityFunc4.ignoreCapitalization();
+//        AbsoluteNumberDiffFunction similarityFunc5 = new AbsoluteNumberDiffFunction(10, "year");
 //        DuDeOutput output = new JsonOutput(System.out);
         DuDeOutput output = new CSVOutput(escreveResult);
 
@@ -95,29 +97,42 @@ public class Alg1 extends DedupAlg {
         for (DuDeObjectPair pair : algorithm) {
 
             final double similarity = similarityFunc.getSimilarity(pair);
-            
-            if ((similarity >= 0.8)) {
-                fechoTrans.add(pair);
+            final double similarity2 = similarityFunc2.getSimilarity(pair);
+            final double similarity3 = similarityFunc3.getSimilarity(pair);
+            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
+//            System.out.println(pair.getFirstElement().getAttributeValue("year").toString() + "-" + pair.getSecondElement().getAttributeValue("year").toString());
+//            System.out.println(similarityFunc5.calculateSimilarity(pair.getFirstElement().getAttributeValue("year"), pair.getSecondElement().getAttributeValue("year")));
+//            System.out.println(similarityFunc5.getSimilarity(pair));
+//            System.out.println("");
+//            System.out.println(similarity + "," + similarity2 + "," + similarity3 + "," + (similarity4));
+//            System.out.println(similarity2 /*&& (similarity4 >= 0.85)*/);
+            if ((similarity >= 0.75) && (similarity2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
+//            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
+//            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
+//                fechoTrans.add(pair);
+                statistic.addDuplicate(pair);
+                output.write(pair);
+                System.out.println("Existe no GS: " + existeNoGS(pair));
+//                System.out.println("Elemento 1: " + pair.getFirstElement() + " - " + "Elemento 2: " + pair.getSecondElement());
+//                System.out.println("Similaridade: " + pair.getSimilarity());
+//                System.out.println("");
+//
             } else {
-                try{
-                statistic.addNonDuplicate(pair);
-                }catch(ExtractionFailedException ex){
-//                    System.out.println(pair.getFirstElement());
-//                    System.out.println(pair.getSecondElement());
+                try {
+                    statistic.addNonDuplicate(pair);
+                } catch (ExtractionFailedException ex) {
                     Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
         }
 
-        for (DuDeObjectPair pair : fechoTrans) {
-
-            statistic.addDuplicate(pair);
-            output.write(pair);
-
-        }
-
+//        for (DuDeObjectPair pair : fechoTrans) {
+//
+//            statistic.addDuplicate(pair);
+//            output.write(pair);
+//
+//        }
         statistic.setEndTime();
 
         statisticOutputCSV.writeStatistics();
@@ -130,7 +145,14 @@ public class Alg1 extends DedupAlg {
 
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
+
         Alg1 obj1 = new Alg1("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 1);
+//        Alg1 obj1 = new Alg1( "ACM", "DBLP2", "id", "id", "DBLP2-ACM_perfectMapping", "idACM", "idDBLP",  1);
+//        Alg1 obj1 = new Alg1( "ACM", "DBLP2", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM",  1);
+//        Alg1 obj1 = new Alg1("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idACM", "idDBLP", 1);
+//        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
+//        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idACM", "idDBLP", 1);
+        
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {

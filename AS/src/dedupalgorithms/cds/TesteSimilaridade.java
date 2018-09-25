@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package simdedupalgorithms;
+package dedupalgorithms.cds;
 
+import dedupalgorithms.DedupAlg;
 import dude.algorithm.Algorithm;
 import dude.datasource.CSVSource;
 import dude.output.CSVOutput;
 import dude.output.DuDeOutput;
+import dude.output.JsonOutput;
 import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
@@ -19,7 +21,6 @@ import dude.preprocessor.Preprocessor;
 import dude.similarityfunction.SimilarityFunction;
 import dude.similarityfunction.aggregators.Aggregator;
 import dude.similarityfunction.aggregators.Average;
-import dude.similarityfunction.contentbased.impl.simmetrics.JaccardSimilarityFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.SimmetricsFunction;
 import dude.util.GoldStandard;
@@ -37,33 +38,28 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class Alg15 extends DedupAlg {
-
-    String rotulo;
-    double a, b, c, d, e, f;
-    int index_c1, index_c2, index_c3;
+public class TesteSimilaridade extends DedupAlg {
 
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
+    String dir = "resultsDedup/cds";
 
-    public Alg15(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, int ordem) {
-        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, result);
+    String rotulo, Str2;
+    double a, b, c, d, e, f;
+    int index_c1, index_c2, index_c3;
 
-        estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
-        estatisticasTXT = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".txt");
+    public TesteSimilaridade(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
-        if (estatisticasTXT.exists() | estatisticasCSV.exists()) {
-            System.out.println("Já existem resultados para esse algoritmo!");
-            java.awt.Toolkit.getDefaultToolkit().beep();
-            System.exit(0);
-        }
+        estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
+        estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
 
         try {
-            this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
+            this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg14.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TesteSimilaridade.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -76,13 +72,12 @@ public class Alg15 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        JaccardSimilarityFunction similarityFunc = new JaccardSimilarityFunction("artist");
-        JaccardSimilarityFunction similarityFunc2 = new JaccardSimilarityFunction("title");
-        JaccardSimilarityFunction similarityFunc3 = new JaccardSimilarityFunction("track01");
-        JaccardSimilarityFunction similarityFunc4 = new JaccardSimilarityFunction("track02");
+        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("artist");
+        LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("title");
+//        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
+//        LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");
 
-//        DuDeOutput output = new JsonOutput(System.out);
-//        DuDeOutput output = new CSVOutput(escreveResult);
+        DuDeOutput output = new CSVOutput(escreveResult);
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
         StatisticOutput statisticOutputCSV;
@@ -96,43 +91,57 @@ public class Alg15 extends DedupAlg {
 
         NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
 
+        int cont = 0;
+
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
             final double similarity = similarityFunc.getSimilarity(pair);
             final double similarity2 = similarityFunc2.getSimilarity(pair);
-            final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
-            
-            if ( (similarity >= 0.8) && (similarity2 >= 0.8) && (similarity3 >= 0.8) && (similarity4 >= 0.8)) {
+//            final double similarity3 = similarityFunc3.getSimilarity(pair);
+//            final double similarity4 = similarityFunc4.getSimilarity(pair);
+
+            if ((similarity >= 0.9) && (similarity2 >= 0.9)) /*&& (similarity3 >= 0.9) && (similarity4 >= 0.9))*/ {
                 fechoTrans.add(pair);
+                System.out.println(++cont);
 
             } else {
                 statistic.addNonDuplicate(pair);
             }
 
+            if (cont > 5) {
+                break;
+            }
         }
 
+//        FileWriter escreveSim;
         BufferedWriter bwSim = null;
-        
+
+//        File sim = new File("./src/csv/resultsDedup/similaridade.csv");
+//        escreveSim = new FileWriter(sim, true);
         bwSim = new BufferedWriter(escreveResult);
 
+//        bwSim.write("First Object;Second Object;duplicata;similaridade\n");
         bwSim.write("First Object;Second Object;similaridade\n");
 
         for (DuDeObjectPair pair : fechoTrans) {
 
             statistic.addDuplicate(pair);
-//            output.write(pair);
 
+//            if (statistic.isDuplicate(pair)) {
+//                rotulo = "1.0";
+//            } else {
+//                rotulo = "0.0";
+//            }
             try {
 
                 a = similarityFunc.getSimilarity(pair);
                 b = similarityFunc2.getSimilarity(pair);
-                c = similarityFunc3.getSimilarity(pair);
-                d = similarityFunc4.getSimilarity(pair);
+//                c = similarityFunc3.getSimilarity(pair);
+//                d = similarityFunc4.getSimilarity(pair);
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                final double simNorm = (a + b + c + d) / 4;
+                final double simNorm = (a + b) / 2;
                 String elemento1 = pair.getFirstElement().toString();
                 String elemento2 = pair.getSecondElement().toString();
 
@@ -162,7 +171,7 @@ public class Alg15 extends DedupAlg {
 
             } catch (IOException ex) {
                 System.out.println("ERRO!");
-        }
+            }
 
         }
 
@@ -171,22 +180,25 @@ public class Alg15 extends DedupAlg {
         statistic.setEndTime();
 
         statisticOutputCSV.writeStatistics();
+
         statisticOutputTXT.writeStatistics();
 
         algorithm.cleanUp();
+
         goldStandard.close();
 
     }
 
     public static void main(String[] args) {
-        Alg15 obj1 = new Alg15("cd", "pk", "cd_gold", "disc1_id", "disc2_id", "cd_result", 15);
+        TesteSimilaridade obj1 = new TesteSimilaridade("cd", "pk", "cd_gold", "disc1_id", "disc2_id", 24);
         try {
             obj1.executaDedupAlg();
+
         } catch (IOException ex) {
-            Logger.getLogger(Alg15.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TesteSimilaridade.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }
-    
 
 }

@@ -18,8 +18,10 @@ import java.io.LineNumberReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -270,11 +272,12 @@ public class AnnStd {
         }
 
         if (!DA.exists()) {
+            System.out.println("Não existe arquivo DA.csv em conjuntosAS.");
             BufferedReader brArqResult = null;
             BufferedWriter bwDupAuto = null;
             try {
                 DA.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
                 brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
 
@@ -295,11 +298,11 @@ public class AnnStd {
 
                 //DM e NDM são criados obrigatoriamente quando DA é criado
                 if (!DM.exists()) {
-                    System.out.println("Não existe arquivo " + DM.getName());
+                    System.out.println("Não existe arquivo DM.csv em conjuntosAS.");
 
                     try {
                         DM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -310,19 +313,16 @@ public class AnnStd {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
 
                 if (!NDM.exists()) {
-                    System.out.println("Não existe arquivo " + NDM.getName());
+                    System.out.println("Não existe arquivo NDM.csv em conjuntosAS.");
 
                     try {
                         NDM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -333,20 +333,17 @@ public class AnnStd {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
 
                 //Arquivo para cálculo de precision, recall e f-measure do Annealing todo
                 if (!DADM.exists()) {
-                    System.out.println("Não existe arquivo " + DADM.getName());
+                    System.out.println("Não existe arquivo DADM.csv em conjuntosAS.");
 
                     try {
                         DADM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -357,9 +354,6 @@ public class AnnStd {
                         Logger.getLogger(AnnStd.class
                                 .getName()).log(Level.SEVERE, null, ex);
 
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(AnnStd.class
-                                .getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -369,9 +363,6 @@ public class AnnStd {
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar arquivo " + DA.getName());
 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
             } finally {
 
                 brArqResult.close();
@@ -396,7 +387,8 @@ public class AnnStd {
 
             atualizaDA(aux); //DA deve ficar apenas com a intersecção
 
-            filtraDivergencias(aux); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+//            filtraDivergencias(aux); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+            filtraDivergenciasHash(aux); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
 
             atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
 
@@ -415,10 +407,10 @@ public class AnnStd {
         String[] linhaAtual;
 
         if (!juncao.exists()) {
-            System.out.println("Não existe arquivo juncao.csv.");
+            System.out.println("Não existe arquivo juncao.csv em conjuntosAS.");
             try {
                 juncao.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -426,9 +418,6 @@ public class AnnStd {
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -627,11 +616,11 @@ public class AnnStd {
         divergencias = new File("./src/csv/conjuntosAS", "NAO_DA.csv");
 
         if (!divergencias.exists()) {
-            System.out.println("Não existe arquivo NAO_DA.csv.");
+            System.out.println("Não existe arquivo NAO_DA.csv em conjuntosAS.");
 
             try {
                 divergencias.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -642,9 +631,6 @@ public class AnnStd {
                 Logger.getLogger(AnnStd.class
                         .getName()).log(Level.SEVERE, null, ex);
 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(AnnStd.class
-                        .getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -714,6 +700,128 @@ public class AnnStd {
             bwDiverg.close();
 
         }
+
+        return divergencias;
+    }
+
+    public File filtraDivergenciasHash(File arqDA) throws IOException {
+        //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
+        long tempoInicial = System.currentTimeMillis();
+
+        HashMap<String, Boolean> numIndex = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> abandoned = new HashMap<String, Boolean>();
+
+        String Str;
+        String[] linhaAtual1;
+
+        divergencias = new File("./src/csv/conjuntosAS", "NAO_DA.csv");
+
+        if (!divergencias.exists()) {
+            System.out.println("Não existe arquivo NAO_DA.csv em conjuntosAS.");
+
+            try {
+                divergencias.createNewFile();
+                //new Thread().sleep(50);
+
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(AnnStd.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(AnnStd.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        BufferedReader brDA = null;
+        FileWriter escreveDiverg = null;
+        BufferedWriter bwDiverg = null;
+
+        String elemento1 = null;
+        String elemento2 = null;
+
+        try {
+
+            brDA = new BufferedReader(new FileReader(arqDA.getPath()));
+
+            escreveDiverg = new FileWriter(divergencias); //Dessa forma sobrescreve
+            bwDiverg = new BufferedWriter(escreveDiverg);
+
+            while ((Str = brDA.readLine()) != null) {
+
+                linhaAtual1 = Str.split(";", 2);
+
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                try {
+                    // check if already abandoned and skip this iteration
+                    if ((abandoned.get(elemento1 + ";" + elemento2) != null) || (abandoned.get(elemento2 + ";" + elemento1) != null)) {
+                        continue;
+                    }
+                } catch (Exception e) {
+
+                }
+
+                boolean isInIndex;
+                try {
+                    // check if it is already indexed
+                    isInIndex = ((numIndex.get(elemento1 + ";" + elemento2) != null) || (numIndex.get(elemento2 + ";" + elemento1) != null));
+                } catch (Exception e) {
+                    // if not, we found it the first time
+                    isInIndex = false;
+                }
+
+                if (isInIndex == false) {
+                    //so we put it to the index
+                    numIndex.put(elemento1 + ";" + elemento2, true);
+                } else {
+                    // if it appeared, we abandon it
+                    numIndex.remove(elemento1 + ";" + elemento2);
+                    abandoned.put(elemento1 + ";" + elemento2, true);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brDA.close();
+        }
+
+        try {
+            for (Map.Entry<String, Boolean> entry : numIndex.entrySet()) {
+
+                linhaAtual1 = entry.getKey().split(";", 2);
+
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwDiverg.flush();
+            bwDiverg.close();
+//            System.out.println(entry.getKey());
+        }
+
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
 
         return divergencias;
     }
@@ -1173,7 +1281,7 @@ public class AnnStd {
     public void setTamBaseOrig(int tamBaseOrig) {
         this.tamBaseOrig = tamBaseOrig;
     }
-    
+
     /**
      *
      * @return
@@ -1185,7 +1293,7 @@ public class AnnStd {
     /**
      *
      * @param tamBaseOrig2
-     */    
+     */
     public void setTamBaseOrig2(int tamBaseOrig2) {
         this.tamBaseOrig2 = tamBaseOrig2;
     }
@@ -1238,5 +1346,4 @@ public class AnnStd {
 //            System.err.println(e);
 //        }
 //    }
-
 }

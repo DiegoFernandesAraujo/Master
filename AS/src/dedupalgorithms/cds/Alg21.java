@@ -10,7 +10,6 @@ import dude.algorithm.Algorithm;
 import dude.datasource.CSVSource;
 import dude.output.CSVOutput;
 import dude.output.DuDeOutput;
-import dude.output.JsonOutput;
 import dude.output.statisticoutput.CSVStatisticOutput;
 import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
@@ -30,6 +29,8 @@ import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.SimmetricsFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,10 +44,14 @@ import java.util.logging.Logger;
  */
 public class Alg21 extends DedupAlg {
 
+    String rotulo;
+    double a, b, c, d, e, f;
+    int index_c1, index_c2, index_c3;
+    String dir = "resultsDedup/cds";
+
     FileWriter escreveResult;
     File estatisticasCSV;
     File estatisticasTXT;
-    String dir = "resultsDedup/cds";
 
     public Alg21(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
@@ -82,7 +87,6 @@ public class Alg21 extends DedupAlg {
         JaroDistanceFunction similarityFunc3 = new JaroDistanceFunction("artist");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track12");
         LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("track13");
-        
 
         Maximum max = new Maximum();
         max.add(similarityFunc);
@@ -98,7 +102,6 @@ public class Alg21 extends DedupAlg {
 
 //        DuDeOutput output = new JsonOutput(System.out);
         DuDeOutput output = new CSVOutput(escreveResult);
-
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
         StatisticOutput statisticOutputCSV;
@@ -115,8 +118,8 @@ public class Alg21 extends DedupAlg {
         //Gerando o fecho transitivo
         //Utilização de pesos diversos para os atributos
         for (DuDeObjectPair pair : algorithm) {
-            final double similarity = avg.getSimilarity(pair)*1;
-            final double similarity2 = avg2.getSimilarity(pair)*1.8;
+            final double similarity = avg.getSimilarity(pair) * 1;
+            final double similarity2 = avg2.getSimilarity(pair) * 1.8;
 
             if ((similarity + similarity2) / 2.8 >= 0.9) {
                 fechoTrans.add(pair);
@@ -124,14 +127,64 @@ public class Alg21 extends DedupAlg {
             } else {
                 statistic.addNonDuplicate(pair);
             }
+
         }
+
+        BufferedWriter bwSim = null;
+
+        bwSim = new BufferedWriter(escreveResult);
+
+        bwSim.write("First Object;Second Object;similaridade\n");
 
         for (DuDeObjectPair pair : fechoTrans) {
 
             statistic.addDuplicate(pair);
             output.write(pair);
 
+            try {
+
+                a = avg.getSimilarity(pair) * 1;
+                b = avg2.getSimilarity(pair) * 1.8;
+//                c = avg.getSimilarity(pair)*2;
+//                d = similarityFunc4.getSimilarity(pair)*0.8;
+//                e = similarityFunc2.getSimilarity(pair)*0.9;
+//                f = similarityFunc2.getSimilarity(pair)*0.9;
+
+                final double simNorm = (a + b) / 2.8;
+                String elemento1 = pair.getFirstElement().toString();
+                String elemento2 = pair.getSecondElement().toString();
+
+                index_c1 = elemento1.indexOf('[');
+                index_c2 = elemento1.indexOf(']');
+                index_c3 = elemento1.indexOf(']', index_c2) + 1;
+
+                elemento1 = elemento1.substring(index_c1 + 1, index_c3);
+
+                index_c1 = elemento2.indexOf('[');
+                index_c2 = elemento2.indexOf(']');
+                index_c3 = elemento2.indexOf(']', index_c2) + 1;
+
+                elemento2 = elemento2.substring(index_c1 + 1, index_c3);
+
+//                bwSim.append(pair.getFirstElement().toString());
+                bwSim.append(elemento1);
+                bwSim.append(';');
+                bwSim.append(elemento2);
+//                bwSim.append(pair.getSecondElement().toString());
+                bwSim.append(';');
+//                bwSim.append(rotulo);
+//                bwSim.append(';');
+                bwSim.append(Double.toString(simNorm));
+                bwSim.append('\n');
+                bwSim.flush();
+
+            } catch (IOException ex) {
+                System.out.println("ERRO!");
+            }
+
         }
+
+        bwSim.close(); //Fecha arquivo
 
         statistic.setEndTime();
 

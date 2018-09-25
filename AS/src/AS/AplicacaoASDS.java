@@ -35,10 +35,14 @@ public class AplicacaoASDS {
 
         //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
         //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
+        
+        //Na verdade essa diferenciação abaixo se faz desnecessária, podendo deixar objDS.setCopiaArqDiverg(false) direto,
+        // pois o algoritmo de Peter Christen permite que sejam selecionados os atributos a serem utilizados por 
+        //ele em cada arquivo de divergência.
         if (abordagemAA.equals("Dg")) { 
             objDS.setCopiaArqDiverg(false);
         } else {
-            objDS.setCopiaArqDiverg(true);
+            objDS.setCopiaArqDiverg(true); //Pode ser descartado.
         }
         
         long seed = 500;
@@ -51,11 +55,14 @@ public class AplicacaoASDS {
         objAS.setGs(gs);
         objDS.setGs(gs);
 
+        //Para deduplicação
         objAS.setDedup(true);
         objDS.setDedup(true);
 
+        //Para record linkage
 //        objAS.setDedup(false);
 //        objDS.setDedup(false);
+
         objAS.setTamBaseOrig(9763); //Necessário!
 //        objAS.setTamBaseOrig2(9763); //Necessário!
         objDS.setTamBaseOrig(9763); //Necessário!
@@ -107,7 +114,7 @@ public class AplicacaoASDS {
 
                 if (file.getName().contains(Integer.toString(qtdAlgUt))) {
 
-                    algSort = file;
+                    algSort = file; //Seleciona o arquivo com a lista de sequências aleatórias de <qtdAlgUt> algoritmos utilizados
                     break;
 
                 }
@@ -139,13 +146,13 @@ public class AplicacaoASDS {
 
                     int alg = 0;
 
-                    for (int index : listaAlg) {
+                    for (int index : listaAlg) { //Para cada algoritmo contido na lista
 
 //                        System.out.println("AQUI");||
 //                        System.out.println(index + ",");
                         alg++;
 
-                        objAS.comparaConjuntos(resultadosPadr[index]);
+                        objAS.comparaConjuntos(resultadosPadr[index]); //Compara o algoritmo atual aos demais para gerar o arquivo de divergência
 
                         if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
 //                            System.out.println("último algoritmo: " + alg);
@@ -153,7 +160,7 @@ public class AplicacaoASDS {
                             objDS.setGeraEst(true);
                         }
 //                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
-                        objDS.comparaConjuntos(resultadosPadr[index]);
+                        objDS.comparaConjuntos(resultadosPadr[index]); //Compara o algoritmo atual aos demais para gerar o arquivo de divergência
                     }
 
                     //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
@@ -164,7 +171,7 @@ public class AplicacaoASDS {
 
                         objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
 
-                        objDS.incrementaEstatNAO_DA();
+                        objDS.incrementaEstatNAO_DA(); //Necessário para gerar os arquivos de divergência
 
                         objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
                         //de AA proposta.

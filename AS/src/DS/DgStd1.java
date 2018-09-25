@@ -6,7 +6,10 @@
 package DS;
 
 import AS.*;
+
+import java.util.stream.*;
 import static AS.AplicacaoASDS.geraOrdAlg;
+import static AS.Teste.getUniqueValues;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -23,8 +26,10 @@ import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
@@ -45,7 +50,7 @@ public class DgStd1 {
     File historicoDA;
     File historicoNAODA;
 
-    File divergencias, divergencias2;
+    File divergencias, divergencias2, divergencias3;
     File estatDA, estatNAODA, estatNAODAIncr;
 
     File DM;
@@ -312,11 +317,11 @@ public class DgStd1 {
             BufferedReader brArqResult = null;
             BufferedWriter bwDupAuto = null;
             BufferedWriter bwHist = null;
-            System.out.println("Não existe arquivo " + DA.getName());
+            System.out.println("Não existe arquivo DA.csv em conjuntosDS.");
             try {
                 DA.createNewFile();
                 historicoDA.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
                 brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
 
@@ -327,7 +332,7 @@ public class DgStd1 {
                 bwHist = new BufferedWriter(escreveHist);
 
                 //Copiando do primeiro arquivo
-                System.out.println("Primeiro DA");
+                System.out.println("Primeiro DA em DGStd.");
 
                 while ((Str = brArqResult.readLine()) != null) {
 
@@ -346,11 +351,11 @@ public class DgStd1 {
 
                 //DM e NDM são criados obrigatoriamente quando DA é criado
                 if (!DM.exists()) {
-                    System.out.println("Não existe arquivo " + DM.getName() + " em conjuntosDS");
+                    System.out.println("Não existe arquivo DM.csv em conjuntosDS.");
 
                     try {
                         DM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -360,18 +365,16 @@ public class DgStd1 {
                     } catch (IOException ex) {
                         Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
 
                 if (!NDM.exists()) {
-                    System.out.println("Não existe arquivo " + NDM.getName());
+                    System.out.println("Não existe arquivo NDM.csv em conjuntosDS.");
 
                     try {
                         NDM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -381,19 +384,17 @@ public class DgStd1 {
                     } catch (IOException ex) {
                         Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
 
                 //Arquivo para cálculo de precision, recall e f-measure do Annealing todo
                 if (!DADM.exists()) {
-                    System.out.println("Não existe arquivo " + DADM.getName());
+                    System.out.println("Não existe arquivo DADM.csv em conjuntosDS.");
 
                     try {
                         DADM.createNewFile();
-                        new Thread().sleep(50);
+                        //new Thread().sleep(50);
 
                     } catch (FileNotFoundException ex) {
 
@@ -403,8 +404,6 @@ public class DgStd1 {
                     } catch (IOException ex) {
                         Logger.getLogger(DgStd1.class
                                 .getName()).log(Level.SEVERE, null, ex);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
                 }
@@ -412,9 +411,7 @@ public class DgStd1 {
                 baseline = true;
 
             } catch (IOException ex) {
-                System.out.println("Não foi possível criar arquivo " + DA.getName());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Não foi possível criar arquivo DA em conjuntosDS.");
             } finally {
 
 //                System.out.println("Entrou no baseline true!");
@@ -461,7 +458,9 @@ public class DgStd1 {
             //TRATAR divergencias2 em filtraDivergencias e, assim, não haverá mais necessidade de remDupDiverg!!!!!!
             //!!!!!!!!!!!!!!!
 //            contabilizaEstatDA(aux);
-            remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+//            filtraDivergenciasHash(aux);
+//            remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
+            remDupDiverg(filtraDivergenciasHash(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
             if (isCopiaArqDiverg()) {
                 copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
             }
@@ -493,18 +492,16 @@ public class DgStd1 {
         String[] linhaAtual;
 
         if (!juncao.exists()) {
-            System.out.println("Não existe arquivo juncao.csv.");
+            System.out.println("Não existe arquivo juncao.csv em conjuntosDS.");
             try {
                 juncao.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
                 System.out.println("Não foi possível encontrar o arquivo " + juncao.getName());
             } catch (IOException ex) {
                 System.out.println("Não foi possível criar o arquivo " + juncao.getName());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -803,12 +800,12 @@ public class DgStd1 {
 //        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
 
         if (!historicoNAODA.exists()) {
-            System.out.println("Não existe arquivo NAO_DA.csv.");
+            System.out.println("Não existe arquivo historicoNAO_DA.csv.");
 
             try {
                 historicoNAODA.createNewFile();
 //                divergencias2.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -818,8 +815,6 @@ public class DgStd1 {
             } catch (IOException ex) {
                 Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -905,7 +900,7 @@ public class DgStd1 {
         return historicoNAODA;
     }
 
-    public File filtraDivergencias_NEW(File estatDA, File estatNAO_DA) throws IOException {
+    public void filtraDivergencias_NEW(File estatDA, File estatNAO_DA) throws IOException {
 
         String Str;
         String Str2;
@@ -968,6 +963,7 @@ public class DgStd1 {
                     elemento1DA = linhaAtual2[0];
                     elemento2DA = linhaAtual2[1];
 
+                    //Identificando se está em DA, se estiver não entra para o conjunto NAO_DA2
                     if (((elemento1NAO_DA.equals(elemento1DA)) && (elemento2NAO_DA.equals(elemento2DA))) || ((elemento1NAO_DA.equals(elemento2DA)) && ((elemento2NAO_DA.equals(elemento1DA))))) {
                         bwDiverg.write(linhaAtual2[0] + ";" + linhaAtual2[1] + ";" + linhaAtual2[2] + ";" + linhaAtual2[3] + ";" + linhaAtual2[4] + ";" + linhaAtual2[5] + "\n");
                         existe = true;
@@ -991,7 +987,7 @@ public class DgStd1 {
             bwDiverg.close();
         }
 
-        return historicoDA;
+//        return historicoDA;
     }
 
     //Para gerar DN e NDM       
@@ -1003,6 +999,7 @@ public class DgStd1 {
      */
     public File filtraDivergencias(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
+        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -1021,7 +1018,7 @@ public class DgStd1 {
             try {
                 divergencias.createNewFile();
                 divergencias2.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -1031,8 +1028,6 @@ public class DgStd1 {
             } catch (IOException ex) {
                 Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -1114,6 +1109,145 @@ public class DgStd1 {
 //            bwDiverg2.flush();
 //            bwDiverg2.close();
         }
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+
+        return divergencias;
+    }
+
+    public File filtraDivergenciasHash(File arqDA) throws IOException {
+        //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
+        long tempoInicial = System.currentTimeMillis();
+
+        HashMap<String, Boolean> numIndex = new HashMap<String, Boolean>();
+        HashMap<String, Boolean> abandoned = new HashMap<String, Boolean>();
+
+        ArrayList<String> listaElementos = new ArrayList<String>();
+
+        String Str;
+        String[] linhaAtual1;
+        String[] linhaAtual2;
+        boolean jaExistia = false;
+        int cont = 0;
+
+        divergencias = new File("./src/csv/conjuntosDS", "NAO_DA.csv");
+        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+        divergencias3 = new File("./src/csv/conjuntosDS", "NAO_DA3.csv");
+
+        if (!divergencias.exists()) {
+            System.out.println("Não existe arquivo NAO_DA.csv.");
+
+            try {
+                divergencias.createNewFile();
+                divergencias2.createNewFile();
+                divergencias3.createNewFile();
+                //new Thread().sleep(50);
+
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        BufferedReader brDA = null;
+        FileWriter escreveDiverg = null;
+        BufferedWriter bwDiverg = null;
+        
+        String elemento1 = null;
+        String elemento2 = null;
+        String par = null;
+
+//        FileWriter escreveHistNAODA = null;
+//        BufferedWriter bwHistNAODA = null;
+        try {
+
+            brDA = new BufferedReader(new FileReader(arqDA.getPath()));
+
+            escreveDiverg = new FileWriter(divergencias, true); //Dessa forma NÃO sobrescreve
+            bwDiverg = new BufferedWriter(escreveDiverg);
+
+            
+            
+            while ((Str = brDA.readLine()) != null) {
+                
+                linhaAtual1 = Str.split(";", 3);
+
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                try {
+                    // check if already abandoned and skip this iteration
+                    if ((abandoned.get(elemento1+";"+elemento2) != null) || (abandoned.get(elemento2+";"+elemento1) != null)) {
+                        continue;
+                    }
+                } catch (Exception e) {
+
+                }
+
+                boolean isInIndex;
+                try {
+                    // check if it is already indexed
+                    isInIndex = ((numIndex.get(elemento1+";"+elemento2) != null) || (numIndex.get(elemento2+";"+elemento1) != null));
+                } catch (Exception e) {
+                    // if not, we found it the first time
+                    isInIndex = false;
+                }
+
+                if (isInIndex == false) {
+                    //so we put it to the index
+                    numIndex.put(elemento1+";"+elemento2, true);
+                } else {
+                    // if it appeared, we abandon it
+                    numIndex.remove(elemento1+";"+elemento2);
+                    abandoned.put(elemento1+";"+elemento2, true);
+                }
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brDA.close();
+        }
+
+        
+        try {
+            for (Map.Entry<String, Boolean> entry : numIndex.entrySet()) {
+
+                linhaAtual1 = entry.getKey().split(";", 3);
+                
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwDiverg.flush();
+            bwDiverg.close();
+//            System.out.println(entry.getKey());
+        }
+
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
 
         return divergencias;
     }
@@ -1124,7 +1258,8 @@ public class DgStd1 {
      * @throws IOException
      */
     public void contabilizaEstatDA(File arqHistDA) throws IOException {
-        //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
+
+        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -1139,11 +1274,11 @@ public class DgStd1 {
         estatDA = new File("./src/csv/conjuntosDS", "estatDA.csv");
 
         if (!estatDA.exists()) {
-            System.out.println("Não existe arquivo NAO_DA.csv.");
+            System.out.println("Não existe arquivo estatDA.csv.");
 
             try {
                 estatDA.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -1153,8 +1288,6 @@ public class DgStd1 {
             } catch (IOException ex) {
                 Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -1169,7 +1302,6 @@ public class DgStd1 {
             brHistDA = new BufferedReader(new FileReader(arqHistDA.getPath()));
 
 //            System.out.println("arqHistDA.getPath() " + arqHistDA.getPath());
-
             escreveDiverg2 = new FileWriter(estatDA, true); //Dessa forma NÃO sobrescreve
             bwDiverg2 = new BufferedWriter(escreveDiverg2);
 
@@ -1225,12 +1357,10 @@ public class DgStd1 {
                             qtdAlg++; //Coletando as estatísticas...
 
 //                            System.out.println("qtdAlg: " + qtdAlg);
-
                             min = min(qtdAlg, similaridade, min);
                             max = max(qtdAlg, similaridade, max);
 
 //                            System.out.println("max: " + max);
-
                             soma = soma + Double.parseDouble(similaridade);
 
                         }
@@ -1273,6 +1403,9 @@ public class DgStd1 {
 
         }
 
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+
 //        return divergencias;
     }
 
@@ -1282,7 +1415,8 @@ public class DgStd1 {
      * @throws IOException
      */
     public void contabilizaEstatNAODA(File arqHistNAODA) throws IOException {
-        //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
+
+        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -1297,11 +1431,11 @@ public class DgStd1 {
         estatNAODA = new File("./src/csv/conjuntosDS", "estatNAO_DA.csv");
 
         if (!estatNAODA.exists()) {
-            System.out.println("Não existe arquivo NAO_DA.csv.");
+            System.out.println("Não existe arquivo estatNAO_DA.csv.");
 
             try {
                 estatNAODA.createNewFile();
-                new Thread().sleep(50);
+                //new Thread().sleep(50);
 
             } catch (FileNotFoundException ex) {
 
@@ -1311,20 +1445,18 @@ public class DgStd1 {
             } catch (IOException ex) {
                 Logger.getLogger(DgStd1.class
                         .getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
 
-        BufferedReader brHistDA = null;
+        BufferedReader brHistNAODA = null;
 
         FileWriter escreveDiverg2 = null;
         BufferedWriter bwDiverg2 = null;
 
         try {
 
-            brHistDA = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
+            brHistNAODA = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
 
             escreveDiverg2 = new FileWriter(estatNAODA, true); //Dessa forma NÃO sobrescreve
             bwDiverg2 = new BufferedWriter(escreveDiverg2);
@@ -1337,7 +1469,7 @@ public class DgStd1 {
 
             bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
 
-            while ((Str = brHistDA.readLine()) != null) {
+            while ((Str = brHistNAODA.readLine()) != null) {
 
                 jaExistia = false;
                 qtdAlg = 0;
@@ -1345,7 +1477,7 @@ public class DgStd1 {
                 max = 0.0;
                 soma = 0.0;
 
-                BufferedReader brHistDA2 = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
+                BufferedReader brHistNAODA2 = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
 
                 linhaAtual1 = Str.split(";", 3);
 
@@ -1368,14 +1500,13 @@ public class DgStd1 {
                     //Esse else teria que englobar o while abaixo?! (IMPORTANTE!)
 
                     //FIM_NOVO
-                    while ((Str = brHistDA2.readLine()) != null) {
+                    while ((Str = brHistNAODA2.readLine()) != null) {
 
                         linhaAtual2 = Str.split(";", 4);
 
                         elementoA = linhaAtual2[0];
                         elementoB = linhaAtual2[1];
                         similaridade = linhaAtual2[2].replaceAll("\"", "");
-                        
 
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
@@ -1386,7 +1517,6 @@ public class DgStd1 {
                             max = max(qtdAlg, similaridade, max);
 
 //                            System.out.println("max: " + max);
-
                             soma = soma + Double.parseDouble(similaridade);
 
                         }
@@ -1403,7 +1533,7 @@ public class DgStd1 {
 //                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + cont + "\n");
                     bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
                 }
-                brHistDA2.close();
+                brHistNAODA2.close();
 
 //                if (jaExistia == false) {//NAO_DA é atualizado aqui
                 //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
@@ -1416,7 +1546,7 @@ public class DgStd1 {
 //                bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
 //                }
             }
-            brHistDA.close();
+            brHistNAODA.close();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DgStd1.class
@@ -1434,6 +1564,9 @@ public class DgStd1 {
 
         }
 
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+
 //        return divergencias;
     }
 
@@ -1445,6 +1578,7 @@ public class DgStd1 {
      */
     @SuppressWarnings("unchecked")
     public void remDupDiverg(File divergencias) throws IOException {
+        long tempoInicial = System.currentTimeMillis();
 
         String line = "";
 
@@ -1496,6 +1630,8 @@ public class DgStd1 {
             bwDiverg.flush();
             bwDiverg.close();
         }
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
 
     }
 
@@ -1571,6 +1707,9 @@ public class DgStd1 {
     }
 
     public void incrementaEstatNAO_DA() throws IOException {
+
+        long tempoInicial = System.currentTimeMillis();
+
         tp = 0;
         fp = 0;
 
@@ -1650,6 +1789,9 @@ public class DgStd1 {
                 System.out.println("Não foi possível criar arquivo estatisticas.csv.");
             }
         }
+
+        long tempoFinal = System.currentTimeMillis();
+        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
     }
 
     /**
@@ -2244,13 +2386,13 @@ public class DgStd1 {
     }
 
     public void copiaArqDivergAA() throws IOException {
-        
+
         File dirDivergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/");
 
         if (!dirDivergToAA.exists()) {
             dirDivergToAA.mkdir();
         }
-        
+
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
         File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
@@ -2340,7 +2482,7 @@ public class DgStd1 {
         return maximo;
 
     }
-    
+
 //    Para imprimir todos os métodos desta classe
 //    public static void main(String args[])
 //    {
@@ -2354,5 +2496,4 @@ public class DgStd1 {
 //            System.err.println(e);
 //        }
 //    }
-    
 }

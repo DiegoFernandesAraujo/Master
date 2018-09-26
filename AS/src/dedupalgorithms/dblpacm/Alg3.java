@@ -17,6 +17,7 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
+import dude.similarityfunction.aggregators.Average;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.GoldStandard;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class Alg1 extends DedupAlg {
+public class Alg3 extends DedupAlg {
 
     String rotulo;
     double a, b, c, d, e, f;
@@ -45,7 +46,7 @@ public class Alg1 extends DedupAlg {
     File estatisticasCSVSemFecho;
     File estatisticasTXTSemFecho;
 
-    public Alg1(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
+    public Alg3(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
@@ -60,7 +61,7 @@ public class Alg1 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg3.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -77,6 +78,14 @@ public class Alg1 extends DedupAlg {
         EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
         NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
+        
+        Average avg = new Average();
+        avg.add(similarityFunc);
+        avg.add(similarityFunc2);
+
+        Average avg2 = new Average();
+        avg2.add(similarityFunc3);
+        avg2.add(similarityFunc4);
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -99,12 +108,10 @@ public class Alg1 extends DedupAlg {
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
 
-            final double similarity = similarityFunc.getSimilarity(pair);
-            final double similarity2 = similarityFunc2.getSimilarity(pair);
-            final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
+            final double similarity = avg.getSimilarity(pair);
+            final double similarity2 = avg2.getSimilarity(pair);
 
-            if ((similarity >= 0.75) && (similarity2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
+            if ((similarity >= 0.85) && (similarity2 >= 0.85)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -117,12 +124,12 @@ public class Alg1 extends DedupAlg {
 
                     a = similarity;
                     b = similarity2;
-                    c = similarity3;
-                    d = similarity4;
+//                    c = similarity3;
+//                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c + d) / 4;
+                    final double simNorm = (a + b) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 
@@ -155,7 +162,7 @@ public class Alg1 extends DedupAlg {
                 try {
                     statistic.addNonDuplicate(pair);
                 } catch (ExtractionFailedException ex) {
-                    Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Alg3.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -174,9 +181,8 @@ public class Alg1 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-//        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg1 obj1 = new Alg1("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 1);
+        Alg3 obj1 = new Alg3("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 3);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

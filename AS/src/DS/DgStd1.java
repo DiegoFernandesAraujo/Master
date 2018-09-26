@@ -9,7 +9,6 @@ import AS.*;
 
 import java.util.stream.*;
 import static AS.AplicacaoASDS.geraOrdAlg;
-import static AS.Teste.getUniqueValues;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;

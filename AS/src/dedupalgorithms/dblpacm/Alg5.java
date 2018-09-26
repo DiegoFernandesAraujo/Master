@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class Alg1 extends DedupAlg {
+public class Alg5 extends DedupAlg {
 
     String rotulo;
     double a, b, c, d, e, f;
@@ -45,7 +45,7 @@ public class Alg1 extends DedupAlg {
     File estatisticasCSVSemFecho;
     File estatisticasTXTSemFecho;
 
-    public Alg1(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
+    public Alg5(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
@@ -60,7 +60,7 @@ public class Alg1 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg5.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -73,9 +73,9 @@ public class Alg1 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
-        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
-        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
+        NeedlemanWunschFunction similarityFunc = new NeedlemanWunschFunction("title");
+        NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
+        NeedlemanWunschFunction similarityFunc3 = new NeedlemanWunschFunction("venue");
         NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
@@ -87,8 +87,6 @@ public class Alg1 extends DedupAlg {
         statisticOutputTXT = new SimpleStatisticOutput(estatisticasTXT, statistic);
 
         statistic.setStartTime();
-
-        NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
 
         BufferedWriter bwSim = null;
 
@@ -155,7 +153,7 @@ public class Alg1 extends DedupAlg {
                 try {
                     statistic.addNonDuplicate(pair);
                 } catch (ExtractionFailedException ex) {
-                    Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Alg5.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -176,7 +174,7 @@ public class Alg1 extends DedupAlg {
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg1 obj1 = new Alg1("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 1);
+        Alg5 obj1 = new Alg5("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 5);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

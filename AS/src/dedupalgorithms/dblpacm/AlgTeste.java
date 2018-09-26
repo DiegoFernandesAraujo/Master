@@ -67,7 +67,7 @@ public class AlgTeste extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg1ComFechoTransitivo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -401,7 +401,7 @@ public class AlgTeste extends DedupAlg {
 //                try {
 //                    statistic.addNonDuplicate(pair);
 //                } catch (ExtractionFailedException ex) {
-//                    Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+//                    Logger.getLogger(Alg1ComFechoTransitivo.class.getName()).log(Level.SEVERE, null, ex);
 //                }
 //            }
                 bwArqPadr.flush();
@@ -432,7 +432,7 @@ public class AlgTeste extends DedupAlg {
     }
 
     public static void main(String[] args) {
-//        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
+//        Alg1ComFechoTransitivo obj1 = new Alg1ComFechoTransitivo("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
         AlgTeste obj1 = new AlgTeste("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 1);
         try {
             obj1.executaDedupAlg();

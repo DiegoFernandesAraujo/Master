@@ -135,13 +135,13 @@ public class Alg17 extends DedupAlg {
                 try {
 
                     a = similarity;
-//                    b = similarity2;
+                    b = similarity2;
 //                    c = similarity3;
 //                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a);
+                    final double simNorm = (a + b)/2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 
@@ -195,7 +195,7 @@ public class Alg17 extends DedupAlg {
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg11 obj1 = new Alg11("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 17);
+        Alg17 obj1 = new Alg17("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 17);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

@@ -100,74 +100,76 @@ public class Alg8 extends DedupAlg {
             final double similarity2 = similarityFunc2.getSimilarity(pair);
             final double similarity3 = similarityFunc3.getSimilarity(pair);
 
-            if ((similarity >= 0.75) && (similarity2 >= 0.75) && (similarity3 >= 0.75)) {
+            if ((similarity >= 0.7) && (similarity2 >= 0.7) && (similarity3 >= 0.75)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
-                statistic.addDuplicate(pair);
+                    statistic.addDuplicate(pair);
 //                output.write(pair);
 //                System.out.println("Existe no GS: " + existeNoGS(pair));
 //                System.out.println("Elemento 1: " + pair.getFirstElement() + " - " + "Elemento 2: " + pair.getSecondElement());
 //                System.out.println("Similaridade: " + pair.getSimilarity());
 
-                try {
+                    try {
 
-                    a = similarity;
-                    b = similarity2;
-                    c = similarity3;
+                        a = similarity;
+                        b = similarity2;
+                        c = similarity3;
 //                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c) / 3;
-                    String elemento1 = pair.getFirstElement().toString();
-                    String elemento2 = pair.getSecondElement().toString();
+                        final double simNorm = (a + b + c) / 3;
+                        String elemento1 = pair.getFirstElement().toString();
+                        String elemento2 = pair.getSecondElement().toString();
 
-                    index_c1 = elemento1.indexOf('[');
-                    index_c2 = elemento1.indexOf(']');
-                    index_c3 = elemento1.indexOf(']', index_c2) + 1;
+                        index_c1 = elemento1.indexOf('[');
+                        index_c2 = elemento1.indexOf(']');
+                        index_c3 = elemento1.indexOf(']', index_c2) + 1;
 
-                    elemento1 = elemento1.substring(index_c1 + 1, index_c3);
+                        elemento1 = elemento1.substring(index_c1 + 1, index_c3);
 
-                    index_c1 = elemento2.indexOf('[');
-                    index_c2 = elemento2.indexOf(']');
-                    index_c3 = elemento2.indexOf(']', index_c2) + 1;
+                        index_c1 = elemento2.indexOf('[');
+                        index_c2 = elemento2.indexOf(']');
+                        index_c3 = elemento2.indexOf(']', index_c2) + 1;
 
-                    elemento2 = elemento2.substring(index_c1 + 1, index_c3);
+                        elemento2 = elemento2.substring(index_c1 + 1, index_c3);
 
-                    bwSim.append(elemento1);
-                    bwSim.append(';');
-                    bwSim.append(elemento2);
-                    bwSim.append(';');
-                    bwSim.append(Double.toString(simNorm));
-                    bwSim.append('\n');
-                    bwSim.flush();
+                        bwSim.append(elemento1);
+                        bwSim.append(';');
+                        bwSim.append(elemento2);
+                        bwSim.append(';');
+                        bwSim.append(Double.toString(simNorm));
+                        bwSim.append('\n');
+                        bwSim.flush();
 
-                } catch (IOException ex) {
-                    System.out.println("ERRO!");
-                }
+                    } catch (IOException ex) {
+                        System.out.println("ERRO!");
+                    }
 //                System.out.println("");
 //
-            } else {
-                try {
-                    statistic.addNonDuplicate(pair);
-                } catch (ExtractionFailedException ex) {
-                    Logger.getLogger(Alg8.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    try {
+                        statistic.addNonDuplicate(pair);
+                    } catch (ExtractionFailedException ex) {
+                        Logger.getLogger(Alg8.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+
             }
+
+            bwSim.close(); //Fecha arquivo
+
+            statistic.setEndTime();
+
+            statisticOutputCSV.writeStatistics();
+            statisticOutputTXT.writeStatistics();
+
+            algorithm.cleanUp();
+            goldStandard.close();
 
         }
 
-        bwSim.close(); //Fecha arquivo
-
-        statistic.setEndTime();
-
-        statisticOutputCSV.writeStatistics();
-        statisticOutputTXT.writeStatistics();
-
-        algorithm.cleanUp();
-        goldStandard.close();
-
-    }
+    
 
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);

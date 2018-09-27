@@ -101,7 +101,8 @@ public class Alg7 extends DedupAlg {
             final double similarity3 = similarityFunc3.getSimilarity(pair);
 //            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
-            if ((similarity >= 0.75) && (similarity2 >= 0.75) && (similarity3 >= 0.5)) {
+//            if ((similarity >= 0.6) && (similarity2 >= 0.6) && (similarity3 >= 0.5)) {//ERA ESSE
+                if ((similarity >= 0.5) && (similarity2 >= 0.5) && (similarity3 >= 0.5)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);

@@ -108,7 +108,7 @@ public class Alg10 extends DedupAlg {
             
             
 
-            if ((similarity >= 0.9)) {
+            if ((similarity >= 0.85)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -180,7 +180,7 @@ public class Alg10 extends DedupAlg {
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg11 obj1 = new Alg11("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 10);
+        Alg10 obj1 = new Alg10("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 10);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

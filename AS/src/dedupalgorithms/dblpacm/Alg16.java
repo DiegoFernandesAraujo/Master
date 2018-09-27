@@ -21,6 +21,7 @@ import dude.similarityfunction.aggregators.Average;
 import dude.similarityfunction.aggregators.Maximum;
 import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.JaroDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
@@ -80,18 +81,18 @@ public class Alg16 extends DedupAlg {
         algorithm.enableInMemoryProcessing();
 
         EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
-        SoundExFunction similarityFunc2 = new SoundExFunction("title");
+        JaroDistanceFunction similarityFunc2 = new JaroDistanceFunction("title");
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("authors");
         EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("venue");
         NeedlemanWunschFunction similarityFunc5 = new NeedlemanWunschFunction("year");
         
-        Maximum max = new Maximum();
-        max.add(similarityFunc);
-        max.add(similarityFunc2);
+//        Maximum max = new Maximum();
+//        max.add(similarityFunc);
+//        max.add(similarityFunc2);
 
         Average avg = new Average();
-        avg.add(max);
-        avg.add(similarityFunc3);
+        avg.add(similarityFunc);
+        avg.add(similarityFunc2);
 
         Average avg2 = new Average();
         avg2.add(similarityFunc4);
@@ -116,10 +117,11 @@ public class Alg16 extends DedupAlg {
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
 
-            final double similarity = avg.getSimilarity(pair) * 1;
-            final double similarity2 = avg2.getSimilarity(pair) * 1.8;
+            final double similarity = avg.getSimilarity(pair);
+            final double similarity2 = similarityFunc3.getSimilarity(pair);
+            final double similarity3 = avg2.getSimilarity(pair);
 
-            if ((similarity + similarity2) / 2.8 >= 0.9) {
+            if ((similarity + similarity2)/2 >= 0.85 && similarity3 > 0.8) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -191,7 +193,7 @@ public class Alg16 extends DedupAlg {
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg11 obj1 = new Alg11("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 16);
+        Alg16 obj1 = new Alg16("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 16);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

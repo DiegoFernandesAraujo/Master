@@ -88,8 +88,6 @@ public class Alg19 extends DedupAlg {
 
         statistic.setStartTime();
 
-        NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
-
         BufferedWriter bwSim = null;
 
         bwSim = new BufferedWriter(escreveResult);
@@ -100,12 +98,21 @@ public class Alg19 extends DedupAlg {
         for (DuDeObjectPair pair : algorithm) {
 
             final double similarity = similarityFunc.getSimilarity(pair);
-            final double similarity2 = similarityFunc2.getSimilarity(pair);
+//            final double similarity2 = similarityFunc2.getSimilarity(pair);
             final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
+//            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
+            //TESTAR ESSE DEPOIS
+//            {
+//            final double similarity3 = similarityFunc5.getSimilarity(pair);
+//
+//            if ((similarity + similarity2)/2 >= 0.5 && similarity3 > 0.5) {
+//            
+//            }
 //            if (((similarity * similarity2)/2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
-            if (((similarity + similarity3 + similarity4) / 3 >= 0.85)) {
+//            if (similarity >= 0.9 && similarity3 > 0.4) {ASSIM FOI BEM  - 914	84	5998796	1310
+            if (similarity >= 0.85 && similarity3 > 0.4) {
+//                if (similarity >= 0.8 && similarity3 > 0.4) { ASSIM FOI RUIM. Diferenças muito pequenas
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -117,13 +124,13 @@ public class Alg19 extends DedupAlg {
                 try {
 
                     a = similarity;
-                    b = similarity2;
+//                    b = similarity2;
                     c = similarity3;
-                    d = similarity4;
+//                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c + d) / 4;
+                    final double simNorm = (a + c) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 
@@ -150,7 +157,7 @@ public class Alg19 extends DedupAlg {
                 } catch (IOException ex) {
                     System.out.println("ERRO!");
                 }
-//                System.out.println("");
+                System.out.println("");
 //
             } else {
                 try {

@@ -101,8 +101,8 @@ public class Alg21 extends DedupAlg {
 
             final double similarity = similarityFunc.getSimilarity(pair);
             final double similarity2 = similarityFunc2.getSimilarity(pair);
-            final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
+//            final double similarity3 = similarityFunc3.getSimilarity(pair);
+//            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
 //            if (((similarity * similarity2)/2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
             if (((similarity + similarity2) / 2 >= 0.95)) {
@@ -118,12 +118,12 @@ public class Alg21 extends DedupAlg {
 
                     a = similarity;
                     b = similarity2;
-                    c = similarity3;
-                    d = similarity4;
+//                    c = similarity3;
+//                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c + d) / 4;
+                    final double simNorm = (a + b) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

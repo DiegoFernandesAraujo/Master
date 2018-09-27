@@ -1,0 +1,33 @@
+Start Time:        Thu Sep 27 11:21:11 GMT-03:00 2018
+End Time:          Thu Sep 27 11:26:55 GMT-03:00 2018
+Runtime in ms:     344,308
+Max. Memory in KB:  11,952
+Min. Memory in KB:   7,624
+Avg. Memory in KB:   9,652
+
+Number of Data Records:              4,910
+Number of Comparison Candidates: 6,001,104
+Number of created pairs:         6,001,104
+Number of actual comparisons:    6,001,104
+Reduction Ratio:                         0
+Number of real Duplicates:           2,224
+
+Precision: 0.1317
+Recall:    0.7585
+F-Measure: 0.2244
+
+True Positives:      1,687
+False Positives:    11,123
+True Negatives:  5,987,757
+False Negatives:       537
+
+Precision based on actual comparisons: 0.1317
+Recall based on actual comparisons:    0.7585
+F-Measure based on actual comparisons: 0.2244
+
+Reduction Ratio based on actual comparisons:         0
+True Positives based on actual comparisons:      1,687
+False Positives based on actual comparisons:    11,123
+True Negatives based on actual comparisons:  5,987,757
+False Negatives based on actual comparisons:       537
+

@@ -88,8 +88,6 @@ public class Alg1 extends DedupAlg {
 
         statistic.setStartTime();
 
-        NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
-
         BufferedWriter bwSim = null;
 
         bwSim = new BufferedWriter(escreveResult);

@@ -1,9 +1,9 @@
-Start Time:        Thu Sep 27 10:02:59 GMT-03:00 2018
-End Time:          Thu Sep 27 10:14:54 GMT-03:00 2018
-Runtime in ms:     715,167
-Max. Memory in KB:  12,044
-Min. Memory in KB:   7,676
-Avg. Memory in KB:   9,816
+Start Time:        Thu Sep 27 12:31:54 BRT 2018
+End Time:          Thu Sep 27 12:34:01 BRT 2018
+Runtime in ms:     127,316
+Max. Memory in KB: 787,617
+Min. Memory in KB:  10,198
+Avg. Memory in KB: 167,876
 
 Number of Data Records:              4,910
 Number of Comparison Candidates: 6,001,104

@@ -17,11 +17,11 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.JaroWinklerFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.SmithWatermanFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedWriter;
@@ -76,9 +76,10 @@ public class Alg14 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        SoundExFunction similarityFunc = new SoundExFunction("title");
-        NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
-        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("year");
+        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
+        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
+        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
+        EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -89,6 +90,8 @@ public class Alg14 extends DedupAlg {
         statisticOutputTXT = new SimpleStatisticOutput(estatisticasTXT, statistic);
 
         statistic.setStartTime();
+
+        NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
 
         BufferedWriter bwSim = null;
 
@@ -102,8 +105,12 @@ public class Alg14 extends DedupAlg {
             final double similarity = similarityFunc.getSimilarity(pair);
             final double similarity2 = similarityFunc2.getSimilarity(pair);
             final double similarity3 = similarityFunc3.getSimilarity(pair);
+            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
-            if ((similarity >= 0.8) && (similarity2 >= 0.5) && (similarity3 >= 0.65)) {
+            //Baseado no Alg25
+            if (((similarity >= 0.8) || (similarity2 >= 0.9)) && ((similarity3 >= 0.75) || (similarity4 >= 0.75))) {
+//            if (((similarity >= 0.9) || (similarity2 >= 0.9)) && ((similarity3 >= 0.9) || (similarity4 >= 0.9))) { //Razoável
+//            if (((similarity >= 0.9) || (similarity2 >= 0.8)) && ((similarity3 >= 0.7) || (similarity4 >= 0.75))) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -117,11 +124,11 @@ public class Alg14 extends DedupAlg {
                     a = similarity;
                     b = similarity2;
                     c = similarity3;
-//                    d = similarity4;
+                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c) / 3;
+                    final double simNorm = (a + b + c + d) / 4;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 
@@ -181,7 +188,7 @@ public class Alg14 extends DedupAlg {
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg14.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg10.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

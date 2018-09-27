@@ -109,42 +109,42 @@ public class Alg22 extends DedupAlg {
 //                System.out.println("Elemento 1: " + pair.getFirstElement() + " - " + "Elemento 2: " + pair.getSecondElement());
 //                System.out.println("Similaridade: " + pair.getSimilarity());
 
-//                try {
-//
-//                    a = similarity;
-//                    b = similarity2;
-//                    c = similarity3;
-////                    d = similarity4;
-////                e = similarityFunc2.getSimilarity(pair);
-////                f = similarityFunc2.getSimilarity(pair);
-//
-//                    final double simNorm = (a + b + c) / 3;
-//                    String elemento1 = pair.getFirstElement().toString();
-//                    String elemento2 = pair.getSecondElement().toString();
-//
-//                    index_c1 = elemento1.indexOf('[');
-//                    index_c2 = elemento1.indexOf(']');
-//                    index_c3 = elemento1.indexOf(']', index_c2) + 1;
-//
-//                    elemento1 = elemento1.substring(index_c1 + 1, index_c3);
-//
-//                    index_c1 = elemento2.indexOf('[');
-//                    index_c2 = elemento2.indexOf(']');
-//                    index_c3 = elemento2.indexOf(']', index_c2) + 1;
-//
-//                    elemento2 = elemento2.substring(index_c1 + 1, index_c3);
-//
-//                    bwSim.append(elemento1);
-//                    bwSim.append(';');
-//                    bwSim.append(elemento2);
-//                    bwSim.append(';');
-//                    bwSim.append(Double.toString(simNorm));
-//                    bwSim.append('\n');
-//                    bwSim.flush();
-//
-//                } catch (IOException ex) {
-//                    System.out.println("ERRO!");
-//                }
+                try {
+
+                    a = similarity;
+                    b = similarity2;
+                    c = similarity3;
+//                    d = similarity4;
+//                e = similarityFunc2.getSimilarity(pair);
+//                f = similarityFunc2.getSimilarity(pair);
+
+                    final double simNorm = (a + b + c) / 3;
+                    String elemento1 = pair.getFirstElement().toString();
+                    String elemento2 = pair.getSecondElement().toString();
+
+                    index_c1 = elemento1.indexOf('[');
+                    index_c2 = elemento1.indexOf(']');
+                    index_c3 = elemento1.indexOf(']', index_c2) + 1;
+
+                    elemento1 = elemento1.substring(index_c1 + 1, index_c3);
+
+                    index_c1 = elemento2.indexOf('[');
+                    index_c2 = elemento2.indexOf(']');
+                    index_c3 = elemento2.indexOf(']', index_c2) + 1;
+
+                    elemento2 = elemento2.substring(index_c1 + 1, index_c3);
+
+                    bwSim.append(elemento1);
+                    bwSim.append(';');
+                    bwSim.append(elemento2);
+                    bwSim.append(';');
+                    bwSim.append(Double.toString(simNorm));
+                    bwSim.append('\n');
+                    bwSim.flush();
+
+                } catch (IOException ex) {
+                    System.out.println("ERRO!");
+                }
 //                System.out.println("");
 //
             } else {

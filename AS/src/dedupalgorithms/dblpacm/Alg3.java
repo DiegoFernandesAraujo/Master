@@ -17,9 +17,11 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.aggregators.Average;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.JaroWinklerFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.SmithWatermanFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedWriter;
@@ -77,15 +79,7 @@ public class Alg3 extends DedupAlg {
         EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
         EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
-        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
-        
-        Average avg = new Average();
-        avg.add(similarityFunc);
-        avg.add(similarityFunc2);
-
-        Average avg2 = new Average();
-        avg2.add(similarityFunc3);
-        avg2.add(similarityFunc4);
+        EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -108,10 +102,13 @@ public class Alg3 extends DedupAlg {
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
 
-            final double similarity = avg.getSimilarity(pair);
-            final double similarity2 = avg2.getSimilarity(pair);
+            final double similarity = similarityFunc.getSimilarity(pair);
+            final double similarity2 = similarityFunc2.getSimilarity(pair);
+            final double similarity3 = similarityFunc3.getSimilarity(pair);
+            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
-            if ((similarity >= 0.85) && (similarity2 >= 0.85)) {
+            //Baseado no Alg20
+            if (((similarity >= 0.9) || (similarity2 >= 0.9)) && ((similarity3 >= 0.8) || (similarity4 >= 0.8))) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -124,12 +121,12 @@ public class Alg3 extends DedupAlg {
 
                     a = similarity;
                     b = similarity2;
-//                    c = similarity3;
-//                    d = similarity4;
+                    c = similarity3;
+                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b) / 2;
+                    final double simNorm = (a + b + c + d) / 4;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 
@@ -181,6 +178,7 @@ public class Alg3 extends DedupAlg {
     }
 
     public static void main(String[] args) {
+//        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         Alg3 obj1 = new Alg3("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 3);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);

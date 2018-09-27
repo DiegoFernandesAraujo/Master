@@ -121,7 +121,7 @@ public class Alg23 extends DedupAlg {
             final double similarity2 = similarityFunc3.getSimilarity(pair);
             final double similarity3 = avg2.getSimilarity(pair);
 
-            if (similarity >= 0.6 && similarity2 >= 0.65 && similarity3 > 0.5) {
+            if (similarity >= 0.8 && similarity2 >= 0.65 && similarity3 > 0.5) {
 
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {

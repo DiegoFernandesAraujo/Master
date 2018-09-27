@@ -105,7 +105,7 @@ public class Alg21 extends DedupAlg {
 //            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
 //            if (((similarity * similarity2)/2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
-            if (((similarity + similarity2) / 2 >= 0.95)) {
+            if (((similarity + similarity2) / 2 >= 0.8)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);

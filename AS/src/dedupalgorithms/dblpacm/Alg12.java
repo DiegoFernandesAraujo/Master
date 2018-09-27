@@ -18,11 +18,14 @@ import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
 import dude.similarityfunction.aggregators.Average;
-import dude.similarityfunction.aggregators.Minimum;
+import dude.similarityfunction.aggregators.Maximum;
+import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.JaroDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
+import dude.similarityfunction.contentbased.util.SoundEx;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedWriter;
@@ -64,7 +67,7 @@ public class Alg12 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg12.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg11.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -78,13 +81,22 @@ public class Alg12 extends DedupAlg {
         algorithm.enableInMemoryProcessing();
 
         EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
-        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
-        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("year");
+        JaroDistanceFunction similarityFunc2 = new JaroDistanceFunction("title");
+        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("authors");
+        EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("venue");
+        NeedlemanWunschFunction similarityFunc5 = new NeedlemanWunschFunction("year");
         
-        Minimum min = new Minimum();
-        min.add(similarityFunc);
-        min.add(similarityFunc2);
-        min.add(similarityFunc3);
+//        Maximum max = new Maximum();
+//        max.add(similarityFunc);
+//        max.add(similarityFunc2);
+
+        Average avg = new Average();
+        avg.add(similarityFunc);
+        avg.add(similarityFunc2);
+
+        Average avg2 = new Average();
+        avg2.add(similarityFunc4);
+        avg2.add(similarityFunc5);
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -105,11 +117,12 @@ public class Alg12 extends DedupAlg {
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
 
-            final double similarity = min.getSimilarity(pair);
-            
-            
+            final double similarity = avg.getSimilarity(pair);
+            final double similarity2 = similarityFunc3.getSimilarity(pair);
+            final double similarity3 = avg2.getSimilarity(pair);
 
-            if ((similarity >= 0.85)) {
+                if (similarity >= 0.75 && similarity2 >= 0.65 && similarity3 > 0.5) {
+
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -160,7 +173,7 @@ public class Alg12 extends DedupAlg {
                 try {
                     statistic.addNonDuplicate(pair);
                 } catch (ExtractionFailedException ex) {
-                    Logger.getLogger(Alg12.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Alg11.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -187,7 +200,7 @@ public class Alg12 extends DedupAlg {
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg12.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg11.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

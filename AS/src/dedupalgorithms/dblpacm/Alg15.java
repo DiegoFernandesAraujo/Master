@@ -18,10 +18,7 @@ import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.JaroWinklerFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.SmithWatermanFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedWriter;
@@ -79,7 +76,7 @@ public class Alg15 extends DedupAlg {
         EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
         EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
-        EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("year");
+        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -104,10 +101,11 @@ public class Alg15 extends DedupAlg {
 
             final double similarity = similarityFunc.getSimilarity(pair);
             final double similarity2 = similarityFunc2.getSimilarity(pair);
-            final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
+//            final double similarity3 = similarityFunc3.getSimilarity(pair);
+//            final double similarity4 = similarityFunc4.getSimilarity(pair);
 
-            if (((similarity >= 0.85) || (similarity2 >= 0.85)) && ((similarity3 >= 0.85) || (similarity4 >= 0.85))) {
+//            if (((similarity * similarity2)/2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
+            if (((similarity + similarity2) / 2 >= 0.8)) {
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -120,12 +118,12 @@ public class Alg15 extends DedupAlg {
 
                     a = similarity;
                     b = similarity2;
-                    c = similarity3;
-                    d = similarity4;
+//                    c = similarity3;
+//                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c + d) / 4;
+                    final double simNorm = (a + b) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

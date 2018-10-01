@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 public class DgStd1 {
 
     int tp, fp, tn, fn, iteracao, permutacao, tamBaseOrig, tamBaseOrig2, qtdAlg;
+
     boolean dedup = false;
     boolean copiaArqDiverg = false;
 
@@ -474,6 +475,7 @@ public class DgStd1 {
         if (baseline == false) {
 
 //            System.out.println("Entrou no baseline false!");
+            atualizaHistNAODA2(arqResult); //Antes de atualizar DA
             aux = juntaArquivos(DA, arqResult); //Isso é feito para que se possa ver a união e intersecção do resultado atual com o DA
 
 //            JOptionPane.showMessageDialog(null, "veja DATESTE!");
@@ -486,7 +488,7 @@ public class DgStd1 {
             {
 //                atualizaHistDA(arqResult);
 
-                atualizaHistNAODA(aux);
+//                atualizaHistNAODA(aux);
             }
 
 //            JOptionPane.showMessageDialog(null, "Veja o arquivo historicoDA!");
@@ -530,7 +532,7 @@ public class DgStd1 {
         File juncao = new File("./src/csv/conjuntosDS", "juncao.csv");
         FileWriter escreveJuncao;
 
-        String Str;
+        String str;
         String[] linhaAtual;
 
         if (!juncao.exists()) {
@@ -560,17 +562,17 @@ public class DgStd1 {
             bwJuncao = new BufferedWriter(escreveJuncao);
 
             //Copiando do primeiro arquivo
-            while ((Str = brDA.readLine()) != null) {
+            while ((str = brDA.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = str.split(";", 3);
 //                bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
             }
             //Copiando do segundo arquivo
-            while ((Str = brArq2.readLine()) != null) {
+            while ((str = brArq2.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 3);
+                linhaAtual = str.split(";", 3);
 //                bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + "\n");
                 bwJuncao.write(linhaAtual[0] + ";" + linhaAtual[1] + ";" + linhaAtual[2] + "\n");
 
@@ -864,7 +866,6 @@ public class DgStd1 {
         return DA;
     }
 
-    
     //DATeste
 //    public File atualizaDA2(File arqDuplicatas) throws IOException {
 //
@@ -1052,7 +1053,7 @@ public class DgStd1 {
 
         return historicoDA;
     }
-    
+
     //Atualiza HistoricoDA tbm
     public File atualizaHistDA2(File arqDuplicatas) throws IOException {
 
@@ -1171,7 +1172,6 @@ public class DgStd1 {
         return DA;
     }
 
-
     /**
      * Armazena no arquivo historicoNAO_DA todas as ocorrências dos pares que
      * apresentaram alguma divergência com o arquivo DA.
@@ -1218,6 +1218,8 @@ public class DgStd1 {
         BufferedReader brDA = null;
         FileWriter escreveDiverg = null;
         BufferedWriter bwDiverg = null;
+
+        int tamHistNAODA = 0;
 
         try {
 
@@ -1266,6 +1268,7 @@ public class DgStd1 {
                     //ATENÇÃO! Colocar aqui a busca pelo par atual dentro do arquivo NAO_DA de forma que caso ele exista não seja inserido novamente
                     //Isso está sendo feito com o método removeDup()
                     bwDiverg.write(elemento1 + ";" + elemento2 + ";" + linhaAtual1[2] + "\n");
+                    tamHistNAODA++;
 //                    bwDiverg2.write(elemento1 + ";" + elemento2 + ";" + ";" +   "teste\n");
 
                 }
@@ -1287,6 +1290,222 @@ public class DgStd1 {
 //            bwDiverg2.close();
         }
 
+        System.out.println("Tamanho de histNAODA: " + tamHistNAODA);
+        return historicoNAODA;
+    }
+
+    public File atualizaHistNAODA2(File arqResult) throws IOException {
+
+        historicoNAODA = new File("./src/csv/conjuntosDS", "historicoNAO_DA.csv");
+//        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+
+        if (!historicoNAODA.exists()) {
+            System.out.println("Não existe arquivo historicoNAO_DA.csv.");
+
+            try {
+                historicoNAODA.createNewFile();
+//                divergencias2.createNewFile();
+                //new Thread().sleep(50);
+
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        String str;
+        String[] linhaAtual;
+        String elemento1;
+        String elemento2;
+
+        FileWriter escreveHistNAODA;
+        BufferedReader brArqDA = null;
+        BufferedReader brArqResult = null;
+        BufferedWriter bwHistNAODA = null;
+        Map<String, String> mapDA = new HashMap<String, String>();
+        Map<String, String> mapArqResult = new HashMap<String, String>();
+        Map<String, String> mapHistNAODA = new HashMap<String, String>();
+//        Map<String, String> mapHistDA = new HashMap<String, String>();
+
+        //Armazenando valores de DA no mapa
+        try {
+
+            brArqDA = new BufferedReader(new FileReader(DA.getPath()));
+
+            while ((str = brArqDA.readLine()) != null) {
+
+                linhaAtual = str.split(";", 4);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+                mapDA.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2 + ";" + linhaAtual[2]);
+
+            }
+            brArqDA.close();
+
+//            if (getPermutacao() == 1) {
+//                System.out.println("mapDA.size(): " + mapDA.size());
+//            }
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqDA = null;
+            elemento1 = null;
+            elemento2 = null;
+        }
+
+        //Verificando se os pares existentes no arquivo já estão em DA
+        try {
+
+//            System.out.println("Entrou no try");
+            brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
+
+            int cont = 0;
+
+            while ((str = brArqResult.readLine()) != null) {
+
+                linhaAtual = str.split(";", 4);
+//                linhaAtualHist = str.split(";", 4);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+//                System.out.println("Buscando: " + elemento1 + ";" + elemento2);
+                if (mapDA.containsKey(elemento1 + ";" + elemento2) || mapDA.containsKey(elemento2 + ";" + elemento1)) {
+                    continue;
+                }
+//                System.out.println("Divergência no else - " + elemento1 + ";" + elemento2);
+                mapHistNAODA.put(elemento1 + ";" + elemento2 + cont++, elemento1 + ";" + elemento2 + ";" + linhaAtual[2]);
+
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqResult.close();
+            brArqResult = null;
+            elemento1 = null;
+            elemento2 = null;
+        }
+
+        //Armazenando valores de arqResult no mapa
+        try {
+
+            brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
+
+            while ((str = brArqResult.readLine()) != null) {
+
+                linhaAtual = str.split(";", 4);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+                mapArqResult.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2 + ";" + linhaAtual[2]);
+
+            }
+            brArqResult.close();
+
+//            if (getPermutacao() == 1) {
+//                System.out.println("mapDA.size(): " + mapDA.size());
+//            }
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqResult = null;
+            elemento1 = null;
+            elemento2 = null;
+        }
+
+        //Verificando se os pares existentes em DA já estão no arquivo 
+        try {
+
+//            System.out.println("Entrou no try");
+            brArqDA = new BufferedReader(new FileReader(DA.getPath()));
+
+            int cont = 0;
+
+            while ((str = brArqDA.readLine()) != null) {
+
+                linhaAtual = str.split(";", 4);
+//                linhaAtualHist = str.split(";", 4);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+//                System.out.println("Buscando: " + elemento1 + ";" + elemento2);
+                if (mapArqResult.containsKey(elemento1 + ";" + elemento2) || mapArqResult.containsKey(elemento2 + ";" + elemento1)) {
+                    continue;
+                }
+//                System.out.println("Divergência no else - " + elemento1 + ";" + elemento2);
+                mapHistNAODA.put(elemento1 + ";" + elemento2 + cont++, elemento1 + ";" + elemento2 + ";" + linhaAtual[2]);
+
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqDA.close();
+            brArqDA = null;
+            elemento1 = null;
+            elemento2 = null;
+        }
+
+//        if(arqResult.getName().contains("resultado8_NEW.csv") || arqResult.getName().contains("resultado15_NEW.csv")){
+//            
+//            System.out.println("mapHistNAODA");
+//            
+//            for (Map.Entry<String, String> entry : mapHistNAODA.entrySet()) {
+//
+//                System.out.println(entry.getKey());
+//
+//            }
+//            
+//            JOptionPane.showMessageDialog(null, "Veja DA e " + arqResult.getName());
+//        }
+//        int tamHistNAODA = 0;
+        //Atualizando HistoricoNAODA
+        try {
+
+            escreveHistNAODA = new FileWriter(historicoNAODA, true); //Desta forma NÃO sobrescreve
+            bwHistNAODA = new BufferedWriter(escreveHistNAODA);
+
+            for (Map.Entry<String, String> entry : mapHistNAODA.entrySet()) {
+
+//                tamHistNAODA++;
+                bwHistNAODA.write(entry.getValue() + "\n");
+//                bwHistNAODA.flush();
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwHistNAODA.flush();
+            bwHistNAODA.close();
+            escreveHistNAODA = null;
+            bwHistNAODA = null;
+
+            mapDA.clear();
+            mapDA = null;
+            mapHistNAODA.clear();
+            mapHistNAODA = null;
+
+        }
+
+//        System.out.println("Tamanho de histNAODA: " + tamHistNAODA);
+//        JOptionPane.showMessageDialog(null, "Veja o arquivo DATeste!");
         return historicoNAODA;
     }
 
@@ -1371,7 +1590,8 @@ public class DgStd1 {
             brEstatNAO_DA.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             bwDiverg.flush();
             bwDiverg.close();
@@ -1594,6 +1814,7 @@ public class DgStd1 {
                     // if it appeared, we abandon it
                     numIndex.remove(elemento1 + ";" + elemento2);
                     abandoned.put(elemento1 + ";" + elemento2, true);
+
                 }
             }
 
@@ -2527,6 +2748,10 @@ public class DgStd1 {
     public int getInspManuais() throws IOException {
 
         return getTamNDM() + getTamDM();
+    }
+
+    public int getPermutacao() {
+        return permutacao;
     }
 
     /**

@@ -1019,6 +1019,7 @@ public class AnnStd {
                 elemento2 = linhaAtual[1];
 
                 existeDM_NDM = buscaDM_NDM(elemento1, elemento2);
+//                existeDM_NDM = buscaDM_NDM2(elemento1, elemento2);
 
                 //Só entra se já não existir em DM ou NDM
                 if (!existeDM_NDM) {
@@ -1312,12 +1313,11 @@ public class AnnStd {
                 //Passando o arqResult para procurar os elementos do gabarito nele.
                 //O que estiver no gabarito e não estiver em arqResult é, portanto, um falso negativo
 //                existe = buscaFN(elementoGS1, elementoGS2, arqResult);
-              existe = buscaFN2(elementoGS1, elementoGS2, arqResult);
+                existe = buscaFN2(elementoGS1, elementoGS2, arqResult);
 
 //                if (existe) {
 //                    contExiste++;
 //                }
-
                 //Só entra se a variável existe for falsa
                 if (!existe) {
 //                    contNaoExiste++;
@@ -1398,11 +1398,11 @@ public class AnnStd {
 
     private boolean buscaFN2(String elemento1, String elemento2, File arq) throws IOException {
         //O gabarito tem de estar sem aspas
-        
+
         String str;
-        
+
         BufferedReader brArq = null;
-        
+
         Map<String, String> map = new HashMap<String, String>();
 
         //Armazenando valores do arquivo atual no mapa
@@ -1419,7 +1419,6 @@ public class AnnStd {
 //
 //                elementoA1 = linhaAtual1[0];
 //                elementoA2 = linhaAtual1[1];
-
 //                map.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2);
                 map.put(str, str);
 //                }
@@ -1439,7 +1438,6 @@ public class AnnStd {
 //                System.out.println(entry.getKey());
 //            }
         }
-        
 
         boolean existe = false;
 
@@ -1531,6 +1529,73 @@ public class AnnStd {
         } finally {
             brNDM.close();
         }
+
+        return existe;
+    }
+
+    private boolean buscaDM_NDM2(String elemento1, String elemento2) throws IOException {
+       
+        boolean existe = false;
+
+        String str;
+
+        Map<String, String> mapDM = new HashMap<String, String>();
+        Map<String, String> mapNDM = new HashMap<String, String>();
+
+        BufferedReader brDM = null;
+        BufferedReader brNDM = null;
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brDM = new BufferedReader(new FileReader(DM.getPath()));
+
+            while ((str = brDM.readLine()) != null) {
+
+                mapDM.put(str, str);
+            }
+            brDM.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brDM = null;
+        }
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brNDM = new BufferedReader(new FileReader(NDM.getPath()));
+
+            while ((str = brNDM.readLine()) != null) {
+
+                mapNDM.put(str, str);
+            }
+            brNDM.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brNDM = null;
+        }
+
+//        ***********************
+        //Verificando se os pares existentes no arquivo já estão em DA
+        if ((mapDM.containsKey(elemento1 + ";" + elemento2) || mapDM.containsKey(elemento2 + ";" + elemento1))
+                || (mapNDM.containsKey(elemento1 + ";" + elemento2) || mapNDM.containsKey(elemento2 + ";" + elemento1))) {
+
+            existe = true;
+
+        }
+
+        elemento1 = null;
+        elemento2 = null;
+        mapDM.clear();
+        mapDM = null;
+        mapNDM.clear();
+        mapNDM = null;
 
         return existe;
     }

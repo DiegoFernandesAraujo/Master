@@ -57,6 +57,7 @@ public class DgStd1 {
     File DATeste;
     File historicoDA;
     File historicoNAODA;
+    File arqResult;
 
     File divergencias, divergencias2, divergencias3;
     File estatDA, estatNAODA, estatNAODAIncr;
@@ -67,6 +68,7 @@ public class DgStd1 {
     File DADM;
     FileWriter escreveEstat;
     Map<String, String> mapGS;
+    Map<String, String> mapArqResult;
 
     /**
      *
@@ -76,6 +78,7 @@ public class DgStd1 {
         this.gs = gabarito;
 
         mapGS = new HashMap<String, String>();
+        mapArqResult = new HashMap<String, String>();
 
         populaMapGS();
 
@@ -328,6 +331,10 @@ public class DgStd1 {
      */
     public void comparaConjuntos(File arqResult) throws IOException {
 
+        setArqResult(arqResult);
+
+        populaMapArqResult();
+
         String Str;
         String[] linhaAtual;
         boolean baseline = false;
@@ -489,7 +496,7 @@ public class DgStd1 {
 //            atualizaDA(aux); //DA deve ficar apenas com a intersecção
 //            JOptionPane.showMessageDialog(null, "veja DATESTE!");
             atualizaDA2(arqResult); //DA deve ficar apenas com a intersecção
-            atualizaHistDA2(arqResult); //DA deve ficar apenas com a intersecção
+            atualizaHistDA3(arqResult); //DA deve ficar apenas com a intersecção
 
             //ATENÇÃO! Apenas para a abordagem de AA
             {
@@ -1075,6 +1082,7 @@ public class DgStd1 {
         BufferedWriter bwDA = null;
         BufferedWriter bwHist = null;
         Map<String, String> mapResult = new HashMap<String, String>();
+//        Map<String, String> mapResult = mapArqResult;
         Map<String, String> mapHistDA = new HashMap<String, String>();
 //        Map<String, String> mapHistDA = new HashMap<String, String>();
 
@@ -1172,6 +1180,123 @@ public class DgStd1 {
 
         mapResult.clear();
         mapResult = null;
+        mapHistDA.clear();
+        mapHistDA = null;
+
+//        JOptionPane.showMessageDialog(null, "Veja o arquivo DATeste!");
+        return DA;
+    }
+
+    public File atualizaHistDA3(File arqDuplicatas) throws IOException {
+
+        String str;
+        String[] linhaAtual;
+        String[] linhaAtualHist;
+        String elemento1;
+        String elemento2;
+
+        FileWriter escreveHist;
+        BufferedReader brHistDA = null;
+        BufferedWriter bwDA = null;
+        BufferedWriter bwHist = null;
+//        Map<String, String> mapArqResult = new HashMap<String, String>();
+//        Map<String, String> mapResult = mapArqResult;
+        Map<String, String> mapHistDA = new HashMap<String, String>();
+//        Map<String, String> mapHistDA = new HashMap<String, String>();
+
+        //Armazenando valores do arquivo atual no mapa
+//        try {
+//
+//            brHistDA = new BufferedReader(new FileReader(arqDuplicatas.getPath()));
+//
+//            while ((str = brHistDA.readLine()) != null) {
+//
+//                linhaAtual = str.split(";", 4);
+//
+//                elemento1 = linhaAtual[0];
+//                elemento2 = linhaAtual[1];
+//
+//                mapArqResult.put(elemento1 + ";" + elemento2, linhaAtual[2]);
+//
+//            }
+//            brHistDA.close();
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            brHistDA = null;
+//            elemento1 = null;
+//            elemento2 = null;
+//        }
+        //Verificando se os pares existentes no arquivo já estão em historicoDA
+        try {
+
+//            System.out.println("Entrou no try");
+            brHistDA = new BufferedReader(new FileReader(historicoDA.getPath()));
+
+            while ((str = brHistDA.readLine()) != null) {
+
+                linhaAtual = str.split(";", 4);
+//                linhaAtualHist = str.split(";", 4);
+
+                elemento1 = linhaAtual[0];
+                elemento2 = linhaAtual[1];
+
+//                System.out.println("Buscando: " + elemento1 + ";" + elemento2);
+                if (mapArqResult.containsKey(elemento1 + ";" + elemento2)) {
+//                    System.out.println("Achei: " + elemento1 + ";" + elemento2);
+                    mapHistDA.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2 + ";" + mapArqResult.get(elemento1 + ";" + elemento2));
+//                    mapHistDA.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2 + ";" + linhaAtual[2]);
+                    continue;
+                }
+
+//                System.out.println("Buscando: " + elemento2 + ";" + elemento1);
+                if (mapArqResult.containsKey(elemento2 + ";" + elemento1)) {
+//                    System.out.println("Achei: " + elemento2 + ";" + elemento1);
+                    mapHistDA.put(elemento2 + ";" + elemento1, elemento2 + ";" + elemento1 + ";" + mapArqResult.get(elemento1 + ";" + elemento2));
+//                    mapDA.put(elemento2 + ";" + elemento1, elemento2 + ";" + elemento1 + ";" + linhaAtualHist[2]);
+                    continue;
+                }
+
+            }
+            brHistDA.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brHistDA = null;
+            elemento1 = null;
+            elemento2 = null;
+        }
+
+        //Atualizando historicoDA
+        try {
+
+            escreveHist = new FileWriter(historicoDA, true); //Dessa forma não sobreescreve
+            bwHist = new BufferedWriter(escreveHist);
+
+            for (Map.Entry<String, String> entry : mapHistDA.entrySet()) {
+
+                bwHist.write(entry.getValue() + "\n");
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwHist.flush();
+            bwHist.close();
+            escreveHist = null;
+            bwHist = null;
+        }
+
+//        mapArqResult.clear();
+//        mapArqResult = null;
         mapHistDA.clear();
         mapHistDA = null;
 
@@ -1522,7 +1647,6 @@ public class DgStd1 {
         String Str2;
         String[] linhaAtual1;
         String[] linhaAtual2;
-        List<String> dupEncontradas = new ArrayList<String>();
         boolean existe = false;
         int cont = 0;
 
@@ -1595,6 +1719,99 @@ public class DgStd1 {
 
             }
             brEstatNAO_DA.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwDiverg.flush();
+            bwDiverg.close();
+        }
+
+//        return historicoDA;
+    }
+
+    public void filtraDivergencias_NEW2(File estatDA, File estatNAO_DA) throws IOException {
+
+        String str;
+        String[] linhaAtual1;
+        String[] linhaAtual2;
+        String elementoA1;
+        String elementoA2;
+
+        Map<String, String> mapEstatDA = new HashMap<String, String>();
+
+        BufferedReader brEstatDA2 = null;
+
+        BufferedWriter bwDiverg = null;
+
+        FileWriter escreveDiverg = null;
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            escreveDiverg = new FileWriter(divergencias2, true); //Dessa forma não sobreescreve
+            bwDiverg = new BufferedWriter(escreveDiverg);
+
+            bwDiverg.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
+
+            brEstatDA2 = new BufferedReader(new FileReader(estatDA.getPath()));
+
+            while ((str = brEstatDA2.readLine()) != null) {
+
+                linhaAtual1 = str.split(";", 3);
+                elementoA1 = linhaAtual1[0];
+                elementoA2 = linhaAtual1[1];
+                mapEstatDA.put(elementoA1 + ";" + elementoA2, str);
+            }
+            brEstatDA2.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brEstatDA2 = null;
+            str = null;
+        }
+
+        BufferedReader brEstatNAODA = null;
+
+        try {
+            brEstatNAODA = new BufferedReader(new FileReader(estatNAO_DA.getPath()));
+            String elemento1DA;
+            String elemento2DA;
+
+            while ((str = brEstatNAODA.readLine()) != null) {
+
+                linhaAtual2 = str.split(";", 3);
+
+                elemento1DA = linhaAtual2[0];
+                elemento2DA = linhaAtual2[1];
+
+                if (elemento1DA.contains("elemento")) {
+                    continue;
+                }
+
+                //Identificando se está em DA, se estiver não entra para o conjunto NAO_DA2
+                if (mapEstatDA.containsKey(elemento1DA + ";" + elemento2DA) || mapEstatDA.containsKey(elemento2DA + ";" + elemento1DA)) {
+                    try {
+                        bwDiverg.write(mapEstatDA.get(elemento1DA + ";" + elemento2DA) + "\n");
+                    } catch (Exception ex) {
+                        bwDiverg.write(mapEstatDA.get(elemento2DA + ";" + elemento1DA) + "\n");
+                    }
+                    
+                    
+                } else {
+
+                    bwDiverg.write(str + "\n");
+                }
+            }
+            brEstatNAODA.close();
+
+            elemento1DA = null;
+            elemento2DA = null;
+            mapEstatDA.clear();
+            mapEstatDA = null;
 
         } catch (IOException ex) {
             Logger.getLogger(DgStd1.class
@@ -2020,6 +2237,115 @@ public class DgStd1 {
 
         long tempoFinal = System.currentTimeMillis();
         System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+
+//        return divergencias;
+    }
+
+    public void contabilizaEstatDA2(File arqHistDA) throws IOException {
+
+        MultiValuedMap<String, String> map = new ArrayListValuedHashMap<>();
+
+        String Str;
+        String[] linhaAtual1;
+        int qtdAlg = 0;
+        double max, min, med, soma;
+
+//        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+        estatDA = new File("./src/csv/conjuntosDS", "estatDA.csv");
+
+        if (!estatDA.exists()) {
+            System.out.println("Não existe arquivo estatDA.csv.");
+
+            try {
+                estatDA.createNewFile();
+                //new Thread().sleep(50);
+
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        BufferedReader brHistDA = null;
+
+        FileWriter escreveDiverg2 = null;
+        BufferedWriter bwDiverg2 = null;
+
+        try {
+
+            brHistDA = new BufferedReader(new FileReader(arqHistDA.getPath()));
+
+            escreveDiverg2 = new FileWriter(estatDA, true); //Dessa forma NÃO sobrescreve
+            bwDiverg2 = new BufferedWriter(escreveDiverg2);
+
+            String elemento1;
+            String elemento2;
+
+            bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
+
+            while ((Str = brHistDA.readLine()) != null) {
+
+                linhaAtual1 = Str.split(";", 4);
+
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                map.put(elemento1 + ";" + elemento2, linhaAtual1[2]);
+
+            }
+            brHistDA.close();
+
+//            try {
+            Set<String> keys = map.keySet();
+            for (String par : keys) {
+
+                qtdAlg = 0;
+                min = 10.0;
+                max = 0.0;
+                soma = 0.0;
+
+//                System.out.println("Key = " + par);
+                Collection<String> values = map.get(par);
+
+                for (String sim : values) {
+
+                    //Coletando as estatísticas...
+                    qtdAlg++;
+                    min = min(qtdAlg, sim, min);
+                    max = max(qtdAlg, sim, max);
+                    soma = soma + Double.parseDouble(sim);
+
+//                    System.out.println("Value= " + value);
+                }
+                med = soma / qtdAlg;
+                bwDiverg2.write(par + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+//            bwDiverg.flush();
+//            bwDiverg.close();
+
+            bwDiverg2.flush();
+            bwDiverg2.close();
+            bwDiverg2 = null;
+            brHistDA = null;
+            map.clear();
+            map = null;
+
+        }
 
 //        return divergencias;
     }
@@ -2888,6 +3214,15 @@ public class DgStd1 {
         this.qtdAlg = qtdAlg;
     }
 
+    public File getArqResult() {
+        return arqResult;
+    }
+
+    public void setArqResult(File arqResult) {
+        this.arqResult = null;
+        this.arqResult = arqResult;
+    }
+
     /**
      *
      * @param geraEst
@@ -2994,7 +3329,7 @@ public class DgStd1 {
         //O gabarito tem de estar sem aspas
 
         String str;
-        String [] linhaAtual1;
+        String[] linhaAtual1;
         String elementoA1;
         String elementoA2;
 
@@ -3335,6 +3670,80 @@ public class DgStd1 {
 //
 //                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
 ////                System.out.println(entry.getKey());
+//            }
+        }
+
+    }
+
+    public void populaMapArqResult() {
+
+        System.out.println("populaMapArqResult!");
+
+        //Limpando valores anteriores
+        try {
+            mapArqResult.clear();
+        } catch (NullPointerException ex) {
+            System.out.println("ERRO NO CLEAR!");
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        String str;
+        String[] linhaAtual1;
+        String elementoA1;
+        String elementoA2;
+
+        BufferedReader brArqResult = null;
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brArqResult = new BufferedReader(new FileReader(getArqResult().getPath()));
+//            System.out.println(getArqResult().getName());
+
+//            int linha = 0;
+            while ((str = brArqResult.readLine()) != null) {
+
+//                if (linha > 0) {
+                linhaAtual1 = str.split(";", 4);
+
+                elementoA1 = linhaAtual1[0];
+                elementoA2 = linhaAtual1[1];
+//                System.out.println(elementoA1 + ";" + elementoA2 + " - " + linhaAtual1[2]);
+
+//                mapArqResult.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2 + ";" + linhaAtual1[2]);
+                mapArqResult.put(elementoA1 + ";" + elementoA2, linhaAtual1[2]);
+//                }
+//                linha++;
+            }
+
+//            while ((str = brHistDA.readLine()) != null) {
+//
+//                linhaAtual = str.split(";", 4);
+//
+//                elemento1 = linhaAtual[0];
+//                elemento2 = linhaAtual[1];
+//
+//                mapArqResult.put(elemento1 + ";" + elemento2, linhaAtual[2]);
+            brArqResult.close();
+        } catch (NullPointerException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqResult = null;
+            elementoA1 = null;
+            elementoA2 = null;
+//            int cont = 0;
+//            for (Map.Entry<String, String> entry : mapArqResult.entrySet()) {
+//
+////                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
 //            }
         }
 

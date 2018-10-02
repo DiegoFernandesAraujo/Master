@@ -9,6 +9,8 @@ import AS.*;
 
 import java.util.stream.*;
 import static AS.AplicacaoASDS.geraOrdAlg;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -30,6 +32,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+
+import com.google.common.*;
+import java.util.Set;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 /**
  *
@@ -2104,7 +2111,7 @@ public class DgStd1 {
                     continue; //Dessa forma permite que pesquise por um determinado par apenas na sua primeira aparição
 //                    break;
                 } else {
-                    listaElementos.add(par);
+                    listaElementos.add(par); //Adiciona o par na primeira vez que ocorres
                     //Esse else teria que englobar o while abaixo?! (IMPORTANTE!)
 
                     //FIM_NOVO
@@ -2114,20 +2121,19 @@ public class DgStd1 {
 
                         elementoA = linhaAtual2[0];
                         elementoB = linhaAtual2[1];
-                        similaridade = linhaAtual2[2].replaceAll("\"", "");
+//                        similaridade = linhaAtual2[2].replaceAll("\"", "");
+                        similaridade = linhaAtual2[2];
 
                         if (((elemento1.equals(elementoA)) && (elemento2.equals(elementoB))) || ((elemento1.equals(elementoB)) && ((elemento2.equals(elementoA))))) {
 
-                            qtdAlg++; //Coletando as estatísticas...
-//                            System.out.println("qtdAlg: " + qtdAlg);
-
+                            //Coletando as estatísticas...
+                            qtdAlg++;
                             min = min(qtdAlg, similaridade, min);
                             max = max(qtdAlg, similaridade, max);
-
-//                            System.out.println("max: " + max);
                             soma = soma + Double.parseDouble(similaridade);
 
                         }
+
 //
 //                    if (cont >= 2) {
 //                        jaExistia = true; //Se já existia o par de elementos em DA não deve ser considerada divergência
@@ -2169,11 +2175,123 @@ public class DgStd1 {
 
             bwDiverg2.flush();
             bwDiverg2.close();
+            bwDiverg2 = null;
+            brHistNAODA = null;
+            listaElementos = null;
 
         }
 
         long tempoFinal = System.currentTimeMillis();
         System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+
+//        return divergencias;
+    }
+
+    public void contabilizaEstatNAODA2(File arqHistNAODA) throws IOException {
+
+        MultiValuedMap<String, String> map = new ArrayListValuedHashMap<>();
+
+        String Str;
+        String[] linhaAtual1;
+        int qtdAlg = 0;
+        double max, min, med, soma;
+
+//        divergencias2 = new File("./src/csv/conjuntosDS", "NAO_DA2.csv");
+        estatNAODA = new File("./src/csv/conjuntosDS", "estatNAO_DA.csv");
+
+        if (!estatNAODA.exists()) {
+            System.out.println("Não existe arquivo estatNAO_DA.csv.");
+
+            try {
+                estatNAODA.createNewFile();
+                //new Thread().sleep(50);
+
+            } catch (FileNotFoundException ex) {
+
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(DgStd1.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        BufferedReader brHistNAODA = null;
+
+        FileWriter escreveDiverg2 = null;
+        BufferedWriter bwDiverg2 = null;
+
+        try {
+
+            brHistNAODA = new BufferedReader(new FileReader(arqHistNAODA.getPath()));
+
+            escreveDiverg2 = new FileWriter(estatNAODA, true); //Dessa forma NÃO sobrescreve
+            bwDiverg2 = new BufferedWriter(escreveDiverg2);
+
+            String elemento1;
+            String elemento2;
+            
+            bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
+
+            while ((Str = brHistNAODA.readLine()) != null) {
+
+                linhaAtual1 = Str.split(";", 3);
+
+                elemento1 = linhaAtual1[0];
+                elemento2 = linhaAtual1[1];
+
+                map.put(elemento1 + ";" + elemento2, linhaAtual1[2]);
+
+            }
+            brHistNAODA.close();
+
+//            try {
+            Set<String> keys = map.keySet();
+            for (String par : keys) {
+
+                qtdAlg = 0;
+                min = 10.0;
+                max = 0.0;
+                soma = 0.0;
+
+                System.out.println("Key = " + par);
+                Collection<String> values = map.get(par);
+                
+                for (String sim : values) {
+
+                    //Coletando as estatísticas...
+                    qtdAlg++;
+                    min = min(qtdAlg, sim, min);
+                    max = max(qtdAlg, sim, max);
+                    soma = soma + Double.parseDouble(sim);
+
+//                    System.out.println("Value= " + value);
+                }
+                med = soma / qtdAlg;
+                bwDiverg2.write(par + ";" + qtdAlg + ";" + min + ";" + max + ";" + med + "\n");
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+//            bwDiverg.flush();
+//            bwDiverg.close();
+
+            bwDiverg2.flush();
+            bwDiverg2.close();
+            bwDiverg2 = null;
+            brHistNAODA = null;
+            map.clear();
+            map = null;
+
+        }
 
 //        return divergencias;
     }

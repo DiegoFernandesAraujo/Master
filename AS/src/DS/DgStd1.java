@@ -2232,7 +2232,7 @@ public class DgStd1 {
 
             String elemento1;
             String elemento2;
-            
+
             bwDiverg2.write("elemento1" + ";" + "elemento2" + ";" + "qtdAlg" + ";" + "min" + ";" + "max" + ";" + "med" + "\n");
 
             while ((Str = brHistNAODA.readLine()) != null) {
@@ -2256,9 +2256,9 @@ public class DgStd1 {
                 max = 0.0;
                 soma = 0.0;
 
-                System.out.println("Key = " + par);
+//                System.out.println("Key = " + par);
                 Collection<String> values = map.get(par);
-                
+
                 for (String sim : values) {
 
                     //Coletando as estatísticas...
@@ -2929,6 +2929,7 @@ public class DgStd1 {
                 //Passando o arqResult para procurar os elementos do gabarito nele.
                 //O que estiver no gabarito e não estiver em arqResult é, portanto, um falso negativo
                 existe = buscaFN(elementoGS1, elementoGS2, arqResult);
+//                existe = buscaFN2(elementoGS1, elementoGS2, arqResult);
 
                 //Só entra se a variável existe for falsa
                 if (!existe) {
@@ -2987,6 +2988,82 @@ public class DgStd1 {
         }
 
         return existe;
+    }
+
+    private boolean buscaFN2(String elemento1, String elemento2, File arq) throws IOException {
+        //O gabarito tem de estar sem aspas
+
+        String str;
+        String [] linhaAtual1;
+        String elementoA1;
+        String elementoA2;
+
+        BufferedReader brArq = null;
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brArq = new BufferedReader(new FileReader(arq.getPath()));
+//            System.out.println(getArqResult().getName());
+
+//            int linha = 0;
+            while ((str = brArq.readLine()) != null) {
+
+//                if (linha > 0) {
+                linhaAtual1 = str.split(";", 3);
+//
+                elementoA1 = linhaAtual1[0];
+                elementoA2 = linhaAtual1[1];
+                map.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2);
+//                map.put(str, str);
+//                }
+//                linha++;
+            }
+            brArq.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArq = null;
+            str = null;
+//            int cont = 0;
+//            for (Map.Entry<String, String> entry : mapArqResult.entrySet()) {
+//
+////                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
+//            }
+        }
+
+        boolean existe = false;
+
+        int cont = 0;
+
+        //Verificando se os pares existentes no arquivo já estão em DA
+        if (map.containsKey(elemento1 + ";" + elemento2) || map.containsKey(elemento2 + ";" + elemento1)) {
+
+            existe = true;
+//            if (getArqResult().getName().contains("23")) {
+////                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+//                System.out.println(elemento1 + ";" + elemento2);
+//            }
+
+        } else {
+//            if (getArqResult().getName().contains("23")) {
+////                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+//                System.out.println(elemento1 + ";" + elemento2);
+//            }
+        }
+
+        elemento1 = null;
+        elemento2 = null;
+        map.clear();
+        map = null;
+
+        return existe;
+
     }
 
     private boolean buscaDM_NDM(String elemento1, String elemento2) throws IOException {

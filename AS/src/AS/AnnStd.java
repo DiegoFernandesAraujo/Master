@@ -38,15 +38,18 @@ public class AnnStd {
     File DM;
     File NDM;
     File gs;
+    File arqResult;
     File DADM;
     FileWriter escreveEstat;
     Map<String, String> mapGS;
+    Map<String, String> mapArqResult;
 
     public AnnStd(File gabarito) {
 
         this.gs = gabarito;
 
         mapGS = new HashMap<String, String>();
+        mapArqResult = new HashMap<String, String>();
 
         populaMapGS();
 
@@ -282,6 +285,11 @@ public class AnnStd {
 
     public void comparaConjuntos(File arqResult) throws IOException {
 
+        setArqResult(arqResult);
+
+        populaMapArqResult();
+
+        //Colocar o getArqResult nas invocações abaixo!!!! ATENÇÃO!!
         String Str;
         String[] linhaAtual;
         boolean baseline = false;
@@ -1266,6 +1274,15 @@ public class AnnStd {
         this.qtdAlg = qtdAlg;
     }
 
+    public File getArqResult() {
+        return arqResult;
+    }
+
+    public void setArqResult(File arqResult) {
+        this.arqResult = null;
+        this.arqResult = arqResult;
+    }
+
     public int getFN(File arqResult) throws IOException {
         //Já deve receber o arqResult padronizado
         //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
@@ -1278,6 +1295,8 @@ public class AnnStd {
         String elementoGS2;
         String[] linhaAtual;
         boolean existe = false;
+        int contExiste = 0;
+        int contNaoExiste = 0;
 
         BufferedReader brGS = null;
         try {
@@ -1292,10 +1311,16 @@ public class AnnStd {
 
                 //Passando o arqResult para procurar os elementos do gabarito nele.
                 //O que estiver no gabarito e não estiver em arqResult é, portanto, um falso negativo
-                existe = buscaFN(elementoGS1, elementoGS2, arqResult);
+//                existe = buscaFN(elementoGS1, elementoGS2, arqResult);
+              existe = buscaFN2(elementoGS1, elementoGS2, arqResult);
+
+//                if (existe) {
+//                    contExiste++;
+//                }
 
                 //Só entra se a variável existe for falsa
                 if (!existe) {
+//                    contNaoExiste++;
                     fn++;
                 }
 
@@ -1310,13 +1335,20 @@ public class AnnStd {
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brGS.close();
+
+            if (getArqResult().getName().contains("23")) {
+//                System.out.println("Quantidade de vezes que existe foi verdadeiro: " + contExiste);
+//                System.out.println("Quantidade de vezes que existe foi falso: " + contNaoExiste);
+//                System.out.println("fn: " + fn);
+            }
+
         }
 
         return fn;
     }
 
     private boolean buscaFN(String elementoGS1, String elementoGS2, File arqResult) throws IOException {
-        String Str;
+        String str;
         String elemento1;
         String elemento2;
         String[] linhaAtual;
@@ -1326,9 +1358,9 @@ public class AnnStd {
         try {
             brArqResult = new BufferedReader(new FileReader(arqResult.getPath()));
 
-            while ((Str = brArqResult.readLine()) != null) {
+            while ((str = brArqResult.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+                linhaAtual = str.split(";", 2);
 
                 elemento1 = linhaAtual[0];
                 elemento2 = linhaAtual[1];
@@ -1337,7 +1369,18 @@ public class AnnStd {
                 if (((elemento1.equals(elementoGS1)) && (elemento2.equals(elementoGS2))) || ((elemento1.equals(elementoGS2)) && ((elemento2.equals(elementoGS1))))) {
 
                     existe = true;
+
+                    if (getArqResult().getName().contains("23")) {
+//                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+                        System.out.println(elemento1 + ";" + elemento2);
+                    }
+
                     break;
+                } else {
+                    if (getArqResult().getName().contains("23")) {
+//                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+                        System.out.println(elemento1 + ";" + elemento2);
+                    }
                 }
             }
         } catch (FileNotFoundException ex) {
@@ -1351,6 +1394,80 @@ public class AnnStd {
         }
 
         return existe;
+    }
+
+    private boolean buscaFN2(String elemento1, String elemento2, File arq) throws IOException {
+        //O gabarito tem de estar sem aspas
+        
+        String str;
+        
+        BufferedReader brArq = null;
+        
+        Map<String, String> map = new HashMap<String, String>();
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brArq = new BufferedReader(new FileReader(arq.getPath()));
+//            System.out.println(getArqResult().getName());
+
+//            int linha = 0;
+            while ((str = brArq.readLine()) != null) {
+
+//                if (linha > 0) {
+//                linhaAtual1 = str.split(";", 2);
+//
+//                elementoA1 = linhaAtual1[0];
+//                elementoA2 = linhaAtual1[1];
+
+//                map.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2);
+                map.put(str, str);
+//                }
+//                linha++;
+            }
+            brArq.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArq = null;
+//            int cont = 0;
+//            for (Map.Entry<String, String> entry : mapArqResult.entrySet()) {
+//
+////                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
+//            }
+        }
+        
+
+        boolean existe = false;
+
+        int cont = 0;
+
+        //Verificando se os pares existentes no arquivo já estão em DA
+        if (map.containsKey(elemento1 + ";" + elemento2) || map.containsKey(elemento2 + ";" + elemento1)) {
+
+            existe = true;
+//            if (getArqResult().getName().contains("23")) {
+////                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+//                System.out.println(elemento1 + ";" + elemento2);
+//            }
+
+        } else {
+//            if (getArqResult().getName().contains("23")) {
+////                System.out.println(getArqResult().getName() + " contém " + elemento1 + ";" + elemento2);
+//                System.out.println(elemento1 + ";" + elemento2);
+//            }
+        }
+
+        elemento1 = null;
+        elemento2 = null;
+        map.clear();
+        map = null;
+
+        return existe;
+
     }
 
     private boolean buscaDM_NDM(String elemento1, String elemento2) throws IOException {
@@ -1523,11 +1640,67 @@ public class AnnStd {
             brGS = null;
             elemento1 = null;
             elemento2 = null;
+            int cont = 0;
+            for (Map.Entry<String, String> entry : mapGS.entrySet()) {
+
+                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
+            }
+        }
+
+    }
+
+    public void populaMapArqResult() {
+
+        System.out.println("populaMapArqResult!");
+
+        //Limpando valores anteriores
+        try {
+            mapArqResult.clear();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        String str;
+        String[] linhaAtual1;
+        String elementoA1;
+        String elementoA2;
+
+        BufferedReader brArqResult = null;
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brArqResult = new BufferedReader(new FileReader(getArqResult().getPath()));
+//            System.out.println(getArqResult().getName());
+
+//            int linha = 0;
+            while ((str = brArqResult.readLine()) != null) {
+
+//                if (linha > 0) {
+                linhaAtual1 = str.split(";", 3);
+
+                elementoA1 = linhaAtual1[0];
+                elementoA2 = linhaAtual1[1];
+
+                mapArqResult.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2 + ";" + linhaAtual1[2]);
+//                }
+//                linha++;
+            }
+            brArqResult.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArqResult = null;
+            elementoA1 = null;
+            elementoA2 = null;
 //            int cont = 0;
-//            for (Map.Entry<String, String> entry : mapGS.entrySet()) {
+//            for (Map.Entry<String, String> entry : mapArqResult.entrySet()) {
 //
-//                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
-////                System.out.println(entry.getKey());
+////                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
 //            }
         }
 

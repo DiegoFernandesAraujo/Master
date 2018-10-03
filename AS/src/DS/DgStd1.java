@@ -1799,8 +1799,7 @@ public class DgStd1 {
                     } catch (Exception ex) {
                         bwDiverg.write(mapEstatDA.get(elemento2DA + ";" + elemento1DA) + "\n");
                     }
-                    
-                    
+
                 } else {
 
                     bwDiverg.write(str + "\n");
@@ -1833,7 +1832,8 @@ public class DgStd1 {
      */
     public File filtraDivergencias(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
-        long tempoInicial = System.currentTimeMillis();
+
+//        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -1943,15 +1943,14 @@ public class DgStd1 {
 //            bwDiverg2.flush();
 //            bwDiverg2.close();
         }
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+//        long tempoFinal = System.currentTimeMillis();
+//        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
 
         return divergencias;
     }
 
     public File filtraDivergenciasHash(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
-        long tempoInicial = System.currentTimeMillis();
 
         HashMap<String, Boolean> numIndex = new HashMap<String, Boolean>();
         HashMap<String, Boolean> abandoned = new HashMap<String, Boolean>();
@@ -2078,8 +2077,8 @@ public class DgStd1 {
 //            System.out.println(entry.getKey());
         }
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
 
         return divergencias;
     }
@@ -2090,8 +2089,6 @@ public class DgStd1 {
      * @throws IOException
      */
     public void contabilizaEstatDA(File arqHistDA) throws IOException {
-
-        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -2235,8 +2232,8 @@ public class DgStd1 {
 
         }
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
 
 //        return divergencias;
     }
@@ -2356,8 +2353,6 @@ public class DgStd1 {
      * @throws IOException
      */
     public void contabilizaEstatNAODA(File arqHistNAODA) throws IOException {
-
-        long tempoInicial = System.currentTimeMillis();
 
         ArrayList<String> listaElementos = new ArrayList<String>();
 
@@ -2507,8 +2502,8 @@ public class DgStd1 {
 
         }
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
 
 //        return divergencias;
     }
@@ -2630,7 +2625,6 @@ public class DgStd1 {
      */
     @SuppressWarnings("unchecked")
     public void remDupDiverg(File divergencias) throws IOException {
-        long tempoInicial = System.currentTimeMillis();
 
         String line = "";
 
@@ -2682,8 +2676,8 @@ public class DgStd1 {
             bwDiverg.flush();
             bwDiverg.close();
         }
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
 
     }
 
@@ -2760,8 +2754,6 @@ public class DgStd1 {
     }
 
     public void incrementaEstatNAO_DA() throws IOException {
-
-        long tempoInicial = System.currentTimeMillis();
 
         tp = 0;
         fp = 0;
@@ -2844,8 +2836,8 @@ public class DgStd1 {
             }
         }
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
     }
 
     /**
@@ -3629,7 +3621,7 @@ public class DgStd1 {
 
     public void populaMapGS() {
 
-        System.out.println("populaMapGS!");
+//        System.out.println("populaMapGS!");
         String str;
         String[] linhaAtual1;
         String elemento1;
@@ -3677,7 +3669,7 @@ public class DgStd1 {
 
     public void populaMapArqResult() {
 
-        System.out.println("populaMapArqResult!");
+//        System.out.println("populaMapArqResult!");
 
         //Limpando valores anteriores
         try {

@@ -864,7 +864,7 @@ public class AnnStd {
 
     public File filtraDivergenciasHash(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
-        long tempoInicial = System.currentTimeMillis();
+        
 
         HashMap<String, Boolean> numIndex = new HashMap<String, Boolean>();
         HashMap<String, Boolean> abandoned = new HashMap<String, Boolean>();
@@ -979,8 +979,8 @@ public class AnnStd {
 //            System.out.println(entry.getKey());
         }
 
-        long tempoFinal = System.currentTimeMillis();
-        System.out.printf("Duração de " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": %.3f ms%n", (tempoFinal - tempoInicial) / 1000d);
+        
+        
 
         return divergencias;
     }
@@ -1669,7 +1669,6 @@ public class AnnStd {
 
     public void populaMapGS() {
 
-        System.out.println("populaMapGS!");
         String str;
         String[] linhaAtual1;
         String elemento1;
@@ -1705,19 +1704,19 @@ public class AnnStd {
             brGS = null;
             elemento1 = null;
             elemento2 = null;
-            int cont = 0;
-            for (Map.Entry<String, String> entry : mapGS.entrySet()) {
-
-                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
-//                System.out.println(entry.getKey());
-            }
+//            int cont = 0;
+//            for (Map.Entry<String, String> entry : mapGS.entrySet()) {
+//
+//                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+////                System.out.println(entry.getKey());
+//            }
         }
 
     }
 
     public void populaMapArqResult() {
 
-        System.out.println("populaMapArqResult!");
+//        System.out.println("populaMapArqResult!");
 
         //Limpando valores anteriores
         try {

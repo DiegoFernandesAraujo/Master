@@ -3,8 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 //ESSA TEM HASHMAP!
 package AS;
 
@@ -28,34 +26,33 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class AplicacaoASDS11 {
-    
-    
+public class AplicacaoASDS_NO_MAIN {
 
     File arqAlg = new File("./src/csv/algoritmos.csv");
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        
-        Map<ArrayList<Integer>, ArrayList<Integer>> algsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
-        AnnStd objAS = new AnnStd();
-        DgStd1 objDS = new DgStd1();
+    public void executa() throws IOException, InterruptedException {
+
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
+
+        Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
+
+        AnnStd objAS = new AnnStd(gs);
+        DgStd1 objDS = new DgStd1(gs);
 
         String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
 
         //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
         //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
-        if (abordagemAA.equals("Dg")) { 
+        if (abordagemAA.equals("Dg")) {
             objDS.setCopiaArqDiverg(false);
         } else {
             objDS.setCopiaArqDiverg(true);
         }
-        
+
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
-
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
 
         objAS.setGs(gs);
         objDS.setGs(gs);
@@ -76,7 +73,7 @@ public class AplicacaoASDS11 {
             int index = i + 1;
             //O diretório que segue abaixo tem que ser setado de acordo com a base de dados utilizada
 //            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv"); 
-            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv"); 
+            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos
@@ -92,7 +89,7 @@ public class AplicacaoASDS11 {
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
-        int qtdObservacoes = 50; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
+        int qtdObservacoes = 1000; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
 
 //        File algSort3 = new File("./src/csv/", "algoritmos3.csv");
         File algSort10 = new File("./src/csv/", "algoritmos10.csv");
@@ -108,39 +105,45 @@ public class AplicacaoASDS11 {
 //        algSorts.add(algSort23);
 
 //        int sohParaTestar = 0;
+        File algSort = null;
+        ArrayList<Integer> listaAlg = null;
+
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
-            File algSort = null;
+            algSort = null;
+
+            mapAlgsGerados.clear();
 
             for (File file : algSorts) {
 
                 if (file.getName().contains(Integer.toString(qtdAlgUt))) {
 
-                    algSort = file;
+                    algSort = file; //Seleciona o arquivo com a lista de sequências aleatórias de <qtdAlgUt> algoritmos utilizados
                     break;
 
                 }
             }
 
-           
             System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
+            
+            
             for (int i = 1; i <= qtdObservacoes; i++) {
+                
+                listaAlg = null;
 
-                ArrayList<Integer> listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg);
+                listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg);
 //                objAS.limpaTudo();
 //                objDS.limpaTudo();
 
                 //Verifica se a sequência gerada não já foi utilizada antes
-                if(!algsGerados.containsKey(listaAlg)){
-                    
-                    algsGerados.put(listaAlg, listaAlg);
-                
+                if (!mapAlgsGerados.containsKey(listaAlg)) {
+
+                    mapAlgsGerados.put(listaAlg, listaAlg);
+
 //                if (!buscaAlgoritmos(algSort, listaAlg)) {
-
-                    gravaAlgoritmos(algSort, listaAlg);
-
+//                    gravaAlgoritmos(algSort, listaAlg);
                     objAS.setPermutacao(i);
                     objAS.setQtdAlg(qtdAlgUt);
                     objAS.limpaTudo();
@@ -171,11 +174,11 @@ public class AplicacaoASDS11 {
 
                     //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
                     if (abordagemAA.equals("Dg")) {
-                        
-                        objDS.contabilizaEstatDA(objDS.getHistoricoDA());
-                        objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
 
-                        objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+                        objDS.contabilizaEstatDA2(objDS.getHistoricoDA());
+                        objDS.contabilizaEstatNAODA2(objDS.getHistoricoNAODA());
+
+                        objDS.filtraDivergencias_NEW2(objDS.getEstatDA(), objDS.getEstatNAODA());
 
                         objDS.incrementaEstatNAO_DA();
 
@@ -190,42 +193,44 @@ public class AplicacaoASDS11 {
                 }
                 seed += 10;
             }
+            gravaAlgoritmos2(algSort, mapAlgsGerados);
             
-            
+            mapAlgsGerados.clear();//COLOQUEI ISSO AQUI, DIEGO!
+
             java.awt.Toolkit.getDefaultToolkit().beep();
 
         }
 
     }
 
-    public int getTamAlg() throws IOException {
-
-        int tamAlg = 0;
-
-        LineNumberReader linhaLeitura1 = null;
-
-        try {
-            linhaLeitura1 = new LineNumberReader(new FileReader(arqAlg.getPath()));
-            linhaLeitura1.skip(arqAlg.length());
-            tamAlg = linhaLeitura1.getLineNumber();
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-
-        } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            linhaLeitura1.close();
-        }
-
-        return tamAlg;
-
-    }
+//    public int getTamAlg() throws IOException {
+//
+//        int tamAlg = 0;
+//
+//        LineNumberReader linhaLeitura1 = null;
+//
+//        try {
+//            linhaLeitura1 = new LineNumberReader(new FileReader(arqAlg.getPath()));
+//            linhaLeitura1.skip(arqAlg.length());
+//            tamAlg = linhaLeitura1.getLineNumber();
+//
+//        } catch (FileNotFoundException ex) {
+//            Logger.getLogger(AnnStd.class
+//                    .getName()).log(Level.SEVERE, null, ex);
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(AnnStd.class
+//                    .getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            linhaLeitura1.close();
+//        }
+//
+//        return tamAlg;
+//
+//    }
 
     //Gera ordem aleatória de algoritmos sem repetição dessa
-    public static ArrayList<Integer> geraOrdAlg(int qtdAlgUt, long seed, int maxAlgUt) { //Esse static precisa mesmo?
+    public ArrayList<Integer> geraOrdAlg(int qtdAlgUt, long seed, int maxAlgUt) { //Esse static precisa mesmo?
 
         ArrayList<Integer> aux = new ArrayList<Integer>();
         Random gerador = new Random(seed);
@@ -269,7 +274,7 @@ public class AplicacaoASDS11 {
 
     //Grava uma lista de algoritmos em um arquivo dedicado a manter o histórico de algoritmos selecionados 
     //para compor a amostra para os experimentos
-    public static void gravaAlgoritmos(File arqResult, ArrayList<Integer> lista) throws IOException {
+    public void gravaAlgoritmos(File arqResult, ArrayList<Integer> lista) throws IOException {
 
         FileWriter escreveAlg = null;
         BufferedWriter bwAlg = null;
@@ -303,8 +308,40 @@ public class AplicacaoASDS11 {
         }
     }
 
+    public void gravaAlgoritmos2(File arqSeqAlgs, Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgs) throws IOException {
+
+        FileWriter escreveAlgs;
+        BufferedWriter bwAlg = null;
+
+        try {
+
+            escreveAlgs = new FileWriter(arqSeqAlgs); //Desta forma sobrescreve
+            bwAlg = new BufferedWriter(escreveAlgs);
+
+            for (Map.Entry<ArrayList<Integer>, ArrayList<Integer>> lista : mapAlgs.entrySet()) {
+
+                bwAlg.write(lista.getValue() + "\n");
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwAlg.flush();
+            bwAlg.close();
+            escreveAlgs = null;
+            bwAlg = null;
+        }
+
+    }
+
     //Busca se a lista de algoritmos passados já existe no arquivo responsável por armazenar listas de algoritmos anteriormente gerados
-    private static boolean buscaAlgoritmos(File busca, ArrayList<Integer> elemento) throws IOException, InterruptedException {
+    private boolean buscaAlgoritmos(File busca, ArrayList<Integer> elemento) throws IOException, InterruptedException {
 
         if (!busca.exists()) {
 

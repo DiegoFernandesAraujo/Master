@@ -7,10 +7,6 @@ package DS;
 
 import AS.*;
 
-import java.util.stream.*;
-import static AS.AplicacaoASDS.geraOrdAlg;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -23,7 +19,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.LineNumberReader;
-import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,9 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
-
-import com.google.common.*;
 import java.util.Set;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;

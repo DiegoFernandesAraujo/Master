@@ -12,6 +12,6 @@ package AS;
 public class TesteRemoto {
  
     public static void main(String[] args){
-        System.out.println("Deu certo, Carvalho!");
+        System.out.println("Deu certo, Cabo Daciolo!");
     }
 }

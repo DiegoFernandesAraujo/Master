@@ -131,7 +131,7 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
         for (DuDeObjectPair pair : fechoTrans) {
 
             statistic.addDuplicate(pair);
-            output.write(pair);
+            ////output.write(pair);
 
             try {
 

@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+//ESSA TEM HASHMAP!
 package AS;
 
 import DS.DgStd1;
@@ -15,6 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,41 +31,37 @@ public class AplicacaoASDS {
     File arqAlg = new File("./src/csv/algoritmos.csv");
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        AnnStd objAS = new AnnStd();
-        DgStd1 objDS = new DgStd1();
+
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
+
+        Map<ArrayList<Integer>, ArrayList<Integer>> algsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
+
+        AnnStd objAS = new AnnStd(gs);
+        DgStd1 objDS = new DgStd1(gs);
 
         String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
 
         //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
         //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
-        
-        //Na verdade essa diferenciação abaixo se faz desnecessária, podendo deixar objDS.setCopiaArqDiverg(false) direto,
-        // pois o algoritmo de Peter Christen permite que sejam selecionados os atributos a serem utilizados por 
-        //ele em cada arquivo de divergência.
-        if (abordagemAA.equals("Dg")) { 
+        if (abordagemAA.equals("Dg")) {
             objDS.setCopiaArqDiverg(false);
         } else {
-            objDS.setCopiaArqDiverg(true); //Pode ser descartado.
+            objDS.setCopiaArqDiverg(true);
         }
-        
+
         long seed = 500;
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
-
         objAS.setGs(gs);
         objDS.setGs(gs);
 
-        //Para deduplicação
         objAS.setDedup(true);
         objDS.setDedup(true);
 
-        //Para record linkage
 //        objAS.setDedup(false);
 //        objDS.setDedup(false);
-
         objAS.setTamBaseOrig(9763); //Necessário!
 //        objAS.setTamBaseOrig2(9763); //Necessário!
         objDS.setTamBaseOrig(9763); //Necessário!
@@ -74,7 +73,7 @@ public class AplicacaoASDS {
             int index = i + 1;
             //O diretório que segue abaixo tem que ser setado de acordo com a base de dados utilizada
 //            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv"); 
-            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv"); 
+            resultados[i] = new File("./src/csv/resultsDedup/cds", "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos
@@ -86,7 +85,8 @@ public class AplicacaoASDS {
         }
 
 //        int qtdAlg = 10; //n algoritmos
-        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
+//        int[] vQtdAlg = {10, 15, 20};//, 25}; //Quantidades de algoritmos para geração das observações
+        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {3};//, 25}; //Quantidades de algoritmos para geração das observações
 //        int[] vQtdAlg = {10};//, 25}; //Quantidades de algoritmos para geração das observações
 
@@ -106,9 +106,13 @@ public class AplicacaoASDS {
 //        algSorts.add(algSort23);
 
 //        int sohParaTestar = 0;
+        File algSort = null;
+
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
-            File algSort = null;
+            algSort = null;
+
+            algsGerados.clear();
 
             for (File file : algSorts) {
 
@@ -120,7 +124,6 @@ public class AplicacaoASDS {
                 }
             }
 
-          
             System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
@@ -131,10 +134,12 @@ public class AplicacaoASDS {
 //                objDS.limpaTudo();
 
                 //Verifica se a sequência gerada não já foi utilizada antes
-                if (!buscaAlgoritmos(algSort, listaAlg)) {
+                if (!algsGerados.containsKey(listaAlg)) {
 
-                    gravaAlgoritmos(algSort, listaAlg);
+                    algsGerados.put(listaAlg, listaAlg);
 
+//                if (!buscaAlgoritmos(algSort, listaAlg)) {
+//                    gravaAlgoritmos(algSort, listaAlg);
                     objAS.setPermutacao(i);
                     objAS.setQtdAlg(qtdAlgUt);
                     objAS.limpaTudo();
@@ -146,13 +151,13 @@ public class AplicacaoASDS {
 
                     int alg = 0;
 
-                    for (int index : listaAlg) { //Para cada algoritmo contido na lista
+                    for (int index : listaAlg) {
 
 //                        System.out.println("AQUI");||
 //                        System.out.println(index + ",");
                         alg++;
 
-                        objAS.comparaConjuntos(resultadosPadr[index]); //Compara o algoritmo atual aos demais para gerar o arquivo de divergência
+                        objAS.comparaConjuntos(resultadosPadr[index]);
 
                         if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
 //                            System.out.println("último algoritmo: " + alg);
@@ -160,18 +165,18 @@ public class AplicacaoASDS {
                             objDS.setGeraEst(true);
                         }
 //                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
-                        objDS.comparaConjuntos(resultadosPadr[index]); //Compara o algoritmo atual aos demais para gerar o arquivo de divergência
+                        objDS.comparaConjuntos(resultadosPadr[index]);
                     }
 
                     //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
                     if (abordagemAA.equals("Dg")) {
-                        
-                        objDS.contabilizaEstatDA(objDS.getHistoricoDA());
-                        objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
 
-                        objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+                        objDS.contabilizaEstatDA2(objDS.getHistoricoDA());
+                        objDS.contabilizaEstatNAODA2(objDS.getHistoricoNAODA());
 
-                        objDS.incrementaEstatNAO_DA(); //Necessário para gerar os arquivos de divergência
+                        objDS.filtraDivergencias_NEW2(objDS.getEstatDA(), objDS.getEstatNAODA());
+
+                        objDS.incrementaEstatNAO_DA();
 
                         objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
                         //de AA proposta.
@@ -184,6 +189,8 @@ public class AplicacaoASDS {
                 }
                 seed += 10;
             }
+            gravaAlgoritmos2(algSort, algsGerados);
+
             java.awt.Toolkit.getDefaultToolkit().beep();
 
         }
@@ -293,6 +300,38 @@ public class AplicacaoASDS {
             bwAlg.close();
 
         }
+    }
+
+    public static void gravaAlgoritmos2(File arqSeqAlgs, Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados) throws IOException {
+
+        FileWriter escreveAlgs;
+        BufferedWriter bwAlg = null;
+
+        try {
+
+            escreveAlgs = new FileWriter(arqSeqAlgs); //Desta forma sobrescreve
+            bwAlg = new BufferedWriter(escreveAlgs);
+
+            for (Map.Entry<ArrayList<Integer>, ArrayList<Integer>> lista : mapAlgsGerados.entrySet()) {
+
+                bwAlg.write(lista.getValue() + "\n");
+
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            bwAlg.flush();
+            bwAlg.close();
+            escreveAlgs = null;
+            bwAlg = null;
+        }
+
     }
 
     //Busca se a lista de algoritmos passados já existe no arquivo responsável por armazenar listas de algoritmos anteriormente gerados

@@ -5,6 +5,7 @@
  */
 package dedupalgorithms;
 
+import dedupalgorithms.cds.Alg111;
 import dude.algorithm.Algorithm;
 import dude.algorithm.SortingDuplicateDetection;
 import dude.algorithm.duplicatedetection.NaiveDuplicateDetection;
@@ -51,7 +52,31 @@ public class DedupAlg {
     private CSVSource source1;
     private CSVSource source2;
     private GoldStandard goldStandard;
+    
+    String dir = null;
 
+    FileWriter escreveResult;
+
+    
+
+    
+    File estatisticasCSV;
+    File estatisticasTXT;
+
+    
+    
+    int ordem = 0;
+
+    /**
+     * Construtor utilizado para quando o projeto de herança não estava bem definido.
+     * Pode ser utilizado com cd.
+     * @param baseDados1
+     * @param chavePrimaria
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param separator
+     */
     public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
 
@@ -65,7 +90,21 @@ public class DedupAlg {
         this.separator = separator;
         deduplication();
     }
+    
 
+
+    /**
+     * Construtor utilizado para quando o projeto de herança não estava bem definido.
+     * Pode ser utilizado com dblp-acm.
+     * @param baseDados1
+     * @param baseDados2
+     * @param chavePrimaria1
+     * @param chavePrimaria2
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param separator
+     */
     public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, String result) {
 
@@ -84,7 +123,70 @@ public class DedupAlg {
         this.separator = separator;
         recordLinkage();
     }
+    
+        /**
+     * Construtor com projeto de herança reformulado.
+     * @param baseDados1
+     * @param chavePrimaria
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param separator
+     * @param dir
+     * @param ordem
+     */
+    public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String dir, int ordem) {
+//    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
 
+        this.result = baseDados1;
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.idBaseDados = idBaseDados;
+        this.separator = separator;
+        this.ordem = ordem;
+        this.setUpDiretorios(dir);
+        deduplication();
+    }
+
+    /**
+     * Construtor utilizado para quando o projeto de herança não estava bem definido.
+     * Pode ser utilizado com dblp-acm.
+     * @param baseDados1
+     * @param baseDados2
+     * @param chavePrimaria1
+     * @param chavePrimaria2
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param separator
+     */
+    public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String dir, int ordem) {
+//    public DedupAlg(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, String result) {
+
+        System.out.println("baseDados2= " + baseDados2);
+        System.out.println("Entrei no 2");
+
+        this.baseDados1 = baseDados1;
+        this.baseDados2 = baseDados2;
+        this.chavePrimaria1 = chavePrimaria1;
+        this.chavePrimaria2 = chavePrimaria2;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.idBaseDados = idBaseDados;
+        this.result = baseDados1 + baseDados2;
+        this.ordem = ordem;
+        this.setUpDiretorios(dir);
+        recordLinkage();
+    }
+    
+    
+    /**
+     *
+     */
     public void deduplication() {
 //        String literalGS = baseDados1;
         try {
@@ -116,6 +218,9 @@ public class DedupAlg {
 
     }
 
+    /**
+     *
+     */
     public void recordLinkage() {
 //        String literalGS = baseDados1 + baseDados2;
         try {
@@ -163,6 +268,10 @@ public class DedupAlg {
 
     }
 
+    /**
+     *
+     * @param literalGS
+     */
     public void setGoldStandard(String literalGS) {
         CSVSource goldStandardSource = null;
         try {
@@ -196,6 +305,12 @@ public class DedupAlg {
     }
 
     //Para record linkage
+
+    /**
+     *
+     * @param literalGS1
+     * @param literalGS2
+     */
     public void setGoldStandard(String literalGS1, String literalGS2) {
         CSVSource goldStandardSource = null;
         try {
@@ -228,44 +343,191 @@ public class DedupAlg {
 
     }
 
+    /**
+     *
+     * @param par
+     * @return
+     */
     public boolean existeNoGS(DuDeObjectPair par) {
         return getGS().contains(par);
     }
 
+    /**
+     *
+     * @return
+     */
     public char getSeparator() {
         return separator;
     }
 
+    /**
+     *
+     * @return
+     */
     public Algorithm getAlg() {
         return algorithm;
     }
 
+    /**
+     *
+     * @return
+     */
     public GoldStandard getGS() {
         return goldStandard;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getResult() {
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGold() {
         return gold;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGoldId1() {
         return goldId1;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getGoldId2() {
         return goldId2;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getIdBaseDados() {
         return idBaseDados;
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     public void executaDedupAlg() throws Exception {
 
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public int getOrdem() {
+        return ordem;
+    }
+
+    /**
+     *
+     * @param ordem
+     */
+    public void setOrdem(int ordem) {
+        this.ordem = ordem;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public FileWriter getEscreveResult() {
+        return escreveResult;
+    }
+    
+    /**
+     *
+     * @param escreveResult
+     */
+    public void setEscreveResult(FileWriter escreveResult) {
+        this.escreveResult = escreveResult;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public String getDir() {
+        return dir;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public File getEstatisticasCSV() {
+        return estatisticasCSV;
+    }
+
+    /**
+     *
+     * @param estatisticasCSV
+     */
+    public void setEstatisticasCSV(File estatisticasCSV) {
+        this.estatisticasCSV = estatisticasCSV;
+    }
+    
+    /**
+     *
+     * @param dir
+     */
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public File getEstatisticasTXT() {
+        return estatisticasTXT;
+    }
+
+    /**
+     *
+     * @param estatisticasTXT
+     */
+    public void setEstatisticasTXT(File estatisticasTXT) {
+        this.estatisticasTXT = estatisticasTXT;
+    }
+
+    /**
+     *
+     * @param dir
+     */
+    public void setUpDiretorios(String dir){
+        
+        this.dir = dir;
+        this.estatisticasCSV = new File("./src/csv/" + getDir() + "/estatisticas", "estatisticasDedup" + getOrdem() + ".csv");
+        this.estatisticasTXT = new File("./src/csv/" + getDir() + "/estatisticas", "estatisticasDedup" + getOrdem() + ".txt");
+//        estatisticasCSV = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".csv");
+//        estatisticasTXT = new File("./src/csv/resultsDedup/estatisticas", "estatisticasDedup" + ordem + ".txt");
+        if (this.estatisticasTXT.exists() | this.estatisticasCSV.exists()) {
+            System.out.println("Já existem resultados para esse algoritmo!");
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            System.exit(0);
+        }
+        try {
+            this.escreveResult = new FileWriter(new File("./src/csv/" + getDir(), "resultado" + getOrdem() + ".csv"));
+            System.out.println("Chamou escreveResult;");
+//            this.escreveResult = new FileWriter(new File("./src/csv/resultsDedup", "resultado" + ordem + ".csv"));
+
+        } catch (IOException ex) {
+            Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

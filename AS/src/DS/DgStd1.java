@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JOptionPane;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
@@ -62,6 +63,8 @@ public class DgStd1 {
     Map<String, String> mapGS;
     Map<String, String> mapArqResult;
 
+    String dirDiverg = null;
+
     /**
      *
      */
@@ -80,6 +83,61 @@ public class DgStd1 {
 
         estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
 //        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); 
+
+        if (!estatisticas.exists()) {
+            System.out.println("Não existe arquivo estatisticas.csv.");
+
+            try {
+                estatisticas.createNewFile();
+                BufferedWriter bwEstat = null;
+                try {
+                    escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+                    bwEstat = new BufferedWriter(escreveEstat);
+
+                    bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+
+                } catch (IOException ex) {
+                    System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
+                } finally {
+                    bwEstat.flush();
+                    bwEstat.close();
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo estatisticas.csv.");
+            }
+        }
+
+    }
+
+    public DgStd1(File gabarito, String base, String experimento) {
+
+        this.gs = gabarito;
+
+        mapGS = new HashMap<String, String>();
+        mapArqResult = new HashMap<String, String>();
+
+        populaMapGS();
+
+        tp = 0;
+        fp = 0;
+        iteracao = 0;
+
+        File dirEstat = new File("./src/csv/estatisticas/" + base + "/" + experimento);
+
+        try {
+            if (!dirEstat.exists()) {
+                dirEstat.mkdirs();
+                System.out.println("Diretório " + dirEstat.getAbsoluteFile() + " criado!");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        estatisticas = new File(dirEstat, "estatisticaInicialDS.csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
@@ -511,17 +569,33 @@ public class DgStd1 {
 //            filtraDivergenciasHash(aux);
 //            remDupDiverg(filtraDivergencias(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
             remDupDiverg(filtraDivergenciasHash(aux)); //NAO_DA deve ficar apenas com aquilo que não for intersecção com DA
-            if (isCopiaArqDiverg()) {
-                copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
-            }
+
+//            if (isCopiaArqDiverg()) {
+//                copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
+//            }
+            //Não precisa do teste acima ATENÇÃO!!!
+//            copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
             //ATENÇÃO! Os arquivos DN e NDM devem ser povoados a partir do algoritmo de AA
 //            atualizaDM_NDM(); //Separação daquilo que não é DA em D_M e ND_M. 
 //
 //            juntaDADM(DA, DM);
 //
             if (geraEst) {
+//                copiaArqDiverg(); //Salva o conjunto de divergências atual em diretório específico
                 comparaComGS(DA);
                 setGeraEst(false);
+
+                //Manter ou remover?
+                //AQUI DIEGO!
+                {
+                    contabilizaEstatDA2(getHistoricoDA());
+                    contabilizaEstatNAODA2(getHistoricoNAODA());
+                    filtraDivergencias_NEW2(getEstatDA(), getEstatNAODA());
+                    incrementaEstatNAO_DA();
+                    //Necessário, pois precisa dos dados gerados após a contabilização das estatísticas
+                    copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
+                }
+
             }
         }
     }
@@ -1723,6 +1797,7 @@ public class DgStd1 {
 //        return historicoDA;
     }
 
+    //Gera o NAO_DA2
     public void filtraDivergencias_NEW2(File estatDA, File estatNAO_DA) throws IOException {
 
         String str;
@@ -1812,6 +1887,7 @@ public class DgStd1 {
             bwDiverg.close();
         }
 
+//        JOptionPane.showMessageDialog(null, "Veja NAO_DA2!");
 //        return historicoDA;
     }
 
@@ -1826,7 +1902,6 @@ public class DgStd1 {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
 
 //        long tempoInicial = System.currentTimeMillis();
-
         ArrayList<String> listaElementos = new ArrayList<String>();
 
         String Str;
@@ -2068,10 +2143,7 @@ public class DgStd1 {
             bwDiverg.close();
 //            System.out.println(entry.getKey());
         }
-
-        
-        
-
+//        JOptionPane.showMessageDialog(null, "Veja NAO_DA2!");
         return divergencias;
     }
 
@@ -2223,9 +2295,6 @@ public class DgStd1 {
             bwDiverg2.close();
 
         }
-
-        
-        
 
 //        return divergencias;
     }
@@ -2494,9 +2563,6 @@ public class DgStd1 {
 
         }
 
-        
-        
-
 //        return divergencias;
     }
 
@@ -2668,8 +2734,6 @@ public class DgStd1 {
             bwDiverg.flush();
             bwDiverg.close();
         }
-        
-        
 
     }
 
@@ -2828,8 +2892,6 @@ public class DgStd1 {
             }
         }
 
-        
-        
     }
 
     /**
@@ -3038,6 +3100,17 @@ public class DgStd1 {
      */
     public void setTamBaseOrig2(int tamBaseOrig2) {
         this.tamBaseOrig2 = tamBaseOrig2;
+    }
+
+    public void setDirDiverg(String dir, String qp) {
+        dirDiverg = dir + "/" + qp + "/";
+        System.out.println("setDirDiverg:");
+        System.out.println(dirDiverg);
+    }
+
+    public String getDirDiverg() {
+
+        return dirDiverg;
     }
 
     /**
@@ -3491,6 +3564,41 @@ public class DgStd1 {
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
         File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/" + getDirDiverg(), "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+
+        if (divergToAA.exists()) {
+            divergToAA.delete();
+        }
+        FileChannel sourceChannel = null;
+        FileChannel destinationChannel = null;
+        try {
+            sourceChannel = new FileInputStream(divergencias).getChannel();
+            destinationChannel = new FileOutputStream(divergToAA).getChannel();
+            sourceChannel.transferTo(0, sourceChannel.size(),
+                    destinationChannel);
+        } finally {
+            if (sourceChannel != null && sourceChannel.isOpen()) {
+                sourceChannel.close();
+            }
+            if (destinationChannel != null && destinationChannel.isOpen()) {
+                destinationChannel.close();
+            }
+        }
+
+//        JOptionPane.showMessageDialog(null, "Veja a pasta diverg!");
+    }
+
+    public void copiaArqDiverg2() throws IOException {
+
+        File dir = new File("./src/csv/conjuntosDS/conjuntosDiverg/" + getDirDiverg());
+
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/" + getDirDiverg(), "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        File divergToAA = new File(dir, "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (divergToAA.exists()) {
@@ -3515,14 +3623,19 @@ public class DgStd1 {
 
     public void copiaArqDivergAA() throws IOException {
 
-        File dirDivergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/");
+        File dirDivergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + getDirDiverg());
 
-        if (!dirDivergToAA.exists()) {
-            dirDivergToAA.mkdir();
+        try {
+            if (!dirDivergToAA.exists()) {
+                dirDivergToAA.mkdirs();
+                System.out.println("Diretório " + dirDivergToAA.getAbsoluteFile() + " criado!");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
-        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDivergAA/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        File divergToAA = new File(dirDivergToAA, "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
 
         if (divergToAA.exists()) {
@@ -3662,7 +3775,6 @@ public class DgStd1 {
     public void populaMapArqResult() {
 
 //        System.out.println("populaMapArqResult!");
-
         //Limpando valores anteriores
         try {
             mapArqResult.clear();

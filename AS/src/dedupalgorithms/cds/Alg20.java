@@ -129,7 +129,7 @@ public class Alg20 extends DedupAlg {
         for (DuDeObjectPair pair : fechoTrans) {
 
             statistic.addDuplicate(pair);
-            output.write(pair);
+            //output.write(pair);
 
             try {
 

@@ -113,6 +113,8 @@ public class DgStd1 {
 
     public DgStd1(File gabarito, String base, String experimento) {
 
+        setDirDiverg(base, experimento);
+        
         this.gs = gabarito;
 
         mapGS = new HashMap<String, String>();

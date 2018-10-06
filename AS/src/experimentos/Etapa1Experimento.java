@@ -8,9 +8,11 @@ package experimentos;
 
 import AS.*;
 import DS.DgStd1;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,17 +23,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Superclasse para Questões de pesquisa
+ * Possui os métodos que organizam a geração de conjuntos de divergência, 
+ * assim como a geração das estatísticas correspondentes.
  *
  * @author Diego
  */
-public class QP {
+public class Etapa1Experimento {
 
     File gs = null;
     String base = null; //"cd", "dblp-acm", "cd1%"...
     String qp = null; //Questão de pesquisa
     File algSort = null;
-    int qtdAlg; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
+    int qtdMaxAlg; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
     int tamBase1, tamBase2, qtdObservacoes; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
     boolean isDedup;
     int[] vQtdAlg = null; //{10, 15, 20};//, 25}; - Quantidades de algoritmos para geração das observações
@@ -42,20 +45,22 @@ public class QP {
      * @param gabarito Nome do arquivo que armazena o gabarito (<i>gold
      * standard</i>).
      * @param base Nome do diretório onde ficarão armazenados os arquivos
-     * resultantes dos experimentos. Também nome do diretório onde ficam armazenados os <i>matchers</i> para cada base. Ex.: "cd". 
+     * resultantes dos experimentos. Também nome do diretório onde ficam
+     * armazenados os <i>matchers</i> para cada base. Ex.: "cd".
      * @param qp Questão de pesquisa para o experimento a ser dodado. Ex.: QP1.
-     * @param qtdAlg Quantidade total de <i>matchers</i> desenvolvidos para a(s)
+     * @param qtdMaxAlg Quantidade total de <i>matchers</i> desenvolvidos para a(s)
      * base(s) de dados tratada.
      * @param tamBase1 Quantidade de elementos na base de dados.
-     * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      * @param qtdObs Quantidade de observações a serem geradas no experimento.
+     * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      */
-    public QP(String gabarito, String base, String qp, int qtdAlg, int tamBase1, int[] vQtdAlg, int qtdObs) {
+    public Etapa1Experimento(String gabarito, String base, String qp, int qtdMaxAlg, int tamBase1, int qtdObs, int[] vQtdAlg) {
+        limpaEstatisticas(base, qp);        
         gs = new File("./src/csv/datasets", gabarito);
         this.base = base;
         this.qp = qp;
         this.qtdObservacoes = qtdObs;
-        this.qtdAlg = qtdAlg;
+        this.qtdMaxAlg = qtdMaxAlg;
         this.tamBase1 = tamBase1;
         this.isDedup = true;
         this.vQtdAlg = vQtdAlg;
@@ -67,21 +72,23 @@ public class QP {
      * @param gabarito Nome do arquivo que armazena o gabarito (<i>gold
      * standard</i>).
      * @param base Nome do diretório onde ficarão armazenados os arquivos
-     * resultantes dos experimentos. Também nome do diretório onde ficam armazenados os <i>matchers</i> para cada base. Ex.: "cd". 
+     * resultantes dos experimentos. Também nome do diretório onde ficam
+     * armazenados os <i>matchers</i> para cada base. Ex.: "cd".
      * @param qp Questão de pesquisa para o experimento a ser dodado. Ex.: QP1.
-     * @param qtdAlg Quantidade total de <i>matchers</i> desenvolvidos para a(s)
+     * @param qtdMaxAlg Quantidade total de <i>matchers</i> desenvolvidos para a(s)
      * base(s) de dados tratada.
      * @param tamBase1 Quantidade de elementos na base de dados 1.
      * @param tamBase2 Quantidade de elementos na base de dados 2.
-     * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      * @param qtdObs Quantidade de observações a serem geradas no experimento.
+     * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      */
-    public QP(String gabarito, String base, String qp, int qtdAlg, int tamBase1, int tamBase2, int[] vQtdAlg, int qtdObs) {
+    public Etapa1Experimento(String gabarito, String base, String qp, int qtdMaxAlg, int tamBase1, int tamBase2, int qtdObs, int... vQtdAlg) {
+        limpaEstatisticas(base, qp);
         gs = new File("./src/csv/datasets", gabarito);
         this.base = base;
         this.qp = qp;
         this.qtdObservacoes = qtdObs;
-        this.qtdAlg = qtdAlg;
+        this.qtdMaxAlg = qtdMaxAlg;
         this.tamBase1 = tamBase1;
         this.tamBase2 = tamBase2;
         this.isDedup = false;
@@ -97,28 +104,16 @@ public class QP {
 
         Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
 
-//        AnnStd objAS = new AnnStd(gs);
-//        DgStd1 objDS = new DgStd1(gs);
         AnnStd objAS = new AnnStd(gs, base, qp);
         DgStd1 objDS = new DgStd1(gs, base, qp);
 
-//        String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
-//
-//        //Se for a abordagem de AA proposta nesse trabalho, não copia os arquivos de divergência convencionais,
-//        //pois será necessário copiar os arquivos de divergência com as estatísticas (méd, mín, máx).
-//        if (abordagemAA.equals("Dg")) {
-//            objDS.setCopiaArqDiverg(false);
-//        } else {
-//            objDS.setCopiaArqDiverg(true);
-//        }
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         long seed = 500;
 
-        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         objAS.setGs(gs);
         objDS.setGs(gs);
 
-        objDS.setDirDiverg(base, qp);
-
+//        objDS.setDirDiverg(base, qp);
         objAS.setDedup(isDedup);
         objDS.setDedup(isDedup);
 
@@ -128,17 +123,14 @@ public class QP {
         objAS.setTamBaseOrig2(tamBase2); //Necessário!
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
-        File[] resultados = new File[qtdAlg];
+        File[] resultados = new File[qtdMaxAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
-            //O diretório que segue abaixo tem que ser setado de acordo com a base de dados utilizada
-//            resultados[i] = new File("./src/csv/resultsDedup", "resultado" + index + ".csv"); 
             resultados[i] = new File("./src/csv/resultsDedup/" + base, "resultado" + index + ".csv");
-            System.out.println(resultados[i].getAbsoluteFile());
         }
 
         //Padronização dos arquivos
-        File[] resultadosPadr = new File[qtdAlg];
+        File[] resultadosPadr = new File[qtdMaxAlg];
 
         ArrayList<Integer> listaAlg = null;
 
@@ -146,18 +138,18 @@ public class QP {
             resultadosPadr[i] = objAS.padronizaCsvFile(resultados[i]);
 //            resultadosPadr[i] = objDS.padronizaCsvFile(resultados[i]);
         }
-        
+
+        //Armazenando lista das sequências de algoritmos geradas para eventual futuro uso.
         File dirAlgs = new File("./src/csv/listasAlgoritmos/" + base + "/" + qp);
 
-            try {
-                if (!dirAlgs.exists()) {
-                    dirAlgs.mkdirs();
-                    System.out.println("Diretório " + dirAlgs.getAbsoluteFile() + " criado!");
-                }
-            } catch (Exception e) {
-                System.out.println(e);
+        try {
+            if (!dirAlgs.exists()) {
+                dirAlgs.mkdirs();
+                System.out.println("Diretório " + dirAlgs.getAbsoluteFile() + " criado!");
             }
-        
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
@@ -172,15 +164,13 @@ public class QP {
 
                 listaAlg = null;
 
-                listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdAlg);
+                listaAlg = geraOrdAlg(qtdAlgUt, seed, qtdMaxAlg);
 
                 //Verifica se a sequência gerada não já foi utilizada antes
                 if (!mapAlgsGerados.containsKey(listaAlg)) {
 
                     mapAlgsGerados.put(listaAlg, listaAlg);
 
-//                if (!buscaAlgoritmos(algSort, listaAlg)) {
-//                    gravaAlgoritmos(algSort, listaAlg);
                     objAS.setPermutacao(i);
                     objAS.setQtdAlg(qtdAlgUt);
                     objAS.limpaTudo();
@@ -193,21 +183,18 @@ public class QP {
                     int alg = 0;
 
                     for (int index : listaAlg) {
-//                        System.out.println("AQUI");||
-//                        System.out.println(index + ",");
                         alg++;
 
                         objAS.comparaConjuntos(resultadosPadr[index]);
 
                         if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
-//                            System.out.println("último algoritmo: " + alg);
                             objDS.setGeraEst(true);
                         }
-//                        System.out.println("resultadosPadr[index]: " + resultadosPadr[index].getName());
                         objDS.comparaConjuntos(resultadosPadr[index]);
                     }
 
                     //Isso aqui só executa depois da última iteração, então acho que dá pra ser chamado dentor de DgStd1
+                    //E foi!
                     {
 //                        objDS.contabilizaEstatDA2(objDS.getHistoricoDA());
 //                        objDS.contabilizaEstatNAODA2(objDS.getHistoricoNAODA());
@@ -222,14 +209,14 @@ public class QP {
                     }
 
                 } else {
-//                    System.out.println("Entrou no else");
                     i--;
                 }
                 seed += 10;
             }
+            //Armazena as sequências geradas em um arquivo.
             gravaAlgoritmos(algSort, mapAlgsGerados);
 
-            mapAlgsGerados.clear();//COLOQUEI ISSO AQUI, DIEGO!
+            mapAlgsGerados.clear();
 
             java.awt.Toolkit.getDefaultToolkit().beep();
 
@@ -237,8 +224,141 @@ public class QP {
 
     }
 
-    //Gera ordem aleatória de algoritmos sem repetição dessa
     /**
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void executa2() throws IOException, InterruptedException {
+
+        Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
+
+        AnnStd objAS = new AnnStd(gs, base, qp);
+        DgStd1 objDS = new DgStd1(gs, base, qp);
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+        long seed = 500;
+
+        objAS.setGs(gs);
+        objDS.setGs(gs);
+
+//        objDS.setDirDiverg(base, qp);
+        objAS.setDedup(isDedup);
+        objDS.setDedup(isDedup);
+
+        objAS.setTamBaseOrig(tamBase1); //Necessário!
+        objAS.setTamBaseOrig2(tamBase2); //Necessário!
+        objDS.setTamBaseOrig(tamBase1); //Necessário!
+        objAS.setTamBaseOrig2(tamBase2); //Necessário!
+
+        //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
+        File[] resultados = new File[qtdMaxAlg];
+        for (int i = 0; i < resultados.length; ++i) {
+            int index = i + 1;
+            resultados[i] = new File("./src/csv/resultsDedup/" + base, "resultado" + index + ".csv");
+        }
+
+        //Padronização dos arquivos
+        File[] resultadosPadr = new File[qtdMaxAlg];
+
+        ArrayList<Integer> listaAlg = null;
+
+        for (int i = 0; i < resultadosPadr.length; ++i) {
+            resultadosPadr[i] = objAS.padronizaCsvFile(resultados[i]);
+//            resultadosPadr[i] = objDS.padronizaCsvFile(resultados[i]);
+        }
+
+        //Armazenando lista das sequências de algoritmos geradas para eventual futuro uso.
+        File dirAlgs = new File("./src/csv/listasAlgoritmos/" + base + "/" + qp);
+
+        try {
+            if (!dirAlgs.exists()) {
+                dirAlgs.mkdirs();
+                System.out.println("Diretório " + dirAlgs.getAbsoluteFile() + " criado!");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
+
+            algSort = null;
+
+            algSort = new File(dirAlgs, "algoritmos" + qtdAlgUt + ".csv");
+
+            System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
+
+            BufferedReader brArq = null;
+
+            try {
+                brArq = new BufferedReader(new FileReader(algSort.getPath()));
+
+                String str = null;
+
+                int i = 0;
+
+                listaAlg = new ArrayList<Integer>();
+
+                while ((str = brArq.readLine()) != null) {
+
+                    str = str.replace("[", " ");
+                    str = str.replace("]", " ");
+                    str = str.replace(" ", "");
+                    listaAlg.clear();
+
+                    String elementos[] = str.split(",");
+//                    
+
+                    for (String num : elementos) {
+                        if (!num.equals("[") & !num.equals("]") & !num.equals(",") & !num.equals(" ")) {
+
+                            listaAlg.add(Integer.parseInt(num));
+                        }
+                    }
+
+                    System.out.println(listaAlg);
+
+                    i++;
+
+                    if (true) {
+
+                        objAS.setPermutacao(i);
+                        objAS.setQtdAlg(qtdAlgUt);
+                        objAS.limpaTudo();
+
+                        objDS.setPermutacao(i);
+                        objDS.setQtdAlg(qtdAlgUt);
+                        objDS.limpaTudo();
+                        System.out.println("Iteração " + i);
+
+                        int alg = 0;
+
+                        for (int index : listaAlg) {
+
+                            alg++;
+
+                            objAS.comparaConjuntos(resultadosPadr[index]);
+
+                            if (alg == listaAlg.size()) { //Gerar estatísticas só na última iteração
+                                objDS.setGeraEst(true);
+                            }
+                            objDS.comparaConjuntos(resultadosPadr[index]);
+                        }
+
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(AplicacaoASDS1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            java.awt.Toolkit.getDefaultToolkit().beep();
+
+        }
+
+    }
+
+    /**
+     * Gera ordem aleatória de algoritmos sem repetição dessa.
      *
      * @param qtdAlgUt
      * @param seed
@@ -266,9 +386,9 @@ public class QP {
 
     }
 
-    //Grava uma lista de algoritmos em um arquivo dedicado a manter o histórico de algoritmos selecionados 
-    //para compor a amostra para os experimentos
     /**
+     * Grava uma lista de algoritmos em um arquivo dedicado a manter o histórico
+     * de algoritmos selecionados para compor a amostra para os experimentos.
      *
      * @param arqSeqAlgs
      * @param mapAlgs
@@ -305,9 +425,23 @@ public class QP {
         }
 
     }
+    
+    /**
+     * Elimina os possíveis arquivos com estatísticas de experimentos anteriores.
+     * @param base
+     * @param qp
+     */
+    public void limpaEstatisticas(String base, String qp) {
 
-//    public static void main(String[] args) throws IOException, InterruptedException {
-//        QP obj = new QP();
-//        obj.executa();
-//    }
+        File dir = new File("./src/csv/estatisticas/" + base + "/" + qp);
+
+        if (dir.isDirectory()) {
+            File[] sun = dir.listFiles();
+            for (File toDelete : sun) {
+                toDelete.delete();
+            }
+        }
+
+    }
+
 }

@@ -5,27 +5,17 @@
  */
 package experimentos;
 
-import experimentos.QP;
-
-import java.io.File;
 import java.io.IOException;
 
 /**
  *
  * @author Diego
  */
-public class TestaQP {
-    
+public class ExperimentosCDS {
     public static void main(String[] args) throws IOException, InterruptedException {
-//        File gs = new File("./src/csv/datasets", "cd_gold.csv");
-    
-
-    //Para deduplicação
-    
-        int [] vetor = {10};
-        
-        QP obj = new QP("cd_gold.csv", "cds", "QP1", 23, 9763, vetor, 1);
-        obj.executa();
+        AllQPEtapa1 obj = new AllQPEtapa1("cds", 23, 0, 0, 0, 0, 0, 9763, 0, 0, 0, 1, 0, 0, 0, 0, 0, true, false, false, false, false, false, false, false, false);
+        obj.setGsGeral("cd_gold.csv");
+        obj.rodaExpDedup();
     }
     
 }

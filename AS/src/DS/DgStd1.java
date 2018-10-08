@@ -45,7 +45,7 @@ public class DgStd1 {
 
     boolean geraEst = false;
 
-    File estatisticas;
+    File estatisticas, estatisticasPC;
     File DA;
     File DATeste;
     File historicoDA;
@@ -59,7 +59,7 @@ public class DgStd1 {
     File NDM;
     File gs;
     File DADM;
-    FileWriter escreveEstat;
+    FileWriter escreveEstat, escreveEstatPC;
     Map<String, String> mapGS;
     Map<String, String> mapArqResult;
 
@@ -82,6 +82,7 @@ public class DgStd1 {
         iteracao = 0;
 
         estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
+        estatisticasPC = new File("./src/csv/", "estatisticaInicialDSPC.csv");
 //        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); 
 
         if (!estatisticas.exists()) {
@@ -89,19 +90,28 @@ public class DgStd1 {
 
             try {
                 estatisticas.createNewFile();
+                estatisticasPC.createNewFile();
                 BufferedWriter bwEstat = null;
+                BufferedWriter bwEstatPC = null;
                 try {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
+                    
+                    escreveEstatPC = new FileWriter(estatisticasPC, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+                    bwEstatPC = new BufferedWriter(escreveEstatPC);
 
                     bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstatPC.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn;pc\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
                 } finally {
                     bwEstat.flush();
                     bwEstat.close();
+                    bwEstatPC.flush();
+                    bwEstatPC.close();
 
+                    
                 }
 
             } catch (IOException ex) {
@@ -114,7 +124,7 @@ public class DgStd1 {
     public DgStd1(File gabarito, String base, String experimento) {
 
         setDirDiverg(base, experimento);
-        
+
         this.gs = gabarito;
 
         mapGS = new HashMap<String, String>();
@@ -138,26 +148,35 @@ public class DgStd1 {
         }
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
-        estatisticas = new File(dirEstat, "estatisticaInicialDS.csv");
-//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+         estatisticas = new File(dirEstat, "estatisticaInicialDS.csv");
+        estatisticasPC = new File(dirEstat, "estatisticaInicialDSPC.csv");
+//        estatisticas = new File(dirEstat, "estatisticaInicialDS-DEMO.csv"); 
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
 
             try {
                 estatisticas.createNewFile();
+                estatisticasPC.createNewFile();
                 BufferedWriter bwEstat = null;
+                BufferedWriter bwEstatPC = null;
                 try {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
+                    
+                    escreveEstatPC = new FileWriter(estatisticasPC, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+                    bwEstatPC = new BufferedWriter(escreveEstatPC);
 
                     bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+                    bwEstatPC.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn;pc\n");
 
                 } catch (IOException ex) {
                     System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
                 } finally {
                     bwEstat.flush();
                     bwEstat.close();
+                    bwEstatPC.flush();
+                    bwEstatPC.close();
 
                 }
 
@@ -2895,7 +2914,7 @@ public class DgStd1 {
         }
 
     }
-
+    
     /**
      *
      * @param tp
@@ -2916,13 +2935,17 @@ public class DgStd1 {
             int tamDA = getTamDA();
             int tamDM = getTamDM();
             int tamNDM = getTamNDM();
+            int tamPC = getTamPC();
 
             BufferedWriter bwEstat = null;
+            
+            BufferedWriter bwEstatPC = null;
+
 
             try {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
-
+                
                 bwEstat.append("DS");
                 bwEstat.append(";");
                 bwEstat.append("1 - acm diverg");
@@ -2955,12 +2978,53 @@ public class DgStd1 {
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(fn));
                 bwEstat.append("\n");
+                
+                //Salvando conjunto PC
+                escreveEstatPC = new FileWriter(estatisticasPC, true);
+                bwEstatPC = new BufferedWriter(escreveEstatPC);
+
+                bwEstatPC.append("DS");
+                bwEstatPC.append(";");
+                bwEstatPC.append("1 - acm diverg");
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(getQtdAlg()));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(permutacao));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(iteracao));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(inspecoes));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Double.toString(precision));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Double.toString(recall));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Double.toString(f1));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tamDA));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tamDM));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tamNDM));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tp));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(fp));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tn));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(fn));
+                bwEstatPC.append(";");
+                bwEstatPC.append(Integer.toString(tamPC));
+                bwEstatPC.append("\n");
 
             } catch (FileNotFoundException ex) {
                 System.out.println("Não foi possível encontrar o arquivo " + estatisticas.getName() + " em gravaEstatisticas()");
             } finally {
                 bwEstat.flush();
                 bwEstat.close();
+                bwEstatPC.flush();
+                bwEstatPC.close();
 
                 iteracao++;
                 tp = 0;
@@ -3212,6 +3276,32 @@ public class DgStd1 {
         }
 
         return tamNDM;
+
+    }
+
+    public int getTamPC() throws IOException {
+
+        int tamPC = 0;
+
+        LineNumberReader linhaLeitura1 = null;
+
+        try {
+            linhaLeitura1 = new LineNumberReader(new FileReader(divergencias.getPath()));
+            linhaLeitura1.skip(divergencias.length());
+            tamPC = linhaLeitura1.getLineNumber();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            linhaLeitura1.close();
+        }
+
+        return tamPC;
 
     }
 

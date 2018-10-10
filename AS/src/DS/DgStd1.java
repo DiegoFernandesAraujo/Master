@@ -81,9 +81,9 @@ public class DgStd1 {
         fp = 0;
         iteracao = 0;
 
-        estatisticas = new File("./src/csv/", "estatisticaInicialDS.csv");
-        estatisticasPC = new File("./src/csv/", "estatisticaInicialDSPC.csv");
-//        estatisticas = new File("./src/csv/", "estatisticaInicialDS-DEMO.csv"); 
+        estatisticas = new File("./src/csv/", "estatisticaDS.csv");
+        estatisticasPC = new File("./src/csv/", "estatisticaDSPC.csv");
+//        estatisticas = new File("./src/csv/", "estatisticaDS-DEMO.csv"); 
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");
@@ -148,9 +148,9 @@ public class DgStd1 {
         }
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
-         estatisticas = new File(dirEstat, "estatisticaInicialDS.csv");
-        estatisticasPC = new File(dirEstat, "estatisticaInicialDSPC.csv");
-//        estatisticas = new File(dirEstat, "estatisticaInicialDS-DEMO.csv"); 
+         estatisticas = new File(dirEstat, "estatisticaDS.csv");
+        estatisticasPC = new File(dirEstat, "estatisticaDSPC.csv");
+//        estatisticas = new File(dirEstat, "estatisticaDS-DEMO.csv"); 
 
         if (!estatisticas.exists()) {
             System.out.println("Não existe arquivo estatisticas.csv.");

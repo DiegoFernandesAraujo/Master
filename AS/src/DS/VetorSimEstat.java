@@ -129,8 +129,8 @@ public class VetorSimEstat extends DedupAlg {
             escreveArqVetor = new FileWriter(vetorSimilaridade, false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-            bwArqVetor.write("elemento1;elemento2;title;artist;track01;track02;track03;track10;track11\n"); //ERA ASSIM
-//            bwArqVetor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+//            bwArqVetor.write("elemento1;elemento2;title;artist;track01;track02;track03;track10;track11\n"); //ERA ASSIM
+            bwArqVetor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
 
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
@@ -316,6 +316,11 @@ public class VetorSimEstat extends DedupAlg {
                         bwVetorMenor.append(Str);
                         bwVetorMenor.append(';');
                         bwVetorMenor.append(linhaAtualVetor[2]);
+                        
+                        if(cont++ == 0){
+                            System.out.println("Str: " + Str);
+                            System.out.println("linhaAtualVetor[2]: " + linhaAtualVetor[2]);
+                        }
 
 //                            if (cont < linhaAtualVetor.length - 1) {
 //                                bwVetorMenor.append(';');

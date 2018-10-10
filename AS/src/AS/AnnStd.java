@@ -85,6 +85,62 @@ public class AnnStd {
         }
 
     }
+    
+    
+    public AnnStd(File gabarito, String base, String experimento) {
+
+        this.gs = gabarito;
+
+        mapGS = new HashMap<String, String>();
+        mapArqResult = new HashMap<String, String>();
+
+        populaMapGS();
+
+        tp = 0;
+        fp = 0;
+        iteracao = 0;
+
+        File dirEstat = new File("./src/csv/estatisticas/" + base + "/" + experimento);
+
+        try {
+            if (!dirEstat.exists()) {
+                dirEstat.mkdirs();
+                System.out.println("Diretório " + dirEstat.getAbsoluteFile() + " criado!");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        estatisticas = new File(dirEstat, "estatisticas.csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+
+        if (!estatisticas.exists()) {
+            System.out.println("Não existe arquivo estatisticas.csv.");
+
+            try {
+                estatisticas.createNewFile();
+                BufferedWriter bwEstat = null;
+                try {
+                    escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+                    bwEstat = new BufferedWriter(escreveEstat);
+
+                    bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+
+                } catch (IOException ex) {
+                    System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
+                } finally {
+                    bwEstat.flush();
+                    bwEstat.close();
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo estatisticas.csv.");
+            }
+        }
+
+    }
 
     public File padronizaCsvFile(File arq) throws IOException {
 

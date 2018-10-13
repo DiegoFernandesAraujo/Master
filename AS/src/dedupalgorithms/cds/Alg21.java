@@ -56,6 +56,8 @@ public class Alg21 extends DedupAlg {
     public Alg21(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
+        dir = "resultsDedup/" + baseDados1;
+        
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
 

@@ -5,28 +5,16 @@
  */
 package dedupalgorithms;
 
-import dedupalgorithms.cds.Alg111;
 import dude.algorithm.Algorithm;
-import dude.algorithm.SortingDuplicateDetection;
 import dude.algorithm.duplicatedetection.NaiveDuplicateDetection;
 import dude.algorithm.recordlinkage.NaiveRecordLinkage;
 import dude.datasource.CSVSource;
-import dude.output.CSVOutput;
-import dude.output.DuDeOutput;
-import dude.output.JsonOutput;
-import dude.output.statisticoutput.CSVStatisticOutput;
-import dude.output.statisticoutput.SimpleStatisticOutput;
-import dude.output.statisticoutput.StatisticOutput;
-import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.SimmetricsFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,7 +76,7 @@ public class DedupAlg {
         this.goldId2 = goldId2;
         this.idBaseDados = idBaseDados;
         this.separator = separator;
-        deduplication();
+        deduplication(); //Não era final antes
     }
     
 
@@ -147,7 +135,7 @@ public class DedupAlg {
         this.idBaseDados = idBaseDados;
         this.separator = separator;
         this.ordem = ordem;
-        this.setUpDiretorios(dir);
+        this.setUpDiretorios(dir); //Não era final antes
         deduplication();
     }
 
@@ -179,7 +167,7 @@ public class DedupAlg {
         this.idBaseDados = idBaseDados;
         this.result = baseDados1 + baseDados2;
         this.ordem = ordem;
-        this.setUpDiretorios(dir);
+        this.setUpDiretorios(dir); //Não era final antes
         recordLinkage();
     }
     
@@ -187,7 +175,7 @@ public class DedupAlg {
     /**
      *
      */
-    public void deduplication() {
+    public final void deduplication() {
 //        String literalGS = baseDados1;
         try {
             source1 = new CSVSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".csv"));
@@ -221,7 +209,7 @@ public class DedupAlg {
     /**
      *
      */
-    public void recordLinkage() {
+    final void recordLinkage() {
 //        String literalGS = baseDados1 + baseDados2;
         try {
 
@@ -508,7 +496,7 @@ public class DedupAlg {
      *
      * @param dir
      */
-    public void setUpDiretorios(String dir){
+    final void setUpDiretorios(String dir){
         
         this.dir = dir;
         this.estatisticasCSV = new File("./src/csv/" + getDir() + "/estatisticas", "estatisticasDedup" + getOrdem() + ".csv");

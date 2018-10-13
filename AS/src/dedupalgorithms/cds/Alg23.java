@@ -52,7 +52,9 @@ public class Alg23 extends DedupAlg {
     File estatisticasTXT;
 
     public Alg23(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
-super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
+        super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
+
+        dir = "resultsDedup/" + baseDados1;
 
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
@@ -80,13 +82,12 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        SoundExFunction similarityFunc2 = new SoundExFunction ("artist");
-        MongeElkanFunction similarityFunc = new MongeElkanFunction ("title");
+        SoundExFunction similarityFunc2 = new SoundExFunction("artist");
+        MongeElkanFunction similarityFunc = new MongeElkanFunction("title");
         LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track10");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track11");
         LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("category");
         LevenshteinDistanceFunction similarityFunc6 = new LevenshteinDistanceFunction("genre");
-        
 
 //        DuDeOutput output = new JsonOutput(System.out);
         DuDeOutput output = new CSVOutput(escreveResult);
@@ -106,14 +107,14 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
         //Gerando o fecho transitivo
         //Utilização de pesos diversos para os atributos
         for (DuDeObjectPair pair : algorithm) {
-            final double similarity = similarityFunc.getSimilarity(pair)*1;
-            final double similarity2 = similarityFunc2.getSimilarity(pair)*2;
-            final double similarity3 = similarityFunc3.getSimilarity(pair)*0.9;
-            final double similarity4 = similarityFunc4.getSimilarity(pair)*0.9;
-            final double similarity5 = similarityFunc5.getSimilarity(pair)*0.5;
-            final double similarity6 = similarityFunc6.getSimilarity(pair)*0.5;
-            
-            if ( (similarity + similarity2 + similarity3  + similarity4 + similarity5  + similarity6 )/5.8 >= 0.9) {
+            final double similarity = similarityFunc.getSimilarity(pair) * 1;
+            final double similarity2 = similarityFunc2.getSimilarity(pair) * 2;
+            final double similarity3 = similarityFunc3.getSimilarity(pair) * 0.9;
+            final double similarity4 = similarityFunc4.getSimilarity(pair) * 0.9;
+            final double similarity5 = similarityFunc5.getSimilarity(pair) * 0.5;
+            final double similarity6 = similarityFunc6.getSimilarity(pair) * 0.5;
+
+            if ((similarity + similarity2 + similarity3 + similarity4 + similarity5 + similarity6) / 5.8 >= 0.9) {
                 fechoTrans.add(pair);
 
             } else {
@@ -123,7 +124,7 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
         }
 
         BufferedWriter bwSim = null;
-        
+
         bwSim = new BufferedWriter(escreveResult);
 
         bwSim.write("First Object;Second Object;similaridade\n");
@@ -135,12 +136,12 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
             try {
 
-                a = similarityFunc.getSimilarity(pair)*1;
-                b = similarityFunc2.getSimilarity(pair)*2;
-                c = similarityFunc3.getSimilarity(pair)*0.9;
-                d = similarityFunc4.getSimilarity(pair)*0.9;
-                e = similarityFunc5.getSimilarity(pair)*0.5;
-                f = similarityFunc6.getSimilarity(pair)*0.5;
+                a = similarityFunc.getSimilarity(pair) * 1;
+                b = similarityFunc2.getSimilarity(pair) * 2;
+                c = similarityFunc3.getSimilarity(pair) * 0.9;
+                d = similarityFunc4.getSimilarity(pair) * 0.9;
+                e = similarityFunc5.getSimilarity(pair) * 0.5;
+                f = similarityFunc6.getSimilarity(pair) * 0.5;
 
                 final double simNorm = (a + b + c + d + e + f) / 5.8;
                 String elemento1 = pair.getFirstElement().toString();
@@ -172,7 +173,7 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
 
             } catch (IOException ex) {
                 System.out.println("ERRO!");
-        }
+            }
 
         }
 
@@ -197,6 +198,5 @@ super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ';');
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }
-    
 
 }

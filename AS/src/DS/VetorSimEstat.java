@@ -8,21 +8,10 @@
  */
 package DS;
 
-import AS.AnnStd;
 import dedupalgorithms.*;
 import dude.algorithm.Algorithm;
-import dude.datasource.CSVSource;
-import dude.output.CSVOutput;
-import dude.output.DuDeOutput;
-import dude.output.JsonOutput;
-import dude.output.statisticoutput.CSVStatisticOutput;
-import dude.output.statisticoutput.SimpleStatisticOutput;
-import dude.output.statisticoutput.StatisticOutput;
-import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.contentbased.impl.SoundExFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
-import dude.similarityfunction.contentbased.util.SoundEx;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedReader;
@@ -34,7 +23,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.MongeElkan;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
@@ -52,7 +40,7 @@ public class VetorSimEstat extends DedupAlg {
     String a, b, c, d, e, f, g, rotulo;
 
     /**
-     *
+     * Não utilizado
      * @param baseDados1
      * @param chavePrimaria
      * @param gold
@@ -80,8 +68,7 @@ public class VetorSimEstat extends DedupAlg {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
         
         vetorSimilaridade = vetor;
-        
-
+    
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");
 
@@ -96,7 +83,7 @@ public class VetorSimEstat extends DedupAlg {
     }
 
     /**
-     *
+     * A ser sobreescrito para cada base
      * @param arqDiverg
      * @throws IOException
      */
@@ -108,12 +95,8 @@ public class VetorSimEstat extends DedupAlg {
         String[] linhaAtual;
         BufferedReader brDiverg = null;
 
-        GoldStandard goldStandard = getGS();
-
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
-
-        StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
         //Utilizando-se funções de similaridade que apresentaram bons resultados para gerar os vetores de similaridade.
         MongeElkanFunction similarityFunc = new MongeElkanFunction("title");
@@ -278,6 +261,8 @@ public class VetorSimEstat extends DedupAlg {
 //            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
             //Ordem para o algoritmo de Peter Christen
             bwVetorMenor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+            //Construir a string acima a partir do cabeçalho de NAO_DA2 e do vetorMaior
+            
             
             while ((Str = brDiverg.readLine()) != null) {
                 
@@ -339,7 +324,7 @@ public class VetorSimEstat extends DedupAlg {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em buscaGabarito()");
         } catch (IOException ex) {
-            Logger.getLogger(AnnStd.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VetorSimEstat.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
 
             bwVetorMenor.flush();

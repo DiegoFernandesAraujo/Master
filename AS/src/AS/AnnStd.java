@@ -47,6 +47,8 @@ public class AnnStd {
     public AnnStd(File gabarito) {
 
         this.gs = gabarito;
+        
+        System.out.println("Gabarito: " + gs);
 
         mapGS = new HashMap<String, String>();
         mapArqResult = new HashMap<String, String>();
@@ -90,7 +92,7 @@ public class AnnStd {
     public AnnStd(File gabarito, String base, String experimento) {
 
         this.gs = gabarito;
-
+        
         mapGS = new HashMap<String, String>();
         mapArqResult = new HashMap<String, String>();
 
@@ -1357,7 +1359,7 @@ public class AnnStd {
 
         BufferedReader brGS = null;
         try {
-            brGS = new BufferedReader(new FileReader(gs.getPath()));
+            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
 
             while ((Str = brGS.readLine()) != null) {
 
@@ -1735,7 +1737,7 @@ public class AnnStd {
         //Armazenando valores do arquivo atual no mapa
         try {
 
-            brGS = new BufferedReader(new FileReader(gs.getPath()));
+            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
 
             int linha = 0;
 

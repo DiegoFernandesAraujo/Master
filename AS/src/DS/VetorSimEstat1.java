@@ -35,16 +35,17 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
  */
 public abstract class VetorSimEstat1 extends DedupAlg {
 
-    File vetorSimilaridade = null;
+    File vetorSimilaridade;
+    File dirDiverg;
 
-    FileWriter escreveArqVetor;
-    BufferedWriter bwArqVetor = null;
-    String a, b, c, d, e, f, g, rotulo;
+    
+    
 
-    public VetorSimEstat1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, String result, File vetor, char separator) {
+    public VetorSimEstat1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
-        vetorSimilaridade = vetor;
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+        dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "/" + qp + "/");
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");
@@ -67,13 +68,22 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         this.vetorSimilaridade = vetorSimilaridade;
     }
 
+    public File getDirDiverg() {
+        return dirDiverg;
+    }
+
+    public File getFileDiverg() {
+        File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
+        return diverg;
+    }
+
     /**
      * A ser sobreescrito para cada base
      *
      * @param arqDiverg
      * @throws IOException
      */
-    public abstract File geraVetor(File arq) throws IOException;
+    public abstract void geraVetor(File arqDivergMaior) throws IOException;
 
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
@@ -100,7 +110,7 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         BufferedWriter bwVetorMenor = null;
         FileWriter escreveVetorMenor;
         int linha = 0;
-        
+
         if (vetorSim.length() == 0) {
             JOptionPane.showMessageDialog(null, "Vetor de similaridades vazio! Especifique outro arquivo!");
             System.exit(0);
@@ -193,6 +203,32 @@ public abstract class VetorSimEstat1 extends DedupAlg {
             brDiverg.close();
             brVetorSim.close();
         }
+    }
+
+    public void executa() {
+
+        try {
+
+            if (getDirDiverg().isDirectory()) {
+                File[] divergs = getDirDiverg().listFiles();
+
+                for (File arq : divergs) {
+
+                    String nome = arq.getName();
+
+                    System.out.println("Nome do arquivo: " + nome);
+
+                    if (nome.contains("diverg") && !nome.contains("_NEW")) {
+                        geraVetorMenor(arq, getVetorSimilaridade());
+                        arq.delete(); //Exclui o arquivo depois de gerar os vetores de similaridade
+                    }
+
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ExecVetorSimCDs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

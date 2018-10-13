@@ -3401,7 +3401,7 @@ public class DgStd1 {
 
         BufferedReader brGS = null;
         try {
-            brGS = new BufferedReader(new FileReader(gs.getPath()));
+            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
 
             while ((Str = brGS.readLine()) != null) {
 
@@ -3829,7 +3829,7 @@ public class DgStd1 {
         //Armazenando valores do arquivo atual no mapa
         try {
 
-            brGS = new BufferedReader(new FileReader(gs.getPath()));
+            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
 
             int linha = 0;
 

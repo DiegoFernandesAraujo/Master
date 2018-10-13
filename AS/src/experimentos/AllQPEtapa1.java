@@ -5,6 +5,7 @@
  */
 package experimentos;
 
+import DS.VetorSimEstat1;
 import experimentos.Etapa1Experimento;
 
 import java.io.File;
@@ -25,7 +26,14 @@ public class AllQPEtapa1 {
     String gsThree;
     String baseFive;
     String gsFive;
-            
+
+    String chavePrimaria;
+    String chavePrimaria2;
+    String goldId1;
+    String goldId2;
+    char separator;
+    boolean geraVetor;
+
     int qtdMaxGeral, qtdMaxB, qtdMaxM, qtdMaxR, qtdMaxAll, qtdMaxLot;
     int tamBase1Geral, tamBase1One, tamBase1Three, tamBase1Five, tamBase2Geral, tamBase2One, tamBase2Three, tamBase2Five;
     int qtdObs;
@@ -42,8 +50,9 @@ public class AllQPEtapa1 {
     boolean okqp5five = true;
 
     /**
-     * Construtor utilizado para realizar <b>todos</b> experimentos com deduplicação.
-     * 
+     * Construtor utilizado para realizar <b>todos</b> experimentos com
+     * deduplicação.
+     *
      * @param base
      * @param qtdMaxGeral
      * @param qtdMaxB
@@ -125,7 +134,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot,  boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -165,8 +174,8 @@ public class AllQPEtapa1 {
     }
 
     /**
-     * Construtor utilizado para realizar <b>todos</b> experimentos com <i>record
-     * linkage</i>.
+     * Construtor utilizado para realizar <b>todos</b> experimentos com
+     * <i>record linkage</i>.
      *
      * @param base1
      * @param qtdMaxGeral
@@ -264,7 +273,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot,  boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -313,72 +322,90 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void rodaExpDedup() throws IOException, InterruptedException {
+    public void rodaExpDedup(boolean geraVetorMaior) throws IOException, InterruptedException {
 
-        //Para QP1
+        //Para qp1
         if (okqp1) {
             int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
-            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "QP1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
             qp1.executa();
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp1");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP2  - Bons
+        //Para qp2  - Bons
         if (okqp2b) {
             int[] vetor2 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "QP2B", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
             qp2b.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2b");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP2  - Médios
+        //Para qp2  - Médios
         if (okqp2m) {
             int vetor3 = 10; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "QP2M", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
+            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2m", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
             qp2m.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2m");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP2  - Ruins
+        //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "QP2R", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
             qp2r.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2r");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP3  - Todos
+        //Para qp3  - Todos
         if (okqp3all) {
             int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "QP3All", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
             qp3All.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp3all");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP3  - Parte
+        //Para qp3  - Parte
         if (okqp3lot) {
             int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "QP3Lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
             qp3Lot.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp3lot");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP5 - 1% 
+        //Para qp5 - 1% 
         if (okqp5one) {
             int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "QP5O", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "qp5o", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
             qp5o.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', geraVetorMaior, "qp5o");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP5 - 3% 
+        //Para qp5 - 3% 
         if (okqp5three) {
             int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "QP5T", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "qp5t", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
             qp5t.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', geraVetorMaior, "qp5t");
+            obj.executa(); //Para gerar os vetores menores
         }
 
-        //Para QP5 - 5% 
+        //Para qp5 - 5% 
         if (okqp5five) {
             int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "QP5F", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "qp5f", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
             qp5f.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
+            VetorSimEstat1 obj = new ExperimentosCDs(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', geraVetorMaior, "qp5f");
+            obj.executa(); //Para gerar os vetores menores
         }
 
     }
@@ -392,69 +419,69 @@ public class AllQPEtapa1 {
      */
     public void rodaExpDedupArq() throws IOException, InterruptedException {
 
-        //Para QP1
+        //Para qp1
         if (okqp1) {
             int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
-            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "QP1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
             qp1.executa2();
         }
 
-        //Para QP2  - Bons
+        //Para qp2  - Bons
         if (okqp2b) {
             int[] vetor2 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "QP2B", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2B", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
             qp2b.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Médios
+        //Para qp2  - Médios
         if (okqp2m) {
             int vetor3 = 10; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "QP2M", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
+            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2M", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
             qp2m.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Ruins
+        //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "QP2R", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
             qp2r.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Todos
+        //Para qp3  - Todos
         if (okqp3all) {
             int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "QP3All", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3All", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
             qp3All.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Parte
+        //Para qp3  - Parte
         if (okqp3lot) {
             int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "QP3Lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3Lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
             qp3Lot.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 1% 
+        //Para qp5 - 1% 
         if (okqp5one) {
             int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "QP5O", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "qp5O", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
             qp5o.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 3% 
+        //Para qp5 - 3% 
         if (okqp5three) {
             int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "QP5T", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "qp5T", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
             qp5t.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 5% 
+        //Para qp5 - 5% 
         if (okqp5five) {
             int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "QP5F", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "qp5F", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
             qp5f.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
@@ -468,69 +495,69 @@ public class AllQPEtapa1 {
      */
     public void rodaExpRecLink() throws IOException, InterruptedException {
 
-        //Para QP1
+        //Para qp1
         if (okqp1) {
             int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
-            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "QP1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
             qp1.executa();
         }
 
-        //Para QP2  - Bons
+        //Para qp2  - Bons
         if (okqp2b) {
             int[] vetor2 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "QP2B", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2B", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
             qp2b.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Médios
+        //Para qp2  - Médios
         if (okqp2m) {
             int vetor3 = 10; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "QP2M", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
+            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2M", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
             qp2m.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Ruins
+        //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "QP2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
             qp2r.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Todos
+        //Para qp3  - Todos
         if (okqp3all) {
             int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "QP3All", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3All", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
             qp3All.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Parte
+        //Para qp3  - Parte
         if (okqp3lot) {
             int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "QP3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
             qp3Lot.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 1% 
+        //Para qp5 - 1% 
         if (okqp5one) {
             int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "QP5O", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "qp5O", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
             qp5o.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 3% 
+        //Para qp5 - 3% 
         if (okqp5three) {
             int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "QP5T", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "qp5T", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
             qp5t.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 5% 
+        //Para qp5 - 5% 
         if (okqp5five) {
             int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "QP5F", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "qp5F", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
             qp5f.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
@@ -545,74 +572,74 @@ public class AllQPEtapa1 {
      */
     public void rodaExpRecLinkArq() throws IOException, InterruptedException {
 
-        //Para QP1
+        //Para qp1
         if (okqp1) {
             int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
-            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "QP1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
             qp1.executa2();
         }
 
-        //Para QP2  - Bons
+        //Para qp2  - Bons
         if (okqp2b) {
             int[] vetor2 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "QP2B", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2B", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
             qp2b.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Médios
+        //Para qp2  - Médios
         if (okqp2m) {
             int vetor3 = 10; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "QP2M", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
+            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2M", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
             qp2m.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP2  - Ruins
+        //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "QP2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
             qp2r.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Todos
+        //Para qp3  - Todos
         if (okqp3all) {
             int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "QP3All", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3All", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
             qp3All.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP3  - Parte
+        //Para qp3  - Parte
         if (okqp3lot) {
             int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "QP3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
             qp3Lot.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 1% 
+        //Para qp5 - 1% 
         if (okqp5one) {
             int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "QP5O", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseGeral, "qp5O", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
             qp5o.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 3% 
+        //Para qp5 - 3% 
         if (okqp5three) {
             int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "QP5T", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseGeral, "qp5T", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
             qp5t.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
-        //Para QP5 - 5% 
+        //Para qp5 - 5% 
         if (okqp5five) {
             int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
-            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "QP5F", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
+            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseGeral, "qp5F", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
             qp5f.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
     }
-    
+
     /**
      *
      * @param gsGeral
@@ -628,7 +655,7 @@ public class AllQPEtapa1 {
     public void setGsOne(String gsOne) {
         this.gsOne = gsOne;
     }
-    
+
     /**
      *
      * @param gsThree
@@ -644,7 +671,7 @@ public class AllQPEtapa1 {
     public void setGsFive(String gsFive) {
         this.gsFive = gsFive;
     }
-    
+
     public String getBaseGeral() {
         return baseGeral;
     }
@@ -677,6 +704,21 @@ public class AllQPEtapa1 {
         this.baseFive = baseFive;
     }
 
+    public void setParamVetorSim(String chavePrimaria, String goldId1, String goldId2, char separator, boolean geraVetor) {
+        this.chavePrimaria = chavePrimaria;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        this.geraVetor = geraVetor;
+    }
     
+        public void setParamVetorSim(String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, boolean geraVetor) {
+        this.chavePrimaria = chavePrimaria1;
+        this.chavePrimaria2 = chavePrimaria2;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        this.geraVetor = geraVetor;
+    }
 
 }

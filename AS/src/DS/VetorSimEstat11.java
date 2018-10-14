@@ -14,6 +14,7 @@ import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceF
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
+import experimentos.ExperimentosCDs1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,16 +34,52 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
  *
  * @author Diego
  */
-public abstract class VetorSimEstat1 extends DedupAlg {
+public abstract class VetorSimEstat11 extends DedupAlg {
 
     File vetorSimilaridade;
     File dirDiverg;
 
-    
-    
+    String baseDados1;
+    String baseDados2;
+    String chavePrimaria;
+    String chavePrimaria1;
+    String chavePrimaria2;
+    String gold;
+    String goldId1;
+    String goldId2;
+    String idBaseDados;
+    char separator;
+    String qp;
 
-    public VetorSimEstat1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
+    public boolean isGerVetMaior() {
+        return geraVetorMaior;
+    }
+
+    public void setGerVetMaior(boolean geraVetorMaior) {
+        this.geraVetorMaior = geraVetorMaior;
+    }
+
+    boolean geraVetorMaior;
+
+    public VetorSimEstat11() {
+
+    }
+
+    public VetorSimEstat11(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
+
+    }
+
+    public void setAllVarDedup(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        this.qp = qp;
+//        geraVetorMaior = geraVetor;
+        super.setAllVarDedup(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
         vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
         dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "/" + qp + "/");
@@ -58,24 +95,43 @@ public abstract class VetorSimEstat1 extends DedupAlg {
             }
 
         }
+        setGerVetMaior(geraVetor);
+
+        exeGerVetMaior();
+    }
+    
+    public void setAllVarDedup(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
+
+        this.baseDados1 = baseDados1;
+        this.baseDados2 = baseDados2;
+        this.chavePrimaria1 = chavePrimaria1;
+        this.chavePrimaria2 = chavePrimaria2;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        this.qp = qp;
+        super.setAllVarDedup(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, separator);
+        
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + baseDados2 + "-" + qp + ".csv");
+        dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "-" + baseDados2 + "/" + qp + "/");
+
+        if (!vetorSimilaridade.exists()) {
+            System.out.println("Não existe arquivo vetorSimilaridade.csv.");
+
+            try {
+                vetorSimilaridade.createNewFile();
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo vetorSimilaridade.csv.");
+            }
+
+        }
+        setGerVetMaior(geraVetor);
+
+        exeGerVetMaior();
     }
 
-    public File getVetorSimilaridade() {
-        return vetorSimilaridade;
-    }
-
-    public void setVetorSimilaridade(File vetorSimilaridade) {
-        this.vetorSimilaridade = vetorSimilaridade;
-    }
-
-    public File getDirDiverg() {
-        return dirDiverg;
-    }
-
-    public File getFileDiverg() {
-        File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
-        return diverg;
-    }
 
     /**
      * A ser sobreescrito para cada base
@@ -84,6 +140,19 @@ public abstract class VetorSimEstat1 extends DedupAlg {
      * @throws IOException
      */
     public abstract void geraVetor(File arqDivergMaior) throws IOException;
+    
+    
+    public void exeGerVetMaior() {
+
+        if (geraVetorMaior) {//Dar um jeito de conseguir o conjunto de todas divergências antes!
+            try {
+                geraVetor(getFileDiverg()); //Para gerar o vetor base dos demais'
+            } catch (IOException ex) {
+                Logger.getLogger(VetorSimEstat11.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
 
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
@@ -194,7 +263,7 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em buscaGabarito()");
         } catch (IOException ex) {
-            Logger.getLogger(VetorSimEstat1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(VetorSimEstat11.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
 
             bwVetorMenor.flush();
@@ -205,7 +274,7 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         }
     }
 
-    public void executa() {
+    public void executaGerVetMenor() {
 
         try {
 
@@ -230,7 +299,22 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         }
 
     }
-
     
+        public File getVetorSimilaridade() {
+        return vetorSimilaridade;
+    }
+
+    public void setVetorSimilaridade(File vetorSimilaridade) {
+        this.vetorSimilaridade = vetorSimilaridade;
+    }
+
+    public File getDirDiverg() {
+        return dirDiverg;
+    }
+
+    public File getFileDiverg() {
+        File diverg = new File("./src/csv/conjuntosDS/", "NAO_DA.csv"); //Esse arquivo tem que possuir todas as divergências
+        return diverg;
+    }
 
 }

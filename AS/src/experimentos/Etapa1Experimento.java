@@ -82,10 +82,10 @@ public class Etapa1Experimento {
      * @param qtdObs Quantidade de observações a serem geradas no experimento.
      * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      */
-    public Etapa1Experimento(String gabarito, String base, String qp, int qtdMaxAlg, int tamBase1, int tamBase2, int qtdObs, int... vQtdAlg) {
+    public Etapa1Experimento(String gabarito, String base1, String base2, String qp, int qtdMaxAlg, int tamBase1, int tamBase2, int qtdObs, int... vQtdAlg) {
         limpaEstatisticas(base, qp);
         gs = new File("./src/csv/datasets", gabarito);
-        this.base = base;
+        this.base = base1+"-"+base2;
         this.qp = qp;
         this.qtdObservacoes = qtdObs;
         this.qtdMaxAlg = qtdMaxAlg;
@@ -94,6 +94,8 @@ public class Etapa1Experimento {
         this.isDedup = false;
         this.vQtdAlg = vQtdAlg;
     }
+
+    
 
     /**
      *
@@ -160,7 +162,7 @@ public class Etapa1Experimento {
             System.out.println("Quantidade de algoritmos: " + qtdAlgUt);
 
             //Gerando observações através de seleção aleatória de n algoritmos de deduplicação
-            for (int i = 1; i <= qtdObservacoes; i++) {
+            for (int i = 1; i <= getQtdObservacoes(); i++) {
 
                 listaAlg = null;
 
@@ -222,6 +224,14 @@ public class Etapa1Experimento {
 
         }
 
+    }
+
+    public int getQtdObservacoes() {
+        return qtdObservacoes;
+    }
+
+    public void setQtdObservacoes(int qtdObservacoes) {
+        this.qtdObservacoes = qtdObservacoes;
     }
 
     /**
@@ -442,6 +452,14 @@ public class Etapa1Experimento {
             }
         }
 
+    }
+    
+    public int[] getvQtdAlg() {
+        return vQtdAlg;
+    }
+
+    public void setvQtdAlg(int[] vQtdAlg) {
+        this.vQtdAlg = vQtdAlg;
     }
 
 }

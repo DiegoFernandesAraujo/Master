@@ -6,9 +6,6 @@
 package experimentos;
 
 import DS.VetorSimEstat1;
-import experimentos.Etapa1Experimento;
-
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -34,11 +31,15 @@ public class AllQPEtapa1 {
     char separator;
     boolean geraVetor;
 
+    VetorSimEstat1 objVet;
+
     int qtdMaxGeral, qtdMaxB, qtdMaxM, qtdMaxR, qtdMaxAll, qtdMaxLot;
     int tamBase1Geral, tamBase1One, tamBase1Three, tamBase1Five, tamBase2Geral, tamBase2One, tamBase2Three, tamBase2Five;
     int qtdObs;
-    int vQtdAlgB, vQtdAlgM, vQtdAlgR, vQtdAlgAll, vQtdAlgLot;
+//    int vQtdAlgB, vQtdAlgM, vQtdAlgR, vQtdAlgAll, vQtdAlgLot;
+    int[] vQtdAlgB, vQtdAlgM, vQtdAlgR, vQtdAlgAll, vQtdAlgLot;
     int[] vQtdAlgGeral;
+
     boolean okqp1 = true;
     boolean okqp2b = true;
     boolean okqp2m = true;
@@ -73,7 +74,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot, VetorSimEstat1 obj) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -99,6 +100,7 @@ public class AllQPEtapa1 {
         this.vQtdAlgAll = vQtdAlgAll;
         this.vQtdAlgLot = vQtdAlgLot;
         this.vQtdAlgGeral = new int[]{10, 15, 20};
+        this.objVet = obj;
 
     }
 
@@ -134,7 +136,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBaseFive, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -202,7 +204,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -273,7 +275,7 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int vQtdAlgB, int vQtdAlgM, int vQtdAlgR, int vQtdAlgAll, int vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
+    public AllQPEtapa1(String baseGeral, String gsGeral, String baseOne, String gsOne, String baseThree, String gsThree, String baseFive, String gsFive, int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException {
         this.baseGeral = baseGeral;
         this.gsGeral = gsGeral;
         this.baseOne = baseOne;
@@ -322,14 +324,31 @@ public class AllQPEtapa1 {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void rodaExpDedup(boolean geraVetorMaior) throws IOException, InterruptedException {
+    public void rodaExpDedup() throws IOException, InterruptedException {
 
         //Para qp1
         if (okqp1) {
-            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
+//            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
             Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
-            qp1.executa();
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp1");
+
+            int[] vetorBKP = getvQtdAlgGeral();
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+            if (geraVetor) {
+                setvQtdAlgGeral(new int[]{qtdMaxGeral});
+                qp1.setvQtdAlg(getvQtdAlgGeral());
+                qp1.setQtdObservacoes(1); //Basta uma vez                
+                qp1.executa();
+            }
+            
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp1");
+            
+            setvQtdAlgGeral(vetorBKP);
+            qp1.setvQtdAlg(getvQtdAlgGeral());
+            qp1.setQtdObservacoes(qtdObs);
+            qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+
+            
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -338,7 +357,9 @@ public class AllQPEtapa1 {
             int[] vetor2 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
             qp2b.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2b");
+            
+            //COMO TORNAR ISSO GENÉRICO?!
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp2b");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -347,7 +368,7 @@ public class AllQPEtapa1 {
             int vetor3 = 10; //Uma única quantidade a ser definida
             Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2m", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
             qp2m.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2m");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp2m");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -356,7 +377,7 @@ public class AllQPEtapa1 {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
             qp2r.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp2r");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp2r");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -365,7 +386,7 @@ public class AllQPEtapa1 {
             int[] vetor5 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
             qp3All.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp3all");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp3all");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -374,7 +395,7 @@ public class AllQPEtapa1 {
             int[] vetor6 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
             qp3Lot.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetorMaior, "qp3lot");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', geraVetor, "qp3lot");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -384,7 +405,7 @@ public class AllQPEtapa1 {
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "qp5o", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
             qp5o.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', geraVetorMaior, "qp5o");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', geraVetor, "qp5o");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -394,7 +415,7 @@ public class AllQPEtapa1 {
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "qp5t", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
             qp5t.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', geraVetorMaior, "qp5t");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', geraVetor, "qp5t");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -404,7 +425,7 @@ public class AllQPEtapa1 {
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "qp5f", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
             qp5f.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
-            VetorSimEstat1 obj = new ExperimentosCDs(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', geraVetorMaior, "qp5f");
+            VetorSimEstat1 obj = new ExperimentosCDs(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', geraVetor, "qp5f");
             obj.executa(); //Para gerar os vetores menores
         }
 
@@ -519,7 +540,7 @@ public class AllQPEtapa1 {
         //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR);
             qp2r.executa(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
@@ -596,7 +617,7 @@ public class AllQPEtapa1 {
         //Para qp2  - Ruins
         if (okqp2r) {
             int[] vetor4 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, tamBase2Geral, qtdObs, vQtdAlgR);
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2R", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR);
             qp2r.executa2(); //Quando já se tem o arquivo com as listas sequenciais aleatórias de matchers
         }
 
@@ -711,14 +732,70 @@ public class AllQPEtapa1 {
         this.separator = separator;
         this.geraVetor = geraVetor;
     }
-    
-        public void setParamVetorSim(String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, boolean geraVetor) {
+
+    public void setParamVetorSim(String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, boolean geraVetor) {
         this.chavePrimaria = chavePrimaria1;
         this.chavePrimaria2 = chavePrimaria2;
         this.goldId1 = goldId1;
         this.goldId2 = goldId2;
         this.separator = separator;
         this.geraVetor = geraVetor;
+    }
+
+    public int getQtdObs() {
+        return qtdObs;
+    }
+
+    public void setQtdObs(int qtdObs) {
+        this.qtdObs = qtdObs;
+    }
+
+    public int[] getvQtdAlgB() {
+        return vQtdAlgB;
+    }
+
+    public void setvQtdAlgB(int[] vQtdAlgB) {
+        this.vQtdAlgB = vQtdAlgB;
+    }
+
+    public int[] getvQtdAlgM() {
+        return vQtdAlgM;
+    }
+
+    public void setvQtdAlgM(int[] vQtdAlgM) {
+        this.vQtdAlgM = vQtdAlgM;
+    }
+
+    public int[] getvQtdAlgR() {
+        return vQtdAlgR;
+    }
+
+    public void setvQtdAlgR(int[] vQtdAlgR) {
+        this.vQtdAlgR = vQtdAlgR;
+    }
+
+    public int[] getvQtdAlgAll() {
+        return vQtdAlgAll;
+    }
+
+    public void setvQtdAlgAll(int[] vQtdAlgAll) {
+        this.vQtdAlgAll = vQtdAlgAll;
+    }
+
+    public int[] getvQtdAlgLot() {
+        return vQtdAlgLot;
+    }
+
+    public void setvQtdAlgLot(int[] vQtdAlgLot) {
+        this.vQtdAlgLot = vQtdAlgLot;
+    }
+
+    public int[] getvQtdAlgGeral() {
+        return vQtdAlgGeral;
+    }
+
+    public void setvQtdAlgGeral(int[] vQtdAlgGeral) {
+        this.vQtdAlgGeral = vQtdAlgGeral;
     }
 
 }

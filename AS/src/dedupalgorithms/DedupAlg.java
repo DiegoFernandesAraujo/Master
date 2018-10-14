@@ -11,6 +11,7 @@ import dude.algorithm.recordlinkage.NaiveRecordLinkage;
 import dude.datasource.CSVSource;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
+import experimentos.ExperimentosCDs1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -40,24 +41,24 @@ public class DedupAlg {
     private CSVSource source1;
     private CSVSource source2;
     private GoldStandard goldStandard;
-    
+
     String dir = null;
 
     FileWriter escreveResult;
 
-    
-
-    
     File estatisticasCSV;
     File estatisticasTXT;
 
-    
-    
     int ordem = 0;
 
+    public DedupAlg() {
+
+    }
+
     /**
-     * Construtor utilizado para quando o projeto de herança não estava bem definido.
-     * Pode ser utilizado com cd.
+     * Construtor utilizado para quando o projeto de herança não estava bem
+     * definido. Pode ser utilizado com cd.
+     *
      * @param baseDados1
      * @param chavePrimaria
      * @param gold
@@ -78,12 +79,11 @@ public class DedupAlg {
         this.separator = separator;
         deduplication(); //Não era final antes
     }
-    
-
 
     /**
-     * Construtor utilizado para quando o projeto de herança não estava bem definido.
-     * Pode ser utilizado com dblp-acm.
+     * Construtor utilizado para quando o projeto de herança não estava bem
+     * definido. Pode ser utilizado com dblp-acm.
+     *
      * @param baseDados1
      * @param baseDados2
      * @param chavePrimaria1
@@ -95,9 +95,6 @@ public class DedupAlg {
      */
     public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, String result) {
-
-        System.out.println("baseDados2= " + baseDados2);
-        System.out.println("Entrei no 2");
 
         this.baseDados1 = baseDados1;
         this.baseDados2 = baseDados2;
@@ -111,9 +108,10 @@ public class DedupAlg {
         this.separator = separator;
         recordLinkage();
     }
-    
-        /**
+
+    /**
      * Construtor com projeto de herança reformulado.
+     *
      * @param baseDados1
      * @param chavePrimaria
      * @param gold
@@ -140,8 +138,9 @@ public class DedupAlg {
     }
 
     /**
-     * Construtor utilizado para quando o projeto de herança não estava bem definido.
-     * Pode ser utilizado com dblp-acm.
+     * Construtor utilizado para quando o projeto de herança não estava bem
+     * definido. Pode ser utilizado com dblp-acm.
+     *
      * @param baseDados1
      * @param baseDados2
      * @param chavePrimaria1
@@ -170,8 +169,7 @@ public class DedupAlg {
         this.setUpDiretorios(dir); //Não era final antes
         recordLinkage();
     }
-    
-    
+
     /**
      *
      */
@@ -283,8 +281,6 @@ public class DedupAlg {
             goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
 
             goldStandard.setSourceIdLiteral(literalGS);
-            
-            
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
@@ -293,7 +289,6 @@ public class DedupAlg {
     }
 
     //Para record linkage
-
     /**
      *
      * @param literalGS1
@@ -411,7 +406,7 @@ public class DedupAlg {
     public void executaDedupAlg() throws Exception {
 
     }
-    
+
     /**
      *
      * @return
@@ -427,7 +422,7 @@ public class DedupAlg {
     public void setOrdem(int ordem) {
         this.ordem = ordem;
     }
-    
+
     /**
      *
      * @return
@@ -435,7 +430,7 @@ public class DedupAlg {
     public FileWriter getEscreveResult() {
         return escreveResult;
     }
-    
+
     /**
      *
      * @param escreveResult
@@ -443,7 +438,7 @@ public class DedupAlg {
     public void setEscreveResult(FileWriter escreveResult) {
         this.escreveResult = escreveResult;
     }
-    
+
     /**
      *
      * @return
@@ -451,7 +446,7 @@ public class DedupAlg {
     public String getDir() {
         return dir;
     }
-    
+
     /**
      *
      * @return
@@ -467,7 +462,7 @@ public class DedupAlg {
     public void setEstatisticasCSV(File estatisticasCSV) {
         this.estatisticasCSV = estatisticasCSV;
     }
-    
+
     /**
      *
      * @param dir
@@ -496,8 +491,8 @@ public class DedupAlg {
      *
      * @param dir
      */
-    final void setUpDiretorios(String dir){
-        
+    final void setUpDiretorios(String dir) {
+
         this.dir = dir;
         this.estatisticasCSV = new File("./src/csv/" + getDir() + "/estatisticas", "estatisticasDedup" + getOrdem() + ".csv");
         this.estatisticasTXT = new File("./src/csv/" + getDir() + "/estatisticas", "estatisticasDedup" + getOrdem() + ".txt");
@@ -516,6 +511,29 @@ public class DedupAlg {
         } catch (IOException ex) {
             Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setAllVarDedup(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator) {
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        deduplication(); //Não era final antes
+    }
+
+    public void setAllVarDedup(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator) {
+
+        this.baseDados1 = baseDados1;
+        this.baseDados2 = baseDados2;
+        this.chavePrimaria1 = chavePrimaria1;
+        this.chavePrimaria2 = chavePrimaria2;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        recordLinkage();
     }
 
 }

@@ -604,7 +604,7 @@ public class AllQPEtapa11 {
         //Para qp3  - Parte
         if (okqp3lot) {
 //            int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgLot);
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
 //            if (geraVetor) {
@@ -615,8 +615,10 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
+            qtdMaxLot = (int) qtdMaxAll/2; //Metade da quantidade máxima de matchers bons.
+            
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp3Lot.setvQtdAlg(new int[]{qtdMaxLot - 2});
+            qp3Lot.setvQtdAlg(new int[]{qtdMaxLot});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo

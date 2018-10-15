@@ -1,0 +1,1 @@
+Similaridades calculadas por cada algoritmo individualmente, desconsiderando aquela gerada pelo DuDe.

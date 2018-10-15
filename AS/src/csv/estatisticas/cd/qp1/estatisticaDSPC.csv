@@ -1,0 +1,4 @@
+abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn;pc
+DS;1 - acm diverg;10;1;0;0;1.0;0.14046822742474915;0.24633431085043989;42;0;0;42;0;47652904;257;380
+DS;1 - acm diverg;15;1;0;0;1.0;0.14381270903010032;0.25146198830409355;43;0;0;43;0;47652904;256;678
+DS;1 - acm diverg;20;1;0;0;1.0;0.13043478260869565;0.23076923076923078;39;0;0;39;0;47652904;260;1101

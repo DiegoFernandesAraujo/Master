@@ -33,13 +33,11 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
     FileWriter escreveArqVetor;
     BufferedWriter bwArqVetor = null;
     String a, b, c, d, e, f, g, rotulo;
-    
-    
+
     public ExperimentosCDs1() {
-        
-        
+
     }
-    
+
     public ExperimentosCDs1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator, qp);
 
@@ -59,7 +57,6 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
     ExperimentosCDs1(String baseGeral, String chavePrimaria, String gsGeral, String goldId1, String goldId2, char c, boolean geraVetor, String qp2r) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 
     /**
      * A ser sobreescrito para cada base
@@ -72,7 +69,7 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
     public void geraVetorMaior(File arqDiverg) throws IOException {
 
         System.out.println("Olha eu aqui, papae!");
-        
+
         String str;
         String elemento1;
         String elemento2;
@@ -241,18 +238,20 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         //Com o construtor dessa forma realiza apenas o experimento para QP1
-        
+
         VetorSimEstat11 obj;
         obj = new ExperimentosCDs1();
-        
+
 //        AllQPEtapa11 expCds = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 0, 0, 0, 0, 0, 9763, 0, 0, 0, 1000, null, null, null, null, null, true, false, false, false, false, false, false, false, false, obj);
 //        expCds.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCds.rodaExpDedup();
-        
 //        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 10, 0, 0, 0, 0, 9763, 0, 0, 0, 1000, new int[]{10}, null, null, null, null, false, true, false, false, false, false, false, false, false, obj);
-        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 10, 15, 0, 0, 0, 9763, 0, 0, 0, 1000, false, true, true, false, false, false, false, false, false, obj);
-        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
-        expCdsQP2b.rodaExpDedup();
+//        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 10, 15, 0, 0, 0, 9763, 0, 0, 0, 1000, false, true, true, false, false, false, false, false, false, obj);
+//        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
+//        expCdsQP2b.rodaExpDedup();
+        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);
+        expCdsMenosQP5.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
+        expCdsMenosQP5.rodaExpDedup();
     }
 
 }

@@ -9,12 +9,6 @@
 package DS;
 
 import dedupalgorithms.*;
-import dude.algorithm.Algorithm;
-import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
-import dude.util.GoldStandard;
-import dude.util.data.DuDeObjectPair;
-import experimentos.ExperimentosCDs1;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,13 +18,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
- * Método geraVetor() gera os vetores de similaridades juntamente com as
- * estatísticas (méd, mín, máx) necessárias para a execução da abordagem AA
- * baseada em monotonicidade.
+ * Método geraVetorMaior() gera os vetores de similaridades juntamente com as
+ estatísticas (méd, mín, máx) necessárias para a execução da abordagem AA
+ baseada em monotonicidade.
  *
  * @author Diego
  */
@@ -78,7 +70,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         this.goldId2 = goldId2;
         this.separator = separator;
         this.qp = qp;
-//        geraVetorMaior = geraVetor;
+//        geraVetorMaior = geraVetorMaior;
         super.setAllVarDedup(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
         vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
@@ -139,14 +131,14 @@ public abstract class VetorSimEstat11 extends DedupAlg {
      * @param arqDiverg
      * @throws IOException
      */
-    public abstract void geraVetor(File arqDivergMaior) throws IOException;
+    public abstract void geraVetorMaior(File arqDivergMaior) throws IOException;
     
     
     public void exeGerVetMaior() {
 
         if (geraVetorMaior) {//Dar um jeito de conseguir o conjunto de todas divergências antes!
             try {
-                geraVetor(getFileDiverg()); //Para gerar o vetor base dos demais'
+                geraVetorMaior(getFileDiverg()); //Para gerar o vetor base dos demais'
             } catch (IOException ex) {
                 Logger.getLogger(VetorSimEstat11.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -181,7 +173,8 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         int linha = 0;
 
         if (vetorSim.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vetor de similaridades vazio! Especifique outro arquivo!");
+//            JOptionPane.showMessageDialog(null, "Vetor de similaridades vazio! Especifique outro arquivo!");
+            System.out.println("Vetor de similaridades vazio! Especifique outro arquivo!");
             System.exit(0);
         }
 

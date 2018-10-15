@@ -31,7 +31,8 @@ import java.util.logging.Logger;
 public class Etapa1Experimento {
 
     File gs = null;
-    String base = null; //"cd", "dblp-acm", "cd1%"...
+    String dirResult = null; //"cd", "cd1%"...
+    String base = null; //"cd", "dblp-acm"...
     String qp = null; //Questão de pesquisa
     File algSort = null;
     int qtdMaxAlg; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
@@ -64,6 +65,7 @@ public class Etapa1Experimento {
         this.tamBase1 = tamBase1;
         this.isDedup = true;
         this.vQtdAlg = vQtdAlg;
+        dirResult = base+"-"+qp;
     }
 
     //Para record linkage
@@ -93,6 +95,7 @@ public class Etapa1Experimento {
         this.tamBase2 = tamBase2;
         this.isDedup = false;
         this.vQtdAlg = vQtdAlg;
+        dirResult = base+"-"+qp;
     }
 
     
@@ -128,7 +131,7 @@ public class Etapa1Experimento {
         File[] resultados = new File[qtdMaxAlg];
         for (int i = 0; i < resultados.length; ++i) {
             int index = i + 1;
-            resultados[i] = new File("./src/csv/resultsDedup/" + base, "resultado" + index + ".csv");
+            resultados[i] = new File("./src/csv/resultsDedup/" + dirResult, "resultado" + index + ".csv");
         }
 
         //Padronização dos arquivos

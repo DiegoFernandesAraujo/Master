@@ -38,9 +38,6 @@ public abstract class VetorSimEstat1 extends DedupAlg {
     File vetorSimilaridade;
     File dirDiverg;
 
-    
-    
-
     public VetorSimEstat1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
@@ -112,7 +109,8 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         int linha = 0;
 
         if (vetorSim.length() == 0) {
-            JOptionPane.showMessageDialog(null, "Vetor de similaridades vazio! Especifique outro arquivo!");
+//            JOptionPane.showMessageDialog(null, "Vetor de similaridades vazio! Especifique outro arquivo!");
+            System.out.println("Vetor de similaridades vazio! Especifique outro arquivo!");
             System.exit(0);
         }
 
@@ -230,7 +228,5 @@ public abstract class VetorSimEstat1 extends DedupAlg {
         }
 
     }
-
-    
 
 }

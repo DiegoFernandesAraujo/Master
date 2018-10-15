@@ -50,7 +50,6 @@ public class AllQPEtapa11 {
     int qtdMaxGeral, qtdMaxB, qtdMaxM, qtdMaxR, qtdMaxAll, qtdMaxLot;
     int tamBase1Geral, tamBase1One, tamBase1Three, tamBase1Five, tamBase2Geral, tamBase2One, tamBase2Three, tamBase2Five;
     int qtdObs;
-//    int vQtdAlgB, vQtdAlgM, vQtdAlgR, vQtdAlgAll, vQtdAlgLot;
     int[] vQtdAlgB, vQtdAlgM, vQtdAlgR, vQtdAlgAll, vQtdAlgLot;
     int[] vQtdAlgGeral;
 
@@ -371,21 +370,18 @@ public class AllQPEtapa11 {
 //            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
             Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp1.setvQtdAlg(getvQtdAlgGeral());
+                qp1.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp1.setQtdObservacoes(1); //Basta uma vez                
                 qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
 
             //Mesma ideia do construtor
+            //Se geraVetor == true, gera o vetor de similaridades maior
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp1.setvQtdAlg(getvQtdAlgGeral());
             qp1.setQtdObservacoes(qtdObs);
             qp1.executa();
@@ -395,15 +391,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Bons
         if (okqp2b) {
-            int[] vetor2 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor2 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2b.setvQtdAlg(getvQtdAlgGeral());
+                qp2b.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2b.setQtdObservacoes(1); //Basta uma vez                
                 qp2b.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -412,7 +405,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgB(vetorBKP);
             qp2b.setvQtdAlg(getvQtdAlgB());
             qp2b.setQtdObservacoes(qtdObs);
             qp2b.executa();
@@ -421,15 +413,12 @@ public class AllQPEtapa11 {
 
         } //Para qp2  - Médios
         if (okqp2m) {
-            int vetor3 = 10; //Uma única quantidade a ser definida
+//            int vetor3 = 10; //Uma única quantidade a ser definida
             Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2m", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2m.setvQtdAlg(getvQtdAlgGeral());
+                qp2m.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2m.setQtdObservacoes(1); //Basta uma vez                
                 qp2m.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -438,7 +427,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgM(vetorBKP);
             qp2m.setvQtdAlg(getvQtdAlgM());
             qp2m.setQtdObservacoes(qtdObs);
             qp2m.executa();
@@ -448,15 +436,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Ruins
         if (okqp2r) {
-            int[] vetor4 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor4 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2r.setvQtdAlg(getvQtdAlgGeral());
+                qp2r.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2r.setQtdObservacoes(1); //Basta uma vez                
                 qp2r.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -465,7 +450,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgR(vetorBKP);
             qp2r.setvQtdAlg(getvQtdAlgR());
             qp2r.setQtdObservacoes(qtdObs);
             qp2r.executa();
@@ -475,15 +459,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Todos
         if (okqp3all) {
-            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor5 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3All.setvQtdAlg(getvQtdAlgGeral());
+                qp3All.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3All.setQtdObservacoes(1); //Basta uma vez                
                 qp3All.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -492,7 +473,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgAll(vetorBKP);
             qp3All.setvQtdAlg(getvQtdAlgAll());
             qp3All.setQtdObservacoes(qtdObs);
             qp3All.executa();
@@ -502,15 +482,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Parte
         if (okqp3lot) {
-            int[] vetor6 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor6 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3Lot.setvQtdAlg(getvQtdAlgGeral());
+                qp3Lot.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3Lot.setQtdObservacoes(1); //Basta uma vez                
                 qp3Lot.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -519,7 +496,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgLot(vetorBKP);
             qp3Lot.setvQtdAlg(getvQtdAlgLot());
             qp3Lot.setQtdObservacoes(qtdObs);
             qp3Lot.executa();
@@ -530,16 +506,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 1% 
         if (okqp5one) {
-            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "qp5o", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5o.setvQtdAlg(getvQtdAlgGeral());
+                qp5o.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5o.setQtdObservacoes(1); //Basta uma vez                
                 qp5o.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -548,7 +521,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', "qp5o", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5o.setvQtdAlg(getvQtdAlgGeral());
             qp5o.setQtdObservacoes(qtdObs);
             qp5o.executa();
@@ -558,16 +530,14 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 3% 
         if (okqp5three) {
-            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
+//            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "qp5t", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5t.setvQtdAlg(getvQtdAlgGeral());
+                qp5t.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5t.setQtdObservacoes(1); //Basta uma vez                
                 qp5t.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -576,7 +546,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', "qp5t", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5t.setvQtdAlg(getvQtdAlgGeral());
             qp5t.setQtdObservacoes(qtdObs);
             qp5t.executa();
@@ -587,16 +556,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 5% 
         if (okqp5five) {
-            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "qp5f", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5f.setvQtdAlg(getvQtdAlgGeral());
+                qp5f.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5f.setQtdObservacoes(1); //Basta uma vez                
                 qp5f.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -605,7 +571,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', "qp5f", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5f.setvQtdAlg(getvQtdAlgGeral());
             qp5f.setQtdObservacoes(qtdObs);
             qp5f.executa();
@@ -630,21 +595,18 @@ public class AllQPEtapa11 {
 //            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
             Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp1.setvQtdAlg(getvQtdAlgGeral());
+                qp1.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp1.setQtdObservacoes(1); //Basta uma vez                
                 qp1.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
 
             //Mesma ideia do construtor
+            //Se geraVetor == true, gera o vetor de similaridades maior
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp1.setvQtdAlg(getvQtdAlgGeral());
             qp1.setQtdObservacoes(qtdObs);
             qp1.executa2();
@@ -654,15 +616,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Bons
         if (okqp2b) {
-            int[] vetor2 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor2 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2b.setvQtdAlg(getvQtdAlgGeral());
+                qp2b.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2b.setQtdObservacoes(1); //Basta uma vez                
                 qp2b.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -671,7 +630,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgB(vetorBKP);
             qp2b.setvQtdAlg(getvQtdAlgB());
             qp2b.setQtdObservacoes(qtdObs);
             qp2b.executa2();
@@ -680,15 +638,12 @@ public class AllQPEtapa11 {
 
         } //Para qp2  - Médios
         if (okqp2m) {
-            int vetor3 = 10; //Uma única quantidade a ser definida
+//            int vetor3 = 10; //Uma única quantidade a ser definida
             Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2m", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2m.setvQtdAlg(getvQtdAlgGeral());
+                qp2m.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2m.setQtdObservacoes(1); //Basta uma vez                
                 qp2m.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -697,7 +652,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgM(vetorBKP);
             qp2m.setvQtdAlg(getvQtdAlgM());
             qp2m.setQtdObservacoes(qtdObs);
             qp2m.executa2();
@@ -707,15 +661,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Ruins
         if (okqp2r) {
-            int[] vetor4 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor4 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2r.setvQtdAlg(getvQtdAlgGeral());
+                qp2r.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2r.setQtdObservacoes(1); //Basta uma vez                
                 qp2r.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -724,7 +675,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgR(vetorBKP);
             qp2r.setvQtdAlg(getvQtdAlgR());
             qp2r.setQtdObservacoes(qtdObs);
             qp2r.executa2();
@@ -734,15 +684,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Todos
         if (okqp3all) {
-            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor5 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3All.setvQtdAlg(getvQtdAlgGeral());
+                qp3All.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3All.setQtdObservacoes(1); //Basta uma vez                
                 qp3All.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -751,7 +698,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgAll(vetorBKP);
             qp3All.setvQtdAlg(getvQtdAlgAll());
             qp3All.setQtdObservacoes(qtdObs);
             qp3All.executa2();
@@ -761,15 +707,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Parte
         if (okqp3lot) {
-            int[] vetor6 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor6 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxLot, tamBase1Geral, qtdObs, vQtdAlgLot);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3Lot.setvQtdAlg(getvQtdAlgGeral());
+                qp3Lot.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3Lot.setQtdObservacoes(1); //Basta uma vez                
                 qp3Lot.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -778,7 +721,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgLot(vetorBKP);
             qp3Lot.setvQtdAlg(getvQtdAlgLot());
             qp3Lot.setQtdObservacoes(qtdObs);
             qp3Lot.executa2();
@@ -789,16 +731,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 1% 
         if (okqp5one) {
-            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "qp5o", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5o.setvQtdAlg(getvQtdAlgGeral());
+                qp5o.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5o.setQtdObservacoes(1); //Basta uma vez                
                 qp5o.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -807,7 +746,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', "qp5o", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5o.setvQtdAlg(getvQtdAlgGeral());
             qp5o.setQtdObservacoes(qtdObs);
             qp5o.executa2();
@@ -817,16 +755,14 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 3% 
         if (okqp5three) {
-            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
+//            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "qp5t", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5t.setvQtdAlg(getvQtdAlgGeral());
+                qp5t.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5t.setQtdObservacoes(1); //Basta uma vez                
                 qp5t.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -835,7 +771,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', "qp5t", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5t.setvQtdAlg(getvQtdAlgGeral());
             qp5t.setQtdObservacoes(qtdObs);
             qp5t.executa2();
@@ -846,16 +781,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 5% 
         if (okqp5five) {
-            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "qp5f", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5f.setvQtdAlg(getvQtdAlgGeral());
+                qp5f.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5f.setQtdObservacoes(1); //Basta uma vez                
                 qp5f.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -864,7 +796,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', "qp5f", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5f.setvQtdAlg(getvQtdAlgGeral());
             qp5f.setQtdObservacoes(qtdObs);
             qp5f.executa2();
@@ -885,15 +816,12 @@ public class AllQPEtapa11 {
 
         //Para qp1
         if (okqp1) {
-            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
+//            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
             Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp1.setvQtdAlg(getvQtdAlgGeral());
+                qp1.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp1.setQtdObservacoes(1); //Basta uma vez                
                 qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -902,7 +830,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp1.setvQtdAlg(getvQtdAlgGeral());
             qp1.setQtdObservacoes(qtdObs);
             qp1.executa();
@@ -912,14 +839,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Bons
         if (okqp2b) {
-            int[] vetor2 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor2 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2b", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2b.setvQtdAlg(getvQtdAlgGeral());
+                qp2b.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2b.setQtdObservacoes(1); //Basta uma vez                
                 qp2b.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -928,7 +853,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgB(vetorBKP);
             qp2b.setvQtdAlg(getvQtdAlgB());
             qp2b.setQtdObservacoes(qtdObs);
             qp2b.executa();
@@ -941,12 +865,9 @@ public class AllQPEtapa11 {
             int vetor3 = 10; //Uma única quantidade a ser definida
             Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2m", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2m.setvQtdAlg(getvQtdAlgGeral());
+                qp2m.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2m.setQtdObservacoes(1); //Basta uma vez                
                 qp2m.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -955,7 +876,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgM(vetorBKP);
             qp2m.setvQtdAlg(getvQtdAlgM());
             qp2m.setQtdObservacoes(qtdObs);
             qp2m.executa();
@@ -965,15 +885,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Ruins
         if (okqp2r) {
-            int[] vetor4 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor4 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2r", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2r.setvQtdAlg(getvQtdAlgGeral());
+                qp2r.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2r.setQtdObservacoes(1); //Basta uma vez                
                 qp2r.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -982,7 +899,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgR(vetorBKP);
             qp2r.setvQtdAlg(getvQtdAlgR());
             qp2r.setQtdObservacoes(qtdObs);
             qp2r.executa();
@@ -992,15 +908,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Todos
         if (okqp3all) {
-            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor5 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3all", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3All.setvQtdAlg(getvQtdAlgGeral());
+                qp3All.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3All.setQtdObservacoes(1); //Basta uma vez                
                 qp3All.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1009,7 +922,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgAll(vetorBKP);
             qp3All.setvQtdAlg(getvQtdAlgAll());
             qp3All.setQtdObservacoes(qtdObs);
             qp3All.executa();
@@ -1019,15 +931,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Parte
         if (okqp3lot) {
-            int[] vetor6 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor6 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3Lot.setvQtdAlg(getvQtdAlgGeral());
+                qp3Lot.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3Lot.setQtdObservacoes(1); //Basta uma vez                
                 qp3Lot.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1036,7 +945,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgLot(vetorBKP);
             qp3Lot.setvQtdAlg(getvQtdAlgLot());
             qp3Lot.setQtdObservacoes(qtdObs);
             qp3Lot.executa();
@@ -1046,16 +954,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 1% 
         if (okqp5one) {
-            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne1, baseOne2, "qp5o", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5o.setvQtdAlg(getvQtdAlgGeral());
+                qp5o.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5o.setQtdObservacoes(1); //Basta uma vez                
                 qp5o.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1064,7 +969,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseOne1, baseOne2, chavePrimaria, chavePrimaria2, gsOne, goldId1, goldId2, ';', "qp5o", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5o.setvQtdAlg(getvQtdAlgGeral());
             qp5o.setQtdObservacoes(qtdObs);
             qp5o.executa();
@@ -1074,16 +978,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 3% 
         if (okqp5three) {
-            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
+//            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree1, baseThree2, "qp5t", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5t.setvQtdAlg(getvQtdAlgGeral());
+                qp5t.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5t.setQtdObservacoes(1); //Basta uma vez                
                 qp5t.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1092,7 +993,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseThree1, baseThree2, chavePrimaria, chavePrimaria2, gsThree, goldId1, goldId2, ';', "qp5t", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5t.setvQtdAlg(getvQtdAlgGeral());
             qp5t.setQtdObservacoes(qtdObs);
             qp5t.executa();
@@ -1102,16 +1002,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 5% 
         if (okqp5five) {
-            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive1, baseFive2, "qp5f", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5f.setvQtdAlg(getvQtdAlgGeral());
+                qp5f.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5f.setQtdObservacoes(1); //Basta uma vez                
                 qp5f.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1120,7 +1017,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseFive1, baseFive2, chavePrimaria, chavePrimaria2, gsFive, goldId1, goldId2, ';', "qp5f", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5f.setvQtdAlg(getvQtdAlgGeral());
             qp5f.setQtdObservacoes(qtdObs);
             qp5f.executa();
@@ -1141,15 +1037,12 @@ public class AllQPEtapa11 {
 
         //Para qp1
         if (okqp1) {
-            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
+//            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
             Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp1", qtdMaxGeral, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgGeral);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp1.setvQtdAlg(getvQtdAlgGeral());
+                qp1.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp1.setQtdObservacoes(1); //Basta uma vez                
                 qp1.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1158,7 +1051,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp1.setvQtdAlg(getvQtdAlgGeral());
             qp1.setQtdObservacoes(qtdObs);
             qp1.executa2();
@@ -1168,14 +1060,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Bons
         if (okqp2b) {
-            int[] vetor2 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor2 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2b", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB);
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2b.setvQtdAlg(getvQtdAlgGeral());
+                qp2b.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2b.setQtdObservacoes(1); //Basta uma vez                
                 qp2b.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1184,7 +1074,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgB(vetorBKP);
             qp2b.setvQtdAlg(getvQtdAlgB());
             qp2b.setQtdObservacoes(qtdObs);
             qp2b.executa2();
@@ -1197,12 +1086,9 @@ public class AllQPEtapa11 {
             int vetor3 = 10; //Uma única quantidade a ser definida
             Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2m", qtdMaxM, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgM);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2m.setvQtdAlg(getvQtdAlgGeral());
+                qp2m.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2m.setQtdObservacoes(1); //Basta uma vez                
                 qp2m.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1211,7 +1097,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgM(vetorBKP);
             qp2m.setvQtdAlg(getvQtdAlgM());
             qp2m.setQtdObservacoes(qtdObs);
             qp2m.executa2();
@@ -1221,15 +1106,12 @@ public class AllQPEtapa11 {
 
         //Para qp2  - Ruins
         if (okqp2r) {
-            int[] vetor4 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor4 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2r", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp2r.setvQtdAlg(getvQtdAlgGeral());
+                qp2r.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp2r.setQtdObservacoes(1); //Basta uma vez                
                 qp2r.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1238,7 +1120,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgR(vetorBKP);
             qp2r.setvQtdAlg(getvQtdAlgR());
             qp2r.setQtdObservacoes(qtdObs);
             qp2r.executa2();
@@ -1248,15 +1129,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Todos
         if (okqp3all) {
-            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor5 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3all", qtdMaxAll, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgAll);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3All.setvQtdAlg(getvQtdAlgGeral());
+                qp3All.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3All.setQtdObservacoes(1); //Basta uma vez                
                 qp3All.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1265,7 +1143,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgAll(vetorBKP);
             qp3All.setvQtdAlg(getvQtdAlgAll());
             qp3All.setQtdObservacoes(qtdObs);
             qp3All.executa2();
@@ -1275,15 +1152,12 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Parte
         if (okqp3lot) {
-            int[] vetor6 = {10}; //Uma única quantidade a ser definida
+//            int[] vetor6 = {10}; //Uma única quantidade a ser definida
             Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot);
-
-            int[] vetorBKP = getvQtdAlgGeral();
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp3Lot.setvQtdAlg(getvQtdAlgGeral());
+                qp3Lot.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp3Lot.setQtdObservacoes(1); //Basta uma vez                
                 qp3Lot.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1292,7 +1166,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgLot(vetorBKP);
             qp3Lot.setvQtdAlg(getvQtdAlgLot());
             qp3Lot.setQtdObservacoes(qtdObs);
             qp3Lot.executa2();
@@ -1302,16 +1175,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 1% 
         if (okqp5one) {
-            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne1, baseOne2, "qp5o", qtdMaxGeral, tamBase1One, tamBase2One, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5o.setvQtdAlg(getvQtdAlgGeral());
+                qp5o.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5o.setQtdObservacoes(1); //Basta uma vez                
                 qp5o.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1320,7 +1190,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseOne1, baseOne2, chavePrimaria, chavePrimaria2, gsOne, goldId1, goldId2, ';', "qp5o", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5o.setvQtdAlg(getvQtdAlgGeral());
             qp5o.setQtdObservacoes(qtdObs);
             qp5o.executa2();
@@ -1330,16 +1199,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 3% 
         if (okqp5three) {
-            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
+//            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree1, baseThree2, "qp5t", qtdMaxGeral, tamBase1Three, tamBase2Three, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5t.setvQtdAlg(getvQtdAlgGeral());
+                qp5t.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5t.setQtdObservacoes(1); //Basta uma vez                
                 qp5t.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1348,7 +1214,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseThree1, baseThree2, chavePrimaria, chavePrimaria2, gsThree, goldId1, goldId2, ';', "qp5t", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5t.setvQtdAlg(getvQtdAlgGeral());
             qp5t.setQtdObservacoes(qtdObs);
             qp5t.executa2();
@@ -1358,16 +1223,13 @@ public class AllQPEtapa11 {
 
         //Para qp5 - 5% 
         if (okqp5five) {
-            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
+//            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
             //A quantidade de elementos da baseGeral de dados aqui é diferente
             Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive1, baseFive2, "qp5f", qtdMaxGeral, tamBase1Five, tamBase2Five, qtdObs, vQtdAlgGeral);
 
-            int[] vetorBKP = getvQtdAlgGeral();
-
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
-                setvQtdAlgGeral(new int[]{qtdMaxGeral});
-                qp5f.setvQtdAlg(getvQtdAlgGeral());
+                qp5f.setvQtdAlg(new int[]{qtdMaxGeral});
                 qp5f.setQtdObservacoes(1); //Basta uma vez                
                 qp5f.executa2(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             }
@@ -1376,7 +1238,6 @@ public class AllQPEtapa11 {
             objVet.setAllVarDedup(baseFive1, baseFive2, chavePrimaria, chavePrimaria2, gsFive, goldId1, goldId2, ';', "qp5f", geraVetor);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            setvQtdAlgGeral(vetorBKP);
             qp5f.setvQtdAlg(getvQtdAlgGeral());
             qp5f.setQtdObservacoes(qtdObs);
             qp5f.executa2();

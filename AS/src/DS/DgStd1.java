@@ -96,7 +96,7 @@ public class DgStd1 {
                 try {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
-                    
+
                     escreveEstatPC = new FileWriter(estatisticasPC, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstatPC = new BufferedWriter(escreveEstatPC);
 
@@ -111,7 +111,6 @@ public class DgStd1 {
                     bwEstatPC.flush();
                     bwEstatPC.close();
 
-                    
                 }
 
             } catch (IOException ex) {
@@ -148,7 +147,7 @@ public class DgStd1 {
         }
 
 //        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
-         estatisticas = new File(dirEstat, "estatisticaDS.csv");
+        estatisticas = new File(dirEstat, "estatisticaDS.csv");
         estatisticasPC = new File(dirEstat, "estatisticaDSPC.csv");
 //        estatisticas = new File(dirEstat, "estatisticaDS-DEMO.csv"); 
 
@@ -163,7 +162,7 @@ public class DgStd1 {
                 try {
                     escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstat = new BufferedWriter(escreveEstat);
-                    
+
                     escreveEstatPC = new FileWriter(estatisticasPC, true); //O parâmetro true faz com que as informações não sejam sobreescritas
                     bwEstatPC = new BufferedWriter(escreveEstatPC);
 
@@ -2914,7 +2913,7 @@ public class DgStd1 {
         }
 
     }
-    
+
     /**
      *
      * @param tp
@@ -2938,14 +2937,13 @@ public class DgStd1 {
             int tamPC = getTamPC();
 
             BufferedWriter bwEstat = null;
-            
-            BufferedWriter bwEstatPC = null;
 
+            BufferedWriter bwEstatPC = null;
 
             try {
                 escreveEstat = new FileWriter(estatisticas, true);
                 bwEstat = new BufferedWriter(escreveEstat);
-                
+
                 bwEstat.append("DS");
                 bwEstat.append(";");
                 bwEstat.append("1 - acm diverg");
@@ -2978,7 +2976,7 @@ public class DgStd1 {
                 bwEstat.append(";");
                 bwEstat.append(Integer.toString(fn));
                 bwEstat.append("\n");
-                
+
                 //Salvando conjunto PC
                 escreveEstatPC = new FileWriter(estatisticasPC, true);
                 bwEstatPC = new BufferedWriter(escreveEstatPC);
@@ -3401,7 +3399,14 @@ public class DgStd1 {
 
         BufferedReader brGS = null;
         try {
-            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            if (gs.getPath().contains(".csv")) {
+
+                brGS = new BufferedReader(new FileReader(gs.getPath()));
+
+            } else {
+
+                brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            }
 
             while ((Str = brGS.readLine()) != null) {
 
@@ -3829,7 +3834,14 @@ public class DgStd1 {
         //Armazenando valores do arquivo atual no mapa
         try {
 
-            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            if (gs.getPath().contains(".csv")) {
+
+                brGS = new BufferedReader(new FileReader(gs.getPath()));
+
+            } else {
+                
+                brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            }
 
             int linha = 0;
 

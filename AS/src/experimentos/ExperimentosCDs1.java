@@ -45,7 +45,7 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 
         if (geraVetor) {//Dar um jeito de conseguir o conjunto de todas divergências antes!
             try {
-                geraVetor(getFileDiverg()); //Para gerar o vetor base dos demais'
+                geraVetorMaior(getFileDiverg()); //Para gerar o vetor base dos demais'
             } catch (IOException ex) {
                 Logger.getLogger(ExperimentosCDs1.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -69,7 +69,7 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
      * @throws IOException
      */
     @Override
-    public void geraVetor(File arqDiverg) throws IOException {
+    public void geraVetorMaior(File arqDiverg) throws IOException {
 
         System.out.println("Olha eu aqui, papae!");
         
@@ -246,7 +246,7 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
         obj = new ExperimentosCDs1();
         
         AllQPEtapa11 expCds = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 0, 0, 0, 0, 0, 9763, 0, 0, 0, 1, null, null, null, null, null, true, false, false, false, false, false, false, false, false, obj);
-        expCds.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false);
+        expCds.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true);
 //        expCds.setGsGeral("cd_gold.csv");
         expCds.rodaExpDedup();
     }

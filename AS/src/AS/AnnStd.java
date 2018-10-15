@@ -47,7 +47,7 @@ public class AnnStd {
     public AnnStd(File gabarito) {
 
         this.gs = gabarito;
-        
+
         System.out.println("Gabarito: " + gs);
 
         mapGS = new HashMap<String, String>();
@@ -87,12 +87,11 @@ public class AnnStd {
         }
 
     }
-    
-    
+
     public AnnStd(File gabarito, String base, String experimento) {
 
         this.gs = gabarito;
-        
+
         mapGS = new HashMap<String, String>();
         mapArqResult = new HashMap<String, String>();
 
@@ -922,7 +921,6 @@ public class AnnStd {
 
     public File filtraDivergenciasHash(File arqDA) throws IOException {
         //arqDA contém a junção do que está em DA com o último resultado (com dados repetidos, inclusive)
-        
 
         HashMap<String, Boolean> numIndex = new HashMap<String, Boolean>();
         HashMap<String, Boolean> abandoned = new HashMap<String, Boolean>();
@@ -1036,9 +1034,6 @@ public class AnnStd {
             bwDiverg.close();
 //            System.out.println(entry.getKey());
         }
-
-        
-        
 
         return divergencias;
     }
@@ -1359,7 +1354,17 @@ public class AnnStd {
 
         BufferedReader brGS = null;
         try {
-            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+
+            if (gs.getPath().contains(".csv")) {
+
+                brGS = new BufferedReader(new FileReader(gs.getPath()));
+
+            } else {
+                
+                brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            }
+            
+            
 
             while ((Str = brGS.readLine()) != null) {
 
@@ -1592,7 +1597,7 @@ public class AnnStd {
     }
 
     private boolean buscaDM_NDM2(String elemento1, String elemento2) throws IOException {
-       
+
         boolean existe = false;
 
         String str;
@@ -1737,7 +1742,14 @@ public class AnnStd {
         //Armazenando valores do arquivo atual no mapa
         try {
 
-            brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            if (gs.getPath().contains(".csv")) {
+
+                brGS = new BufferedReader(new FileReader(gs.getPath()));
+
+            } else {
+                
+                brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
+            }
 
             int linha = 0;
 
@@ -1775,7 +1787,6 @@ public class AnnStd {
     public void populaMapArqResult() {
 
 //        System.out.println("populaMapArqResult!");
-
         //Limpando valores anteriores
         try {
             mapArqResult.clear();

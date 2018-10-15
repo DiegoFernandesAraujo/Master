@@ -41,8 +41,30 @@ public abstract class VetorSimEstat1 extends DedupAlg {
     public VetorSimEstat1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
-        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+//        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + ".csv");
         dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "/" + qp + "/");
+
+        if (!vetorSimilaridade.exists()) {
+            System.out.println("Não existe arquivo vetorSimilaridade.csv.");
+
+            try {
+                vetorSimilaridade.createNewFile();
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo vetorSimilaridade.csv.");
+            }
+
+        }
+    }
+    
+//    String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator
+    public VetorSimEstat1(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, String qp) {
+        super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, goldId2, goldId1, goldId2, separator);
+
+//        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1+"-"+baseDados2 + ".csv");
+        dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1+"-"+baseDados2 + "/" + qp + "/");
 
         if (!vetorSimilaridade.exists()) {
             System.out.println("Não existe arquivo vetorSimilaridade.csv.");

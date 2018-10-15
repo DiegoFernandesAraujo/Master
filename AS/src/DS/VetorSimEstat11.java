@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 
 /**
  * Método geraVetorMaior() gera os vetores de similaridades juntamente com as
- estatísticas (méd, mín, máx) necessárias para a execução da abordagem AA
- baseada em monotonicidade.
+ * estatísticas (méd, mín, máx) necessárias para a execução da abordagem AA
+ * baseada em monotonicidade.
  *
  * @author Diego
  */
@@ -73,7 +73,8 @@ public abstract class VetorSimEstat11 extends DedupAlg {
 //        geraVetorMaior = geraVetorMaior;
         super.setAllVarDedup(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
 
-        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+//        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + ".csv");
         dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "/" + qp + "/");
 
         if (!vetorSimilaridade.exists()) {
@@ -91,7 +92,11 @@ public abstract class VetorSimEstat11 extends DedupAlg {
 
         exeGerVetMaior();
     }
-    
+
+    public VetorSimEstat11(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, String qp) {
+        super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, goldId2, goldId1, goldId2, separator);
+    }
+
     public void setAllVarDedup(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
 
         this.baseDados1 = baseDados1;
@@ -104,8 +109,9 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         this.separator = separator;
         this.qp = qp;
         super.setAllVarDedup(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, separator);
-        
-        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + baseDados2 + "-" + qp + ".csv");
+
+//        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + baseDados2 + "-" + qp + ".csv");
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + baseDados2 + ".csv");
         dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "-" + baseDados2 + "/" + qp + "/");
 
         if (!vetorSimilaridade.exists()) {
@@ -124,7 +130,6 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         exeGerVetMaior();
     }
 
-
     /**
      * A ser sobreescrito para cada base
      *
@@ -132,8 +137,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
      * @throws IOException
      */
     public abstract void geraVetorMaior(File arqDivergMaior) throws IOException;
-    
-    
+
     public void exeGerVetMaior() {
 
         if (geraVetorMaior) {//Dar um jeito de conseguir o conjunto de todas divergências antes!
@@ -144,7 +148,6 @@ public abstract class VetorSimEstat11 extends DedupAlg {
             }
         }
     }
-
 
     //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
     //existente no arquivo de divergências informado
@@ -227,7 +230,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
 //                    System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
                     if (((elementoVetorSim1.equals(elementoDiverg1)) && (elementoVetorSim2.equals(elementoDiverg2))) || ((elementoVetorSim1.equals(elementoDiverg2)) && ((elementoVetorSim2.equals(elementoDiverg1))))) {
 
-                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
+//                        System.out.println("elementoVetorSim1: " + elementoVetorSim1 + " - " + "elementoVetorSim2: " + elementoVetorSim2);
 //                        System.out.println(linhaAtualVetor.length);
 //                        for (String valor : linhaAtualVetor) {
 //                            bwVetorMenor.append(valor);
@@ -254,7 +257,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
                 brVetorSim.close();
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em buscaGabarito()");
+            System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em geraVetorMenor()");
         } catch (IOException ex) {
             Logger.getLogger(VetorSimEstat11.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -292,8 +295,8 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         }
 
     }
-    
-        public File getVetorSimilaridade() {
+
+    public File getVetorSimilaridade() {
         return vetorSimilaridade;
     }
 

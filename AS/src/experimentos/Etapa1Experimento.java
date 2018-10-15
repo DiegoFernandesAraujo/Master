@@ -65,7 +65,7 @@ public class Etapa1Experimento {
         this.tamBase1 = tamBase1;
         this.isDedup = true;
         this.vQtdAlg = vQtdAlg;
-        dirResult = base+"-"+qp;
+        dirResult = base+"/"+qp+"/";
     }
 
     //Para record linkage
@@ -95,7 +95,7 @@ public class Etapa1Experimento {
         this.tamBase2 = tamBase2;
         this.isDedup = false;
         this.vQtdAlg = vQtdAlg;
-        dirResult = base+"-"+qp;
+        dirResult = base+"/"+qp+"/";
     }
 
     
@@ -394,6 +394,7 @@ public class Etapa1Experimento {
         }
 
         aux.sort(null);
+//        System.out.println(aux);
 
         return aux;
 

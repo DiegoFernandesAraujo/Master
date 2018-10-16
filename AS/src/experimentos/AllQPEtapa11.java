@@ -277,6 +277,10 @@ public class AllQPEtapa11 {
         dirEstatqp4 = new File("./src/csv/estatisticas/" + baseGeral + "/qp4/");
         dirEstatqp6 = new File("./src/csv/estatisticas/" + baseGeral + "/qp6/");
         dirEstatqp7 = new File("./src/csv/estatisticas/" + baseGeral + "/qp7/");
+        
+        System.out.println("Quantidade de observações a serem geradas: " + qtdObs);
+        
+        System.out.println("Executando qp1: " + okqp1 + " - qp2b: " + okqp2b  + " - qp2m: " + okqp2m  + " - qp2r: " + okqp2r  + " - qp3all: " + okqp3all  + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
 
     }
 

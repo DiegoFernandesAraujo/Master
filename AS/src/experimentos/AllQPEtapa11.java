@@ -6,7 +6,12 @@
 package experimentos;
 
 import DS.VetorSimEstat11;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Executa os experimentos para todas as questões de pesquisa.
@@ -62,7 +67,10 @@ public class AllQPEtapa11 {
     boolean okqp5three = true;
     boolean okqp5five = true;
     private boolean geraVetorQP5;
-
+    
+    File dirDivergqp1, dirDivergqp4, dirDivergqp6, dirDivergqp7;
+    File dirEstatqp1, dirEstatqp4, dirEstatqp6, dirEstatqp7;
+    
     public AllQPEtapa11() {
 
     }
@@ -259,6 +267,16 @@ public class AllQPEtapa11 {
         this.okqp5five = okqp5five;
 
         this.objVet = obj;
+        
+        dirDivergqp1 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp1/");
+        dirDivergqp4 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp4/");
+        dirDivergqp6 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp6/");
+        dirDivergqp7 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp7/");
+        
+        dirEstatqp1 = new File("./src/csv/estatisticas/" + baseGeral + "/qp1/");
+        dirEstatqp4 = new File("./src/csv/estatisticas/" + baseGeral + "/qp4/");
+        dirEstatqp6 = new File("./src/csv/estatisticas/" + baseGeral + "/qp6/");
+        dirEstatqp7 = new File("./src/csv/estatisticas/" + baseGeral + "/qp7/");
 
     }
 
@@ -474,6 +492,14 @@ public class AllQPEtapa11 {
             qp1.executa();
 
             objVet.executaGerVetMenor(); //Para gerar os vetores menores
+            
+            copia(dirDivergqp1, dirDivergqp4);
+            copia(dirDivergqp1, dirDivergqp6);
+            copia(dirDivergqp1, dirDivergqp7);
+            copia(dirEstatqp1, dirEstatqp4);
+            copia(dirEstatqp1, dirEstatqp6);
+            copia(dirEstatqp1, dirEstatqp7);
+            
         }
 
         //Para qp2  - Bons
@@ -491,14 +517,17 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
+            int itensComb = (int) (qtdMaxB * 0.8); //80% da quantidade máxima de matchers bons.
+//            System.out.println("qtdMaxB: " + qtdMaxB);
+
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2b.setvQtdAlg(new int[]{qtdMaxB - 2});
+            qp2b.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxB) < qtdObs) {
-                qp2b.setQtdObservacoes(calcQtdObs(qtdMaxB));
+            if (calcQtdObs(qtdMaxB, itensComb) < qtdObs) { //Esse cálculo foi fito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(calcQtdObs(qtdMaxB, itensComb));
             } else {
                 qp2b.setQtdObservacoes(qtdObs);
             }
@@ -521,14 +550,17 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
+            int itensComb = (int) (qtdMaxM * 0.8); //80% da quantidade máxima de matchers médios.
+//            System.out.println("qtdMaxM: " + qtdMaxM);
+
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2m.setvQtdAlg(new int[]{qtdMaxM - 2});
+            qp2m.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxM) < qtdObs) {
-                qp2m.setQtdObservacoes(calcQtdObs(qtdMaxM));
+            if (calcQtdObs(qtdMaxM, itensComb) < qtdObs) {
+                qp2m.setQtdObservacoes(calcQtdObs(qtdMaxM, itensComb));
             } else {
                 qp2m.setQtdObservacoes(qtdObs);
             }
@@ -552,15 +584,18 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
+            int itensComb = (int) (qtdMaxR * 0.8); //80% da quantidade máxima de matchers ruins.
+//            System.out.println("qtdMaxR: " + qtdMaxR);
+
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2r.setvQtdAlg(new int[]{qtdMaxR - 2});
+            qp2r.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxR) < qtdObs) {
-                qp2r.setQtdObservacoes(calcQtdObs(qtdMaxR));
+            if (calcQtdObs(qtdMaxR, itensComb) < qtdObs) {
+                qp2r.setQtdObservacoes(calcQtdObs(qtdMaxR, itensComb));
             } else {
                 qp2r.setQtdObservacoes(qtdObs);
             }
@@ -572,8 +607,10 @@ public class AllQPEtapa11 {
 
         //Para qp3  - Todos
         if (okqp3all) {
+
+            int esteQtdMaxAll = qtdMaxAll;
 //            int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", esteQtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
 //            if (geraVetor) {
@@ -584,14 +621,17 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
+            int itensComb = (int) (esteQtdMaxAll * 0.8); //80% da quantidade máxima de matchers bons.
+//            System.out.println("esteQtdMaxAll: " + esteQtdMaxAll);
+
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp3All.setvQtdAlg(new int[]{qtdMaxAll - 2});
+            qp3All.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxAll) < qtdObs) {
-                qp3All.setQtdObservacoes(calcQtdObs(qtdMaxAll));
+            if (calcQtdObs(esteQtdMaxAll, itensComb) < qtdObs) {
+                qp3All.setQtdObservacoes(calcQtdObs(esteQtdMaxAll, itensComb));
             } else {
                 qp3All.setQtdObservacoes(qtdObs);
             }
@@ -615,16 +655,17 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
 
-            qtdMaxLot = (int) qtdMaxAll/2; //Metade da quantidade máxima de matchers bons.
-            
+            int itensComb = (int) qtdMaxAll / 2; //Metade da quantidade máxima de matchers bons.
+//            System.out.println("qtdMaxLot: " + qtdMaxLot);
+
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp3Lot.setvQtdAlg(new int[]{qtdMaxLot});
+            qp3Lot.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxLot) < qtdObs) {
-                qp3Lot.setQtdObservacoes(calcQtdObs(qtdMaxLot));
+            if (calcQtdObs(qtdMaxLot, itensComb) < qtdObs) {
+                qp3Lot.setQtdObservacoes(calcQtdObs(qtdMaxLot, itensComb));
             } else {
                 qp3Lot.setQtdObservacoes(qtdObs);
             }
@@ -1527,11 +1568,43 @@ public class AllQPEtapa11 {
         this.vQtdAlgGeral = vQtdAlgGeral;
     }
 
-    public int calcQtdObs(int itens) {
-        int combinacoes = itens - 2;
-        int qtdObservacoes = (int) (fact(itens) / (fact(itens - combinacoes) * fact(combinacoes)));
-        
-        System.out.println("Quantidade de observações para " + (itens-2) + ": " + qtdObservacoes + ".");
+    // Copia todos os arquivos de um diretório para o diretório destino
+    // Se o diretório destino não existir, ele sera criado automaticamente
+    public boolean copia( File srcDir, File dstDir ){
+        try{
+            if( srcDir.isDirectory() ){
+                if( !dstDir.exists() ){
+                    dstDir.mkdir();
+                }
+                String[] children = srcDir.list();
+                for (int i=0; i<children.length; i++){
+                    copia( new File( srcDir, children[i] ), new File( dstDir, children[i] ) );
+                }
+            } 
+            else{
+                InputStream in = new FileInputStream( srcDir );
+                OutputStream out = new FileOutputStream( dstDir );
+                byte[] buf = new byte[1024];
+                int len;
+                while( (len = in.read( buf ) ) > 0 ) {
+                    out.write( buf, 0, len );
+                }
+                in.close();
+                out.close();
+            }
+        }
+        catch( IOException ioex ){
+            ioex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public int calcQtdObs(int itensTotal, int itensComb) {
+        //Quantidade de observações corresponde à quantidade de combinações possíveis
+        int qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - itensComb) * fact(itensComb)));
+
+        System.out.println("Quantidade de combinações para " + (itensComb) + ": " + qtdObservacoes + ".");
 
         return qtdObservacoes;
     }
@@ -1546,7 +1619,7 @@ public class AllQPEtapa11 {
 
     public static void main(String[] args) {
         AllQPEtapa11 obj = new AllQPEtapa11();
-        System.out.println(obj.calcQtdObs(10));
+        System.out.println(obj.calcQtdObs(6, 4));
     }
 
 }

@@ -21,13 +21,15 @@ public class AplicacaoAS {
 
     public static void main(String[] args) throws IOException {
 //        AnnStd obj = new AnnStd();
-        AnnStd obj = new AnnStd();
-        DgStd1 objD = new DgStd1();
+        
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
+        
+        AnnStd obj = new AnnStd(gs);
+        DgStd1 objD = new DgStd1(gs);
 
         obj.setGs(gs);
         objD.setGs(gs);

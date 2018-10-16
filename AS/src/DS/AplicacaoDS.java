@@ -27,12 +27,14 @@ public class AplicacaoDS {
      */
     public static void main(String[] args) throws IOException {
 //        DgStd obj = new DgStd();
-        DgStd1 obj = new DgStd1();
-        AnnStd obj1 = new AnnStd();
+        
 
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
         File gs = new File("./src/csv/datasets", "cd_gold.csv");
+        
+        DgStd1 obj = new DgStd1(gs);
+        AnnStd obj1 = new AnnStd(gs);
 
         obj.setGs(gs);
 

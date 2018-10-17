@@ -20,7 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Utilizada quando se tem os arquivos com sequências aleatórias de <i>matchers</i>
  * @author Diego
  */
 public class AplicacaoASDS1 {
@@ -28,8 +28,11 @@ public class AplicacaoASDS1 {
     File arqAlg = new File("./src/csv/algoritmos.csv");
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        AnnStd objAS = new AnnStd();
-        DgStd1 objDS = new DgStd1();
+        
+        File gs = new File("./src/csv/datasets", "cd_gold.csv");
+        
+        AnnStd objAS = new AnnStd(gs);
+        DgStd1 objDS = new DgStd1(gs);
 
         String abordagemAA = "Dg"; //Pt - Peter Christen ou Dg - Diego Araújo
 
@@ -46,8 +49,7 @@ public class AplicacaoASDS1 {
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         int qtdAlg = 23; //Quantidade de algoritmos de resolução de entidades não supervisionados utilizados no processo
 
-        File gs = new File("./src/csv/datasets", "cd_gold.csv");
-
+        
         objAS.setGs(gs);
         objDS.setGs(gs);
 
@@ -97,17 +99,20 @@ public class AplicacaoASDS1 {
         algSorts.add(algSort15);
         algSorts.add(algSort20);
 //        algSorts.add(algSort23);
-        algSorts.hashCode();
+
 //        int sohParaTestar = 0;
+
+        File algSort = null;
+        
         for (int qtdAlgUt : vQtdAlg) { //Adicionado depois
 
-            File algSort = null;
+            algSort = null;
 
             for (File file : algSorts) {
 
                 if (file.getName().contains(Integer.toString(qtdAlgUt))) { //Pra que isso mesmo?
 
-                    algSort = file;
+                    algSort = file; //Seleciona o arquivo com a lista de sequências aleatórias de <qtdAlgUt> algoritmos utilizados
                     break;
 
                 }
@@ -134,8 +139,8 @@ public class AplicacaoASDS1 {
 
                 ArrayList<Integer> listaAlg = new ArrayList<Integer>();
 
-//                while ((Str = brArq.readLine()) != null) {
-                while (((Str = brArq.readLine()) != null) && (i<=3)) {
+                while ((Str = brArq.readLine()) != null) {
+//                while (((Str = brArq.readLine()) != null) && (i<=20)) {
 
 //                    System.out.println(Str);
                     Str = Str.replace("[", " ");
@@ -213,12 +218,13 @@ public class AplicacaoASDS1 {
                         //QUANDO TIVER OS ARQUIVOS COM VALORES DE SIMILARIDADE
                         if (abordagemAA.equals("Dg")) {
 
-                            objDS.contabilizaEstatDA(objDS.getHistoricoDA());
-                            objDS.contabilizaEstatNAODA(objDS.getHistoricoNAODA());
+                            objDS.contabilizaEstatDA2(objDS.getHistoricoDA());
+                            objDS.contabilizaEstatNAODA2(objDS.getHistoricoNAODA());
 
-                            objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+//                            objDS.filtraDivergencias_NEW(objDS.getEstatDA(), objDS.getEstatNAODA());
+                            objDS.filtraDivergencias_NEW2(objDS.getEstatDA(), objDS.getEstatNAODA());
 
-                            objDS.incrementaEstatNAO_DA();
+                            objDS.incrementaEstatNAO_DA(); //Pode ficar em outro local? - Não, pois o arquivo "diverg" é gerado para cada sequência.
 
                             objDS.copiaArqDivergAA(); //Deve ser obrigatorieamente chamado quando se for aplicar a estratégia
                             //de AA proposta.
@@ -229,7 +235,7 @@ public class AplicacaoASDS1 {
 //                    System.out.println("Entrou no else");
 //                        i--;
                     }
-                    seed += 10;
+//                    seed += 10;
                       
                 }
             } catch (IOException ex) {
@@ -238,7 +244,7 @@ public class AplicacaoASDS1 {
             
             
             java.awt.Toolkit.getDefaultToolkit().beep();
-
+            
         }
 
     }

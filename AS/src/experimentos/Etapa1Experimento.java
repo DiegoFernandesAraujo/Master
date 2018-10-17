@@ -183,6 +183,7 @@ public class Etapa1Experimento {
                     objDS.setPermutacao(i);
                     objDS.setQtdAlg(qtdAlgUt);
                     objDS.limpaTudo();
+                    System.out.println(base + " - " + qp + " - " + qtdAlgUt);
                     System.out.println("Iteração " + i);
 
                     int alg = 0;

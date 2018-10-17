@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.swing.JOptionPane;
 
 /**
  * Executa os experimentos para todas as questões de pesquisa.
@@ -67,10 +68,10 @@ public class AllQPEtapa11 {
     boolean okqp5three = true;
     boolean okqp5five = true;
     private boolean geraVetorQP5;
-    
+
     File dirDivergqp1, dirDivergqp4, dirDivergqp6, dirDivergqp7;
     File dirEstatqp1, dirEstatqp4, dirEstatqp6, dirEstatqp7;
-    
+
     public AllQPEtapa11() {
 
     }
@@ -267,20 +268,12 @@ public class AllQPEtapa11 {
         this.okqp5five = okqp5five;
 
         this.objVet = obj;
-        
-        dirDivergqp1 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp1/");
-        dirDivergqp4 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp4/");
-        dirDivergqp6 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp6/");
-        dirDivergqp7 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp7/");
-        
-        dirEstatqp1 = new File("./src/csv/estatisticas/" + baseGeral + "/qp1/");
-        dirEstatqp4 = new File("./src/csv/estatisticas/" + baseGeral + "/qp4/");
-        dirEstatqp6 = new File("./src/csv/estatisticas/" + baseGeral + "/qp6/");
-        dirEstatqp7 = new File("./src/csv/estatisticas/" + baseGeral + "/qp7/");
-        
+
+        iniciaArq();
+
         System.out.println("Quantidade de observações a serem geradas: " + qtdObs);
-        
-        System.out.println("Executando qp1: " + okqp1 + " - qp2b: " + okqp2b  + " - qp2m: " + okqp2m  + " - qp2r: " + okqp2r  + " - qp3all: " + okqp3all  + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
+        System.out.println("Executando qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
 
     }
 
@@ -449,6 +442,12 @@ public class AllQPEtapa11 {
         this.okqp5three = okqp5three;
         this.okqp5five = okqp5five;
 
+        iniciaArq();
+
+        System.out.println("Quantidade de observações a serem geradas: " + qtdObs);
+
+        System.out.println("Executando qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
     }
 
     /**
@@ -468,6 +467,9 @@ public class AllQPEtapa11 {
             qp1.setQtdObservacoes(1); //Basta uma vez                
             qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             qp1.limpaEstatisticas(baseGeral, "qp1");
+            JOptionPane.showMessageDialog(null, "Olhe a pasta lá, papae!");
+            limpaDivergBase(dirDivergqp1);
+            JOptionPane.showMessageDialog(null, "Olhe a pasta agora, papae!");
         }
 
         //Se geraVetor == true, gera o vetor de similaridades maior
@@ -496,14 +498,14 @@ public class AllQPEtapa11 {
             qp1.executa();
 
             objVet.executaGerVetMenor(); //Para gerar os vetores menores
-            
+
             copia(dirDivergqp1, dirDivergqp4);
             copia(dirDivergqp1, dirDivergqp6);
             copia(dirDivergqp1, dirDivergqp7);
             copia(dirEstatqp1, dirEstatqp4);
             copia(dirEstatqp1, dirEstatqp6);
             copia(dirEstatqp1, dirEstatqp7);
-            
+
         }
 
         //Para qp2  - Bons
@@ -757,6 +759,10 @@ public class AllQPEtapa11 {
 
         }
 
+        System.out.println("Quantidade de observações geradas: " + qtdObs);
+
+        System.out.println("QPs executaas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
     }
 
     /**
@@ -981,6 +987,10 @@ public class AllQPEtapa11 {
 
         }
 
+        System.out.println("Quantidade de observações geradas: " + qtdObs);
+
+        System.out.println("QPs executaas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
     }
 
     /**
@@ -1200,6 +1210,10 @@ public class AllQPEtapa11 {
 
             objVet.executaGerVetMenor(); //Para gerar os vetores menores
         }
+
+        System.out.println("Quantidade de observações geradas: " + qtdObs);
+
+        System.out.println("QPs executaas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
 
     }
 
@@ -1422,6 +1436,10 @@ public class AllQPEtapa11 {
             objVet.executaGerVetMenor(); //Para gerar os vetores menores
         }
 
+        System.out.println("Quantidade de observações geradas: " + qtdObs);
+
+        System.out.println("QPs executaas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
     }
 
     /**
@@ -1574,30 +1592,28 @@ public class AllQPEtapa11 {
 
     // Copia todos os arquivos de um diretório para o diretório destino
     // Se o diretório destino não existir, ele sera criado automaticamente
-    public boolean copia( File srcDir, File dstDir ){
-        try{
-            if( srcDir.isDirectory() ){
-                if( !dstDir.exists() ){
+    public boolean copia(File srcDir, File dstDir) {
+        try {
+            if (srcDir.isDirectory()) {
+                if (!dstDir.exists()) {
                     dstDir.mkdir();
                 }
                 String[] children = srcDir.list();
-                for (int i=0; i<children.length; i++){
-                    copia( new File( srcDir, children[i] ), new File( dstDir, children[i] ) );
+                for (int i = 0; i < children.length; i++) {
+                    copia(new File(srcDir, children[i]), new File(dstDir, children[i]));
                 }
-            } 
-            else{
-                InputStream in = new FileInputStream( srcDir );
-                OutputStream out = new FileOutputStream( dstDir );
+            } else {
+                InputStream in = new FileInputStream(srcDir);
+                OutputStream out = new FileOutputStream(dstDir);
                 byte[] buf = new byte[1024];
                 int len;
-                while( (len = in.read( buf ) ) > 0 ) {
-                    out.write( buf, 0, len );
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
                 }
                 in.close();
                 out.close();
             }
-        }
-        catch( IOException ioex ){
+        } catch (IOException ioex) {
             ioex.printStackTrace();
             return false;
         }
@@ -1619,6 +1635,33 @@ public class AllQPEtapa11 {
             return 0;
         }
         return (n < 2) ? 1 : n * fact(n - 1);
+    }
+
+    public void limpaDivergBase(File dir) {
+
+        if (dir.isDirectory()) {
+            File[] sun = dir.listFiles();
+            for (File toDelete : sun) {
+
+                if (toDelete.getName().contains(Integer.toString(qtdMaxGeral))) {
+
+                    toDelete.delete();
+                }
+            }
+        }
+
+    }
+
+    public void iniciaArq() {
+        dirDivergqp1 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp1/");
+        dirDivergqp4 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp4/");
+        dirDivergqp6 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp6/");
+        dirDivergqp7 = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseGeral + "/qp7/");
+
+        dirEstatqp1 = new File("./src/csv/estatisticas/" + baseGeral + "/qp1/");
+        dirEstatqp4 = new File("./src/csv/estatisticas/" + baseGeral + "/qp4/");
+        dirEstatqp6 = new File("./src/csv/estatisticas/" + baseGeral + "/qp6/");
+        dirEstatqp7 = new File("./src/csv/estatisticas/" + baseGeral + "/qp7/");
     }
 
     public static void main(String[] args) {

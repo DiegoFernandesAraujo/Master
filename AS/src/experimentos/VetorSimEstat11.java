@@ -6,8 +6,9 @@
  * Se conseguir recuperar o texto de cada ID normalmente, deverá ser feito um método
  * para desconsiderar seus colchetes ([[ e ]]) para comparar com o conjunto de divergências gerado antes.
  */
-package DS;
+package experimentos;
 
+import DS.ExecVetorSimCDs;
 import dedupalgorithms.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

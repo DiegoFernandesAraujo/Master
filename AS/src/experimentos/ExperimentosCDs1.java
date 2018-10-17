@@ -6,7 +6,6 @@
 package experimentos;
 
 import DS.DgStd1;
-import DS.VetorSimEstat11;
 import dude.algorithm.Algorithm;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
@@ -246,8 +245,8 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 //        expCds.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCds.rodaExpDedup();
 //        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 10, 0, 0, 0, 0, 9763, 0, 0, 0, 1000, new int[]{10}, null, null, null, null, false, true, false, false, false, false, false, false, false, obj);
-        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 7, 10, 6, 7, 7, 9763, 0, 0, 0, 1, true, true, true, true, true, true, false, false, false, obj);
-        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
+        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 7, 10, 6, 7, 7, 9763, 0, 0, 0, 1000, true, true, true, true, true, true, false, false, false, obj);
+        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
         expCdsQP2b.rodaExpDedup();
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);
 //        expCdsMenosQP5.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);

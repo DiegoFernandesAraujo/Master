@@ -5,7 +5,6 @@
  */
 package experimentos;
 
-import DS.VetorSimEstat11;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -467,9 +466,7 @@ public class AllQPEtapa11 {
             qp1.setQtdObservacoes(1); //Basta uma vez                
             qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
             qp1.limpaEstatisticas(baseGeral, "qp1");
-            JOptionPane.showMessageDialog(null, "Olhe a pasta lá, papae!");
             limpaDivergBase(dirDivergqp1);
-            JOptionPane.showMessageDialog(null, "Olhe a pasta agora, papae!");
         }
 
         //Se geraVetor == true, gera o vetor de similaridades maior

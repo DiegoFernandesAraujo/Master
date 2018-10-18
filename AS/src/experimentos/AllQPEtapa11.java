@@ -1626,6 +1626,35 @@ public class AllQPEtapa11 {
         return qtdObservacoes;
     }
 
+    public int[] calcQtdObs(int itensTotal) {
+        //Quantidade de observações corresponde à quantidade de combinações possíveis
+        int qtdObservacoes = 1;
+        int aux = 1;
+        int itensComb = 1;
+        int[] vetor = {qtdObservacoes,itensComb};
+        
+
+        for (int i = 1; i < itensTotal; i++) {
+
+            aux = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+
+            if (aux > qtdObservacoes) {
+
+                qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+                vetor[0] = qtdObservacoes;
+                vetor[1] = i;
+                
+
+            }
+
+//            System.out.println("Quantidade de combinações para " + (i) + ": " + qtdObservacoes + ".");
+        }
+        System.out.println("Maior quantidade de combinações: " + vetor[0] + " gerada por " + vetor[1] + " algoritmos de " + itensTotal + " possíveis.");
+//        int qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - itensComb) * fact(itensComb)));
+//        System.out.println("Quantidade de combinações para " + (itensComb) + ": " + qtdObservacoes + ".");
+        return vetor;
+    }
+
     public static long fact(final int n) {
         if (n < 0) {
             System.err.println("No negative numbers");
@@ -1663,7 +1692,11 @@ public class AllQPEtapa11 {
 
     public static void main(String[] args) {
         AllQPEtapa11 obj = new AllQPEtapa11();
-        System.out.println(obj.calcQtdObs(6, 4));
+//        System.out.println(obj.calcQtdObs(6, 4));
+        for (int i = 1; i < 20; i++) {
+            obj.calcQtdObs(i);
+        }
+
     }
 
 }

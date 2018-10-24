@@ -520,20 +520,23 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
 
-            int itensComb = (int) (qtdMaxB * 0.8); //80% da quantidade máxima de matchers bons.
+//            int itensComb = (int) (qtdMaxB * 0.8); //80% da quantidade máxima de matchers bons.
 //            System.out.println("qtdMaxB: " + qtdMaxB);
-
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2b.setvQtdAlg(new int[]{itensComb});
-
+//            qp2b.setvQtdAlg(new int[]{itensComb});
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
-            //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxB, itensComb) < qtdObs) { //Esse cálculo foi fito baseado nas 1000 iterações clássicas
-                qp2b.setQtdObservacoes(calcQtdObs(qtdMaxB, itensComb));
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(qtdMaxObs);
             } else {
                 qp2b.setQtdObservacoes(qtdObs);
             }
+
+            qp2b.setvQtdAlg(new int[]{itensComb});
 
             qp2b.executa();
 
@@ -553,20 +556,24 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
 
-            int itensComb = (int) (qtdMaxM * 0.8); //80% da quantidade máxima de matchers médios.
-//            System.out.println("qtdMaxM: " + qtdMaxM);
-
-            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2m.setvQtdAlg(new int[]{itensComb});
-
+//            int itensComb = (int) (qtdMaxM * 0.8); //80% da quantidade máxima de matchers médios.
+////            System.out.println("qtdMaxM: " + qtdMaxM);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp2m.setvQtdAlg(new int[]{itensComb});
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
-            //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxM, itensComb) < qtdObs) {
-                qp2m.setQtdObservacoes(calcQtdObs(qtdMaxM, itensComb));
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxM)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxM)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2m.setQtdObservacoes(qtdMaxObs);
             } else {
                 qp2m.setQtdObservacoes(qtdObs);
             }
+
+            qp2m.setvQtdAlg(new int[]{itensComb});
 
             qp2m.executa();
 
@@ -587,21 +594,25 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
 
-            int itensComb = (int) (qtdMaxR * 0.8); //80% da quantidade máxima de matchers ruins.
-//            System.out.println("qtdMaxR: " + qtdMaxR);
-
-            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp2r.setvQtdAlg(new int[]{itensComb});
-
+//            int itensComb = (int) (qtdMaxR * 0.8); //80% da quantidade máxima de matchers ruins.
+////            System.out.println("qtdMaxR: " + qtdMaxR);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp2r.setvQtdAlg(new int[]{itensComb});
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
-            //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxR, itensComb) < qtdObs) {
-                qp2r.setQtdObservacoes(calcQtdObs(qtdMaxR, itensComb));
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxR)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxR)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2r.setQtdObservacoes(qtdMaxObs);
             } else {
                 qp2r.setQtdObservacoes(qtdObs);
             }
+
+            qp2r.setvQtdAlg(new int[]{itensComb});
 
             qp2r.executa();
 
@@ -611,9 +622,8 @@ public class AllQPEtapa11 {
         //Para qp3  - Todos
         if (okqp3all) {
 
-            int esteQtdMaxAll = qtdMaxAll;
-//            int[] vetor5 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", esteQtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
+            //            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll);
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
 //            if (geraVetor) {
@@ -624,20 +634,40 @@ public class AllQPEtapa11 {
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
 
-            int itensComb = (int) (esteQtdMaxAll * 0.8); //80% da quantidade máxima de matchers bons.
-//            System.out.println("esteQtdMaxAll: " + esteQtdMaxAll);
-
-            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp3All.setvQtdAlg(new int[]{itensComb});
-
+//            int itensComb = (int) (esteQtdMaxAll * 0.8); //80% da quantidade máxima de matchers bons.
+////            System.out.println("esteQtdMaxAll: " + esteQtdMaxAll);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp3All.setvQtdAlg(new int[]{itensComb});
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
             //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(esteQtdMaxAll, itensComb) < qtdObs) {
-                qp3All.setQtdObservacoes(calcQtdObs(esteQtdMaxAll, itensComb));
-            } else {
-                qp3All.setQtdObservacoes(qtdObs);
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxAll)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxAll)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (itensComb > (int) qtdMaxAll / 2) { // Se for maior que a metade (quantidade máxima de qp3lot), pode mandar brasa!
+
+                if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                    qp3All.setQtdObservacoes(qtdMaxObs);
+                } else {
+                    qp3All.setQtdObservacoes(qtdObs);
+                }
+
+            } else { // Senão força a pegar um valor acima da metade (quantidade máxima de qp3lot)
+                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[0]; //Quantidade máxima de combinações possíveis
+                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+                if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                    qp3All.setQtdObservacoes(qtdMaxObs);
+                } else {
+                    qp3All.setQtdObservacoes(qtdObs);
+                }
             }
+
+            qp3All.setvQtdAlg(new int[]{itensComb});
 
             qp3All.executa();
 
@@ -657,18 +687,21 @@ public class AllQPEtapa11 {
 //            }
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
-
-            int itensComb = (int) qtdMaxAll / 2; //Metade da quantidade máxima de matchers bons.
-//            System.out.println("qtdMaxLot: " + qtdMaxLot);
-
-            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
-            qp3Lot.setvQtdAlg(new int[]{itensComb});
+//
+//            int itensComb = (int) qtdMaxAll / 2; //Metade da quantidade máxima de matchers bons.
+////            System.out.println("qtdMaxLot: " + qtdMaxLot);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp3Lot.setvQtdAlg(new int[]{itensComb});
 
             //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
             //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
-            //de combinações possíveis de n-2 matchers.
-            if (calcQtdObs(qtdMaxLot, itensComb) < qtdObs) {
-                qp3Lot.setQtdObservacoes(calcQtdObs(qtdMaxLot, itensComb));
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObsAbaixo(qtdMaxAll, (int) qtdMaxAll/2)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObsAbaixo(qtdMaxAll, (int) qtdMaxAll/2)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp3Lot.setQtdObservacoes(qtdMaxObs);
             } else {
                 qp3Lot.setQtdObservacoes(qtdObs);
             }
@@ -1631,8 +1664,7 @@ public class AllQPEtapa11 {
         int qtdObservacoes = 1;
         int aux = 1;
         int itensComb = 1;
-        int[] vetor = {qtdObservacoes,itensComb};
-        
+        int[] vetor = {qtdObservacoes, itensComb};
 
         for (int i = 1; i < itensTotal; i++) {
 
@@ -1643,7 +1675,70 @@ public class AllQPEtapa11 {
                 qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
                 vetor[0] = qtdObservacoes;
                 vetor[1] = i;
-                
+
+            }
+
+//            System.out.println("Quantidade de combinações para " + (i) + ": " + qtdObservacoes + ".");
+        }
+        System.out.println("Maior quantidade de combinações: " + vetor[0] + " gerada por " + vetor[1] + " algoritmos de " + itensTotal + " possíveis.");
+//        int qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - itensComb) * fact(itensComb)));
+//        System.out.println("Quantidade de combinações para " + (itensComb) + ": " + qtdObservacoes + ".");
+        return vetor;
+    }
+
+    /**
+     *
+     * @param itensTotal
+     * @param acimaDe
+     * @return
+     */
+    public int[] calcQtdObsAcima(int itensTotal, int acimaDe) {
+        //Quantidade de observações corresponde à quantidade de combinações possíveis
+        int qtdObservacoes = 1;
+        int aux = 1;
+        int itensComb = 1;
+        int[] vetor = {qtdObservacoes, itensComb};
+
+        for (int i = acimaDe; i < itensTotal; i++) {
+
+            aux = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+
+            System.out.println("Quantidade de combinações para " + (i) + ": " + aux + ".");
+
+            if (aux > qtdObservacoes) {
+
+                qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+                vetor[0] = qtdObservacoes;
+                vetor[1] = i;
+
+//                System.out.println("Quantidade de combinações para " + (i) + ": " + qtdObservacoes + ".");
+            }
+
+        }
+        System.out.println("Maior quantidade de combinações: " + vetor[0] + " gerada por " + vetor[1] + " algoritmos de " + itensTotal + " possíveis.");
+//        int qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - itensComb) * fact(itensComb)));
+//        System.out.println("Quantidade de combinações para " + (itensComb) + ": " + qtdObservacoes + ".");
+        return vetor;
+    }
+
+    public int[] calcQtdObsAbaixo(int itensTotal, int abaixoDe) {
+        //Quantidade de observações corresponde à quantidade de combinações possíveis
+        int qtdObservacoes = 1;
+        int aux = 1;
+        int itensComb = 1;
+        int[] vetor = {qtdObservacoes, itensComb};
+
+        for (int i = 1; i <= abaixoDe; i++) {
+
+            aux = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+
+            System.out.println("Quantidade de combinações para " + (i) + ": " + aux + ".");
+
+            if (aux > qtdObservacoes) {
+
+                qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
+                vetor[0] = qtdObservacoes;
+                vetor[1] = i;
 
             }
 
@@ -1693,8 +1788,16 @@ public class AllQPEtapa11 {
     public static void main(String[] args) {
         AllQPEtapa11 obj = new AllQPEtapa11();
 //        System.out.println(obj.calcQtdObs(6, 4));
-        for (int i = 1; i < 20; i++) {
-            obj.calcQtdObs(i);
+//        for (int i = 1; i <= 20; i++) {
+//            obj.calcQtdObs(i);
+//        }
+//        for (int i = 10; i <= 10; i++) {
+//            obj.calcQtdObsAbaixo(i,(int)i/2);
+////            obj.calcQtdObsAbaixo(i, i);
+//        }
+//
+        for (int i = 10; i <= 10; i++) {
+            obj.calcQtdObsAcima(i, (int) i / 2);
         }
 
     }

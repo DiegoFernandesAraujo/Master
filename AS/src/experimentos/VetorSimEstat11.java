@@ -94,8 +94,8 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         exeGerVetMaior();
     }
 
-    public VetorSimEstat11(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String goldId1, String goldId2, char separator, String qp) {
-        super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, goldId2, goldId1, goldId2, separator);
+    public VetorSimEstat11(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String qp) {
+        super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, separator);
     }
 
     public void setAllVarDedup(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {

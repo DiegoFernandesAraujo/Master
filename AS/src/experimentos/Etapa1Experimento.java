@@ -39,6 +39,7 @@ public class Etapa1Experimento {
     int tamBase1, tamBase2, qtdObservacoes; //Quantidade de observações a serem geradas para os experimentos (ANTES ERAM 1000)
     boolean isDedup;
     int[] vQtdAlg = null; //{10, 15, 20};//, 25}; - Quantidades de algoritmos para geração das observações
+    String sepGS = null;
 
     //Para deduplicação
     /**
@@ -55,7 +56,8 @@ public class Etapa1Experimento {
      * @param qtdObs Quantidade de observações a serem geradas no experimento.
      * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      */
-    public Etapa1Experimento(String gabarito, String base, String qp, int qtdMaxAlg, int tamBase1, int qtdObs, int[] vQtdAlg) {
+    public Etapa1Experimento(String gabarito, String base, String qp, int qtdMaxAlg, int tamBase1, int qtdObs, int[] vQtdAlg, String sepGS) {
+        this.sepGS = sepGS;
         limpaEstatisticas(base, qp);        
         gs = new File("./src/csv/datasets", gabarito);
         this.base = base;
@@ -84,10 +86,11 @@ public class Etapa1Experimento {
      * @param qtdObs Quantidade de observações a serem geradas no experimento.
      * @param vQtdAlg Blocos com quantidades variáveis de <i>matchers</i>.
      */
-    public Etapa1Experimento(String gabarito, String base1, String base2, String qp, int qtdMaxAlg, int tamBase1, int tamBase2, int qtdObs, int... vQtdAlg) {
+    public Etapa1Experimento(String gabarito, String base1, String base2, String qp, int qtdMaxAlg, int tamBase1, int tamBase2, int qtdObs, int[] vQtdAlg, String sepGS) {
+        this.sepGS = sepGS;
+        this.base = base1+"-"+base2;
         limpaEstatisticas(base, qp);
         gs = new File("./src/csv/datasets", gabarito);
-        this.base = base1+"-"+base2;
         this.qp = qp;
         this.qtdObservacoes = qtdObs;
         this.qtdMaxAlg = qtdMaxAlg;
@@ -109,8 +112,8 @@ public class Etapa1Experimento {
 
         Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
 
-        AnnStd objAS = new AnnStd(gs, base, qp);
-        DgStd1 objDS = new DgStd1(gs, base, qp);
+        AnnStd objAS = new AnnStd(gs, base, qp, sepGS);
+        DgStd1 objDS = new DgStd1(gs, base, qp, sepGS);
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         long seed = 500;
@@ -239,7 +242,7 @@ public class Etapa1Experimento {
     }
 
     /**
-     *
+     * Para executar os experimentos a partir dos arquivos com as sequências distintas de matchers
      * @throws IOException
      * @throws InterruptedException
      */
@@ -247,8 +250,8 @@ public class Etapa1Experimento {
 
         Map<ArrayList<Integer>, ArrayList<Integer>> mapAlgsGerados = new HashMap<ArrayList<Integer>, ArrayList<Integer>>();
 
-        AnnStd objAS = new AnnStd(gs, base, qp);
-        DgStd1 objDS = new DgStd1(gs, base, qp);
+        AnnStd objAS = new AnnStd(gs, base, qp, sepGS);
+        DgStd1 objDS = new DgStd1(gs, base, qp, sepGS);
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         long seed = 500;
@@ -449,6 +452,24 @@ public class Etapa1Experimento {
     public void limpaEstatisticas(String base, String qp) {
 
         File dir = new File("./src/csv/estatisticas/" + base + "/" + qp);
+
+        if (dir.isDirectory()) {
+            File[] sun = dir.listFiles();
+            for (File toDelete : sun) {
+                toDelete.delete();
+            }
+        }
+
+    }
+    
+    /**
+     * Elimina os possíveis arquivos com estatísticas de experimentos anteriores.
+     * @param base1
+     * @param qp
+     */
+    public void limpaEstatisticas(String base1, String base2, String qp) {
+
+        File dir = new File("./src/csv/estatisticas/" + base1+"-"+base2 + "/" + qp);
 
         if (dir.isDirectory()) {
             File[] sun = dir.listFiles();

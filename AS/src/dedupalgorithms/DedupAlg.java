@@ -66,6 +66,7 @@ public class DedupAlg {
      * @param goldId2
      * @param separator
      */
+    @Deprecated
     public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator) {
 //    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
 
@@ -106,6 +107,15 @@ public class DedupAlg {
         this.idBaseDados = idBaseDados;
         this.result = baseDados1 + baseDados2;
         this.separator = separator;
+        System.out.println("baseDados1: " + baseDados1);
+        System.out.println("baseDados2: " + baseDados2);
+        System.out.println("chavePrimaria1" + chavePrimaria1);
+        System.out.println("chavePrimaria2" + chavePrimaria2);
+        System.out.println("gold" + gold);
+        System.out.println("goldId1" + goldId1);
+        System.out.println("goldId2" + goldId2);
+        System.out.println("separator" + separator);
+        
         recordLinkage();
     }
 
@@ -150,6 +160,7 @@ public class DedupAlg {
      * @param goldId2
      * @param separator
      */
+    @Deprecated
     public DedupAlg(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator, String dir, int ordem) {
 //    public DedupAlg(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, String result) {
 
@@ -533,6 +544,15 @@ public class DedupAlg {
         this.goldId1 = goldId1;
         this.goldId2 = goldId2;
         this.separator = separator;
+        
+        System.out.println("baseDados1: " + baseDados1);
+        System.out.println("baseDados2: " + baseDados2);
+        System.out.println("chavePrimaria1: " + chavePrimaria1);
+        System.out.println("chavePrimaria2: " + chavePrimaria2);
+        System.out.println("gold: " + gold);
+        System.out.println("goldId1: " + goldId1);
+        System.out.println("goldId2: " + goldId2);
+        System.out.println("separator: " + separator);
         recordLinkage();
     }
 

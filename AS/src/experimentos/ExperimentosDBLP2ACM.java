@@ -7,8 +7,7 @@ package experimentos;
 
 import DS.DgStd1;
 import dude.algorithm.Algorithm;
-import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.MongeElkanFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,39 +20,42 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
  *
  * @author Diego
  */
-public class ExperimentosCDs1 extends VetorSimEstat11 {
+public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
 
     FileWriter escreveArqVetor;
     BufferedWriter bwArqVetor = null;
     String a, b, c, d, e, f, g, rotulo;
 
-    public ExperimentosCDs1() {
+    public ExperimentosDBLP2ACM() {
 
     }
 
-    public ExperimentosCDs1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
+//    public ExperimentosDBLP2ACM(String baseDados1, String baseDados2, String gold, String goldId1, String goldId2, char separator, String qp) {
+//        super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, goldId2, goldId1, goldId2, separator);
+//    }
+    @Deprecated
+    public ExperimentosDBLP2ACM(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator, qp);
 
         if (geraVetor) {//Dar um jeito de conseguir o conjunto de todas divergências antes!
             try {
                 geraVetorMaior(getFileDiverg()); //Para gerar o vetor base dos demais'
             } catch (IOException ex) {
-                Logger.getLogger(ExperimentosCDs1.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ExperimentosDBLP2ACM.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    ExperimentosCDs1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
+    ExperimentosDBLP2ACM(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator, qp);
     }
 
-    ExperimentosCDs1(String baseGeral, String chavePrimaria, String gsGeral, String goldId1, String goldId2, char c, boolean geraVetor, String qp2r) {
+    ExperimentosDBLP2ACM(String baseGeral, String chavePrimaria, String gsGeral, String goldId1, String goldId2, char c, boolean geraVetor, String qp2r) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -83,20 +85,16 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
         algorithm.enableInMemoryProcessing();
 
         //Utilizando-se funções de similaridade que apresentaram bons resultados para gerar os vetores de similaridade.
-        MongeElkanFunction similarityFunc = new MongeElkanFunction("title");
-        Soundex similarityFunc2 = new Soundex();
-        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("track01");
-        LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("track02");
-        LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("track03");
-        LevenshteinDistanceFunction similarityFunc6 = new LevenshteinDistanceFunction("track10");
-        LevenshteinDistanceFunction similarityFunc7 = new LevenshteinDistanceFunction("track11");
+        NeedlemanWunschFunction similarityFunc = new NeedlemanWunschFunction("title");
+        NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
+        NeedlemanWunschFunction similarityFunc3 = new NeedlemanWunschFunction("year");
 
         //Escrita do cabeçalho
         try {
             escreveArqVetor = new FileWriter(getVetorSimilaridade(), false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-            bwArqVetor.write("elemento1;elemento2;title;artist;track01;track02;track03;track10;track11\n"); //ERA ASSIM
+            bwArqVetor.write("elemento1;elemento2;title;authors;year\n"); //ERA ASSIM
 
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
@@ -150,22 +148,27 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 
             int id = 0;
 
-            String firstSoundex = null;
-            String secondSoundex = null;
+//            String firstSoundex = null;
+//            String secondSoundex = null;
 
+//            System.out.println(algorithm.getMaximumPairCount());
             for (DuDeObjectPair pair : algorithm) {
 
-                firstSoundex = null;
-                secondSoundex = null;
-
-                firstSoundex = pair.getFirstElement().getAttributeValues("artist").toString();
-                secondSoundex = pair.getSecondElement().getAttributeValues("artist").toString();
-
+//                firstSoundex = null;
+//                secondSoundex = null;
+//
+//                firstSoundex = pair.getFirstElement().getAttributeValues("artist").toString();
+//                secondSoundex = pair.getSecondElement().getAttributeValues("artist").toString();
                 elemento1Par = pair.getFirstElement().toString();
                 elemento2Par = pair.getSecondElement().toString();
-                elemento1Par = elemento1Par.replaceAll("\\D", ""); //Exclui tudo que não for número
-                elemento2Par = elemento2Par.replaceAll("\\D", ""); //Exclui tudo que não for número
+                elemento1Par = elemento1Par.replaceAll("\\[|\\]", ""); //Substituindo todos números por espaços
+                elemento2Par = elemento2Par.replaceAll("\\[|\\]", ""); //Substituindo todos números por espaços
+                elemento1Par = elemento1Par.replaceAll("ACM.", ""); //Substituindo todos números por espaços
+                elemento2Par = elemento2Par.replaceAll("DBLP2.", ""); //Substituindo todos números por espaços
                 
+//                System.out.println("elemento1Par: " + elemento1Par);
+//                System.out.println("elemento2Par: " + elemento2Par);
+
                 //Fecho transitivo
                 if (mapDivergsMaior.containsKey(elemento1Par + ";" + elemento2Par) || mapDivergsMaior.containsKey(elemento2Par + ";" + elemento1Par)) {
 
@@ -176,12 +179,12 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 //                    }
 //                        System.out.println(firstSoundex + "-" + secondSoundex);
                     a = Double.toString(similarityFunc.getSimilarity(pair));
-                    b = Double.toString(similarityFunc2.getSimilarity(firstSoundex, secondSoundex));
+                    b = Double.toString(similarityFunc2.getSimilarity(pair));
                     c = Double.toString(similarityFunc3.getSimilarity(pair));
-                    d = Double.toString(similarityFunc4.getSimilarity(pair));
-                    e = Double.toString(similarityFunc5.getSimilarity(pair));
-                    f = Double.toString(similarityFunc6.getSimilarity(pair));
-                    g = Double.toString(similarityFunc7.getSimilarity(pair));
+//                    d = Double.toString(similarityFunc4.getSimilarity(pair));
+//                    e = Double.toString(similarityFunc5.getSimilarity(pair));
+//                    f = Double.toString(similarityFunc6.getSimilarity(pair));
+//                    g = Double.toString(similarityFunc7.getSimilarity(pair));
 
                     try {
                         bwArqVetor.append(elemento1Par);
@@ -193,14 +196,14 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
                         bwArqVetor.append(b);
                         bwArqVetor.append(';');
                         bwArqVetor.append(c);
-                        bwArqVetor.append(';');
-                        bwArqVetor.append(d);
-                        bwArqVetor.append(';');
-                        bwArqVetor.append(e);
-                        bwArqVetor.append(';');
-                        bwArqVetor.append(f);
-                        bwArqVetor.append(';');
-                        bwArqVetor.append(g);
+//                        bwArqVetor.append(';');
+//                        bwArqVetor.append(d);
+//                        bwArqVetor.append(';');
+//                        bwArqVetor.append(e);
+//                        bwArqVetor.append(';');
+//                        bwArqVetor.append(f);
+//                        bwArqVetor.append(';');
+//                        bwArqVetor.append(g);
                         bwArqVetor.append('\n');
                         bwArqVetor.flush();
 
@@ -239,23 +242,26 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
         //Com o construtor dessa forma realiza apenas o experimento para QP1
 
         VetorSimEstat11 obj;
-        obj = new ExperimentosCDs1();
+        obj = new ExperimentosDBLP2ACM(); //Os parâmetros são setados na classe AllQPEtapa1
 
 //        AllQPEtapa11 expCds = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 0, 0, 0, 0, 0, 9763, 0, 0, 0, 1000, null, null, null, null, null, true, false, false, false, false, false, false, false, false, obj);
 //        expCds.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCds.rodaExpDedup();
 //        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 10, 0, 0, 0, 0, 9763, 0, 0, 0, 1000, new int[]{10}, null, null, null, null, false, true, false, false, false, false, false, false, false, obj);
-
 //        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 7, 10, 6, 7, 7, 9763, 0, 0, 0, 10, true, true, true, true, true, true, false, false, false, obj);
 //        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsQP2b.rodaExpDedup();
-        
-        AllQPEtapa11 expCdsQP2br = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 12, 0, 11, 12, 12, 9763, 0, 0, 0, 10, true, true, false, true, true, true, false, false, false, obj);
-        expCdsQP2br.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
-        expCdsQP2br.rodaExpDedup();
+        //public AllQPEtapa11(int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException
+//        AllQPEtapa11 expDBLP2ACMQP2br = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 23, 10, 0, 13, 10, 10, 2616, 0, 0, 0, 2294, 0, 0, 0, 10, true, true, false, true, true, true, false, false, false, obj);
+        AllQPEtapa11 expDBLP2ACMQP2br = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 23, 10, 0, 13, 10, 10, 2616, 0, 0, 0, 2294, 0, 0, 0, 1, true, true, false, false, false, false, false, false, false, obj);
+
+//, char separator, String chavePrimaria1QP5, String chavePrimaria2QP5, String goldId1QP5, String goldId2QP5, char separatorQP5, boolean geraVetor, boolean geraVetorQP5
+        expDBLP2ACMQP2br.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', false, false);
+        expDBLP2ACMQP2br.rodaExpRecLink();
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);
 //        expCdsMenosQP5.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsMenosQP5.rodaExpDedup();
+
     }
 
 }

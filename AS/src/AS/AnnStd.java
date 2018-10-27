@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,6 +44,7 @@ public class AnnStd {
     FileWriter escreveEstat;
     Map<String, String> mapGS;
     Map<String, String> mapArqResult;
+    String sepGS;
 
     public AnnStd(File gabarito) {
 
@@ -89,6 +91,63 @@ public class AnnStd {
     }
 
     public AnnStd(File gabarito, String base, String experimento) {
+
+        this.gs = gabarito;
+
+        mapGS = new HashMap<String, String>();
+        mapArqResult = new HashMap<String, String>();
+
+        populaMapGS();
+
+        tp = 0;
+        fp = 0;
+        iteracao = 0;
+
+        File dirEstat = new File("./src/csv/estatisticas/" + base + "/" + experimento);
+
+        try {
+            if (!dirEstat.exists()) {
+                dirEstat.mkdirs();
+                System.out.println("Diretório " + dirEstat.getAbsoluteFile() + " criado!");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+        estatisticas = new File(dirEstat, "estatisticas.csv");
+//        File divergToAA = new File("./src/csv/conjuntosDS/conjuntosDiverg-DEMO/", "diverg(" + getQtdAlg() + ")" + permutacao + ".csv");
+
+        if (!estatisticas.exists()) {
+            System.out.println("Não existe arquivo estatisticas.csv.");
+
+            try {
+                estatisticas.createNewFile();
+                BufferedWriter bwEstat = null;
+                try {
+                    escreveEstat = new FileWriter(estatisticas, true); //O parâmetro true faz com que as informações não sejam sobreescritas
+                    bwEstat = new BufferedWriter(escreveEstat);
+
+                    bwEstat.write("abordagem;etapa;algoritmosUtilizados;permutacao;iteracao;inspecoesManuais;precision;recall;f-measure;da;dm;ndm;tp;fp;tn;fn\n");
+
+                } catch (IOException ex) {
+                    System.out.println("Não foi possível escrever o cabeçalho no arquivo estatisticas.csv.");
+                } finally {
+                    bwEstat.flush();
+                    bwEstat.close();
+
+                }
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo estatisticas.csv.");
+            }
+        }
+
+    }
+
+    public AnnStd(File gabarito, String base, String experimento, String sepGS) {
+
+        this.sepGS = sepGS;
 
         this.gs = gabarito;
 
@@ -299,7 +358,8 @@ public class AnnStd {
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+//                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(sepGS, 2);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -1054,6 +1114,7 @@ public class AnnStd {
         BufferedReader brDiverg = null;
         BufferedWriter bwDM = null;
         BufferedWriter brNDM = null;
+        int cont = 0;
 
         try {
             brDiverg = new BufferedReader(new FileReader(divergencias.getPath()));
@@ -1076,6 +1137,14 @@ public class AnnStd {
 
                 //Só entra se já não existir em DM ou NDM
                 if (!existeDM_NDM) {
+                    
+//                    if(cont == 1){
+//                        System.out.println(elemento1 + ";" + elemento2 + "\n");   
+//                        cont++;
+//                    }
+                    
+                    
+                    
 
 //                    existeGS = buscaGabarito(elemento1, elemento2, gs);
                     existeGS = buscaGabarito2(elemento1, elemento2);
@@ -1084,10 +1153,18 @@ public class AnnStd {
                     //Se a divergência existe no gabarito, então é adicionada a DM
                     if (existeGS) {
                         bwDM.write(elemento1 + ";" + elemento2 + "\n");
+                        bwDM.flush();
+            
                     } else {
                         brNDM.write(elemento1 + ";" + elemento2 + "\n");
+                        brNDM.flush();
 
                     }
+                    
+//                    if(elemento1.equals("253332") && elemento2.equals("conf/sigmod/KornJF97")){
+//                        JOptionPane.showMessageDialog(null, "Olhe o DM ou NDM!");
+//                        cont++;
+//                    }
 
                 }
 
@@ -1103,10 +1180,10 @@ public class AnnStd {
         } finally {
             brDiverg.close();
 
-            bwDM.flush();
+            
             bwDM.close();
 
-            brNDM.flush();
+            
             brNDM.close();
         }
     }
@@ -1360,15 +1437,14 @@ public class AnnStd {
                 brGS = new BufferedReader(new FileReader(gs.getPath()));
 
             } else {
-                
+
                 brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
             }
-            
-            
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
+//                linhaAtual = Str.split(";", 2);
+                linhaAtual = Str.split(sepGS, 2);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -1533,6 +1609,7 @@ public class AnnStd {
 
     private boolean buscaDM_NDM(String elemento1, String elemento2) throws IOException {
         String Str;
+        String StrAnt = null;
         String elementoDM_NDM1;
         String elementoDM_NDM2;
         String[] linhaAtual;
@@ -1544,16 +1621,22 @@ public class AnnStd {
 
             while ((Str = brDM.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 2);
-
-                elementoDM_NDM1 = linhaAtual[0];
-                elementoDM_NDM2 = linhaAtual[1];
-
-                if (((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) || ((elemento1.equals(elementoDM_NDM2)) && ((elemento2.equals(elementoDM_NDM1))))) {
-
-                    return existe = true;
-
+                try {
+                    linhaAtual = Str.split(";", 2);
+                    
+                    
+                    elementoDM_NDM1 = linhaAtual[0];
+                    elementoDM_NDM2 = linhaAtual[1];
+                    
+                    if (((elemento1.equals(elementoDM_NDM1)) && (elemento2.equals(elementoDM_NDM2))) || ((elemento1.equals(elementoDM_NDM2)) && ((elemento2.equals(elementoDM_NDM1))))) {
+                        
+                        return existe = true;
+                        
+                    }
+                } catch (Exception e) {
+                    System.out.println("str: " + Str + " - StrAnt: " + StrAnt);
                 }
+                StrAnt = Str;
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Não foi possível encontrar o arquivo " + gs.getName() + " em buscaGabarito()");
@@ -1747,7 +1830,7 @@ public class AnnStd {
                 brGS = new BufferedReader(new FileReader(gs.getPath()));
 
             } else {
-                
+
                 brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
             }
 
@@ -1756,12 +1839,19 @@ public class AnnStd {
             while ((str = brGS.readLine()) != null) {
 
                 if (linha > 0) {
-                    linhaAtual1 = str.split(";", 2);
+//                    linhaAtual1 = str.split(";", 2);
+                    linhaAtual1 = str.split(sepGS, 2);
+                    try {
 
-                    elemento1 = linhaAtual1[0];
-                    elemento2 = linhaAtual1[1];
+                        elemento1 = linhaAtual1[0];
+                        elemento2 = linhaAtual1[1];
 
-                    mapGS.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2);
+                        mapGS.put(elemento1 + ";" + elemento2, elemento1 + ";" + elemento2);
+
+                    } catch (Exception e) {
+                        Logger.getLogger(AnnStd.class
+                                .getName()).log(Level.SEVERE, null, e);
+                    }
                 }
                 linha++;
             }

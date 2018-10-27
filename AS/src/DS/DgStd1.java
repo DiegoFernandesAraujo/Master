@@ -64,6 +64,7 @@ public class DgStd1 {
     Map<String, String> mapArqResult;
 
     String dirDiverg = null;
+    String sepGS = null;
 
     /**
      *
@@ -120,7 +121,9 @@ public class DgStd1 {
 
     }
 
-    public DgStd1(File gabarito, String base, String experimento) {
+    public DgStd1(File gabarito, String base, String experimento, String sepGS) {
+        
+        this.sepGS = sepGS;
 
         setDirDiverg(base, experimento);
 
@@ -355,7 +358,8 @@ public class DgStd1 {
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 3);
+//                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(sepGS, 3);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -1935,6 +1939,7 @@ public class DgStd1 {
 
         if (!divergencias.exists()) {
             System.out.println("Não existe arquivo NAO_DA.csv.");
+            System.out.println(new Throwable().getStackTrace()[0]);
 
             try {
                 divergencias.createNewFile();
@@ -2056,6 +2061,7 @@ public class DgStd1 {
 
         if (!divergencias.exists()) {
             System.out.println("Não existe arquivo NAO_DA.csv.");
+//            System.out.println(new Throwable().getStackTrace()[0]);
 
             try {
                 divergencias.createNewFile();
@@ -2148,6 +2154,7 @@ public class DgStd1 {
                 elemento2 = linhaAtual1[1];
 
                 bwDiverg.write(elemento1 + ";" + elemento2 + "\n");
+//                System.out.println(++cont + " - " + elemento1 + ";" + elemento2);
 
             }
 
@@ -2449,6 +2456,7 @@ public class DgStd1 {
 
         if (!estatNAODA.exists()) {
             System.out.println("Não existe arquivo estatNAO_DA.csv.");
+            System.out.println(new Throwable().getStackTrace()[0]);
 
             try {
                 estatNAODA.createNewFile();
@@ -2600,6 +2608,7 @@ public class DgStd1 {
 
         if (!estatNAODA.exists()) {
             System.out.println("Não existe arquivo estatNAO_DA.csv.");
+            System.out.println(new Throwable().getStackTrace()[0]);
 
             try {
                 estatNAODA.createNewFile();
@@ -3410,7 +3419,8 @@ public class DgStd1 {
 
             while ((Str = brGS.readLine()) != null) {
 
-                linhaAtual = Str.split(";", 3);
+//                linhaAtual = Str.split(";", 3);
+                linhaAtual = Str.split(sepGS, 3);
 
                 elementoGS1 = linhaAtual[0];
                 elementoGS2 = linhaAtual[1];
@@ -3848,7 +3858,8 @@ public class DgStd1 {
             while ((str = brGS.readLine()) != null) {
 
                 if (linha > 0) {
-                    linhaAtual1 = str.split(";", 2);
+//                    linhaAtual1 = str.split(";", 2);
+                    linhaAtual1 = str.split(sepGS, 2);
 
                     elemento1 = linhaAtual1[0];
                     elemento2 = linhaAtual1[1];

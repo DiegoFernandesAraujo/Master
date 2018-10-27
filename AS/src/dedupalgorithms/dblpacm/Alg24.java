@@ -18,6 +18,7 @@ import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
 import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
+import dude.similarityfunction.contentbased.impl.simmetrics.JaroWinklerFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class Alg18 extends DedupAlg {
+public class Alg24 extends DedupAlg {
 
     String rotulo;
     double a, b, c, d, e, f;
@@ -45,7 +46,7 @@ public class Alg18 extends DedupAlg {
     File estatisticasCSVSemFecho;
     File estatisticasTXTSemFecho;
 
-    public Alg18(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
+    public Alg24(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         
@@ -73,7 +74,7 @@ public class Alg18 extends DedupAlg {
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg18.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg24.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,10 +87,10 @@ public class Alg18 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
-        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
-        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
-        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
+        NeedlemanWunschFunction similarityFunc = new NeedlemanWunschFunction("title");
+        NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
+        JaroWinklerFunction similarityFunc3 = new JaroWinklerFunction("venue");
+        JaroWinklerFunction similarityFunc4 = new JaroWinklerFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -117,8 +118,8 @@ public class Alg18 extends DedupAlg {
             final double similarity3 = similarityFunc3.getSimilarity(pair);
             final double similarity4 = similarityFunc4.getSimilarity(pair);
 
-            if (((similarity >= 0.85) || (similarity2 >= 0.85)) && ((similarity3 >= 0.8) || (similarity4 >= 0.8))) {
-//            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
+//            if (((similarity >= 0.85) || (similarity2 >= 0.85)) && ((similarity3 >= 0.8) || (similarity4 >= 0.8))) {
+            if ((similarity >= 0.65) && (similarity2 >= 0.65) && (similarity3 >= 0.35) && (similarity4 >= 0.6)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
 //                output.write(pair);
@@ -168,7 +169,7 @@ public class Alg18 extends DedupAlg {
                 try {
                     statistic.addNonDuplicate(pair);
                 } catch (ExtractionFailedException ex) {
-                    Logger.getLogger(Alg18.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Alg24.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -189,7 +190,7 @@ public class Alg18 extends DedupAlg {
     public static void main(String[] args) {
 //        Alg1 obj1 = new Alg1("DBLP2", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
-        Alg18 obj1 = new Alg18("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 18);
+        Alg24 obj1 = new Alg24("DBLP2", "ACM", "id", "id", "DBLP2-ACM_perfectMapping", "idDBLP", "idACM", 24);
 //        Alg1 obj1 = new Alg1("DBLP2_NEW", "ACM", "num", "id", "DBLP2-ACM_perfectMapping_NEW", "idDBLP", "idACM", 1);
 
         try {

@@ -49,7 +49,7 @@ public class Alg21 extends DedupAlg {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         dir = "resultsDedup/" + baseDados1 + "-" + baseDados2;
-        
+
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
 
@@ -74,11 +74,10 @@ public class Alg21 extends DedupAlg {
 
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
-
-        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("title");
-        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("authors");
-        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
-        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
+        
+        NeedlemanWunschFunction similarityFunc = new NeedlemanWunschFunction("title");
+        NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
+        NeedlemanWunschFunction similarityFunc3 = new NeedlemanWunschFunction("year");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -103,11 +102,9 @@ public class Alg21 extends DedupAlg {
 
             final double similarity = similarityFunc.getSimilarity(pair);
             final double similarity2 = similarityFunc2.getSimilarity(pair);
-//            final double similarity3 = similarityFunc3.getSimilarity(pair);
-//            final double similarity4 = similarityFunc4.getSimilarity(pair);
+            final double similarity3 = similarityFunc3.getSimilarity(pair);
 
-//            if (((similarity * similarity2)/2 >= 0.75) && (similarity3 >= 0.5) && (similarity4 >= 0.75)) {
-            if (((similarity + similarity2) / 2 >= 0.8)) {
+            if ((similarity >= 0.8) && (similarity3 >= 0.7)) { //Testar esse!
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);

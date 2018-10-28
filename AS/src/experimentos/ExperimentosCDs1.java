@@ -250,7 +250,7 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 //        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsQP2b.rodaExpDedup();
         
-        AllQPEtapa11 expCdsQP1e2e3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 12, 0, 11, 12, 12, 9763, 0, 0, 0, 1, true, true, false, true, true, true, false, false, false, obj);
+        AllQPEtapa11 expCdsQP1e2e3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 12, 0, 11, 12, 12, 9763, 0, 0, 0, 1000, true, true, false, true, true, true, false, false, false, obj);
         expCdsQP1e2e3.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
         expCdsQP1e2e3.rodaExpDedup();
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);

@@ -1,0 +1,1 @@
+cdT, cdF e cdO foram criadas apenas para testar a QP5, no entanto essa questão de pesquisa será rodada, a princípio, apenas com uma base sintética gerada pelo febrl.

@@ -55,10 +55,10 @@ public class Alg1 extends DedupAlg {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         dir = "resultsDedup/" + baseDados1 + "-" + baseDados2;
-        
+
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
-        
+
         if (estatisticasTXT.exists() | estatisticasCSV.exists()) {
             System.out.println("Já existem resultados para esse algoritmo!");
             java.awt.Toolkit.getDefaultToolkit().beep();
@@ -86,7 +86,7 @@ public class Alg1 extends DedupAlg {
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("authors");
         NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("authors");
         NeedlemanWunschFunction similarityFunc5 = new NeedlemanWunschFunction("year");
-        
+
         Average avg = new Average();
         avg.add(similarityFunc);
         avg.add(similarityFunc2);
@@ -98,7 +98,7 @@ public class Alg1 extends DedupAlg {
         Maximum max2 = new Maximum();
         max2.add(similarityFunc3);
         max2.add(similarityFunc4);
-        
+
         Average avg2 = new Average();
         avg2.add(avg1);
         avg2.add(similarityFunc5);
@@ -121,11 +121,24 @@ public class Alg1 extends DedupAlg {
 
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
+            
+//            System.out.println(pair.getFirstElementObjectData());
+//            System.out.println(pair.getSecondElementObjectData());
+
+            String elemento1Par = pair.getFirstElement().toString();
+            String elemento2Par = pair.getSecondElement().toString();
+            
+            System.out.println("elemento1Par: " + elemento1Par + " - elemento2Par: " + elemento2Par);
+            
+            elemento1Par = elemento1Par.replaceAll("\\D", ""); //Substituindo todos números por espaços
+            elemento2Par = elemento2Par.replaceAll("\\D", ""); //Substituindo todos números por espaços
+
+            System.out.println("elemento1Par: " + elemento1Par + " - elemento2Par: " + elemento2Par);
 
             final double similarity = avg1.getSimilarity(pair);
             final double similarity2 = avg2.getSimilarity(pair);
 
-            if (similarity >= 0.85 && similarity2  >= 0.75) { //Baseado no Alg17
+            if (similarity >= 0.85 && similarity2 >= 0.75) { //Baseado no Alg17
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
                 statistic.addDuplicate(pair);
@@ -143,7 +156,7 @@ public class Alg1 extends DedupAlg {
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b)/2;
+                    final double simNorm = (a + b) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

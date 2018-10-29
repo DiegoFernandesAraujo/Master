@@ -128,7 +128,7 @@ public class Etapa1Experimento {
         objAS.setTamBaseOrig(tamBase1); //Necessário!
         objAS.setTamBaseOrig2(tamBase2); //Necessário!
         objDS.setTamBaseOrig(tamBase1); //Necessário!
-        objAS.setTamBaseOrig2(tamBase2); //Necessário!
+        objDS.setTamBaseOrig2(tamBase2); //Necessário!
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         File[] resultados = new File[qtdMaxAlg];
@@ -266,7 +266,7 @@ public class Etapa1Experimento {
         objAS.setTamBaseOrig(tamBase1); //Necessário!
         objAS.setTamBaseOrig2(tamBase2); //Necessário!
         objDS.setTamBaseOrig(tamBase1); //Necessário!
-        objAS.setTamBaseOrig2(tamBase2); //Necessário!
+        objDS.setTamBaseOrig2(tamBase2); //Necessário!
 
         //CONFIGURAÇÃO DOS DADOS REFERENTES AO EXPERIMENTO
         File[] resultados = new File[qtdMaxAlg];

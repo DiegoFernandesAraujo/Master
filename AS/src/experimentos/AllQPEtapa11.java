@@ -510,6 +510,66 @@ public class AllQPEtapa11 {
             copia(dirEstatqp1, dirEstatqp7);
 
         }
+        
+        if (okqp2b && okqp2r) {
+            
+            System.out.println("okqp2b && okqp2r");
+
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2b", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB, getSep());
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2r", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR, getSep());
+
+            int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            int qtdMaxObs2 = calcQtdObs(qtdMaxR)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb2 = calcQtdObs(qtdMaxR)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            //Para garantir que seja selecionada a mesma quantidade de matchers bons e ruins 
+            //e ainda grantir a mair quantidade de combinações possíveis do menor conjunto.
+            if (itensComb <= itensComb2) {
+                System.out.println("Itens utilizados: " + itensComb);
+                qp2b.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+            } else {
+                System.out.println("Itens utilizados: " + itensComb2);
+                qp2b.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+            }
+
+            //*****QP2B*****
+            
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2b.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor);
+
+            qp2b.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+            
+            //*****QP2R*****
+
+            if (qtdMaxObs2 < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2r.setQtdObservacoes(qtdMaxObs2);
+            } else {
+                qp2r.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor);
+
+            qp2r.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+            
+            okqp2b = false;
+            okqp2r = false;
+
+        }
 
         //Para qp2  - Bons
         if (okqp2b) {
@@ -655,7 +715,7 @@ public class AllQPEtapa11 {
             int qtdMaxObs = calcQtdObs(qtdMaxAll)[0]; //Quantidade máxima de combinações possíveis
             int itensComb = calcQtdObs(qtdMaxAll)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
 
-            if (itensComb > (int) (qtdMaxAll / 2)) { //Se for maior que a metade (quantidade máxima de qp3lot), pode mandar brasa!
+            if (itensComb >= (int) (qtdMaxAll*0.70)) { //Se for maior ou igual a 70%, pode mandar brasa!
 
                 if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
                     qp3All.setQtdObservacoes(qtdMaxObs);
@@ -664,8 +724,8 @@ public class AllQPEtapa11 {
                 }
 
             } else { // Senão força a pegar um valor acima da metade (quantidade máxima de qp3lot)
-                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[0]; //Quantidade máxima de combinações possíveis
-                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll*0.70))[0]; //Quantidade máxima de combinações possíveis
+                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll*0.70))[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
 
                 if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
                     qp3All.setQtdObservacoes(qtdMaxObs);
@@ -1077,6 +1137,66 @@ public class AllQPEtapa11 {
 
         }
 
+        if (okqp2b && okqp2r) {
+            
+            System.out.println("okqp2b && okqp2r");
+
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2b", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB, getSep());
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2r", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR, getSep());
+
+            int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            int qtdMaxObs2 = calcQtdObs(qtdMaxR)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb2 = calcQtdObs(qtdMaxR)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            //Para garantir que seja selecionada a mesma quantidade de matchers bons e ruins 
+            //e ainda grantir a mair quantidade de combinações possíveis do menor conjunto.
+            if (itensComb <= itensComb2) {
+                System.out.println("Itens utilizados: " + itensComb);
+                qp2b.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+            } else {
+                System.out.println("Itens utilizados: " + itensComb2);
+                qp2b.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+            }
+
+            //*****QP2B*****
+            
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2b.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor);
+
+            qp2b.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+            
+            //*****QP2R*****
+
+            if (qtdMaxObs2 < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2r.setQtdObservacoes(qtdMaxObs2);
+            } else {
+                qp2r.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor);
+
+            qp2r.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+            
+            okqp2b = false;
+            okqp2r = false;
+
+        }
+
         //Para qp2  - Bons
         if (okqp2b) {
 //            int[] vetor2 = {10}; //Uma única quantidade a ser definida
@@ -1173,7 +1293,7 @@ public class AllQPEtapa11 {
             int qtdMaxObs = calcQtdObs(qtdMaxAll)[0]; //Quantidade máxima de combinações possíveis
             int itensComb = calcQtdObs(qtdMaxAll)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
 
-            if (itensComb > (int) (qtdMaxAll / 2)) { //Se for maior que a metade (quantidade máxima de qp3lot), pode mandar brasa!
+            if (itensComb > (int) (qtdMaxAll*0.70)) { //Se for maior ou igual a 70%, pode mandar brasa!
 
                 if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
                     qp3All.setQtdObservacoes(qtdMaxObs);
@@ -1182,8 +1302,8 @@ public class AllQPEtapa11 {
                 }
 
             } else { // Senão força a pegar um valor acima da metade (quantidade máxima de qp3lot)
-                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[0]; //Quantidade máxima de combinações possíveis
-                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll / 2) + 1)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll*0.70))[0]; //Quantidade máxima de combinações possíveis
+                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll*0.70))[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
 
                 if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
                     qp3All.setQtdObservacoes(qtdMaxObs);
@@ -1845,7 +1965,7 @@ public class AllQPEtapa11 {
     public String getSep() {
         return Character.toString(separator);
     }
-    
+
     public char getSepChar() {
         return separator;
     }

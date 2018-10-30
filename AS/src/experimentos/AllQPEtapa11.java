@@ -475,7 +475,7 @@ public class AllQPEtapa11 {
         }
 
         //Se geraVetor == true, gera o vetor de similaridades maior
-        objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor);
+        objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp1", geraVetor);
         geraVetor = false; //Garantindo que as demais questões de pesquisa não precisarão gerar o vetor maior novamente
 
         //Para qp1
@@ -515,8 +515,8 @@ public class AllQPEtapa11 {
             
             System.out.println("okqp2b && okqp2r");
 
-            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2b", qtdMaxB, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgB, getSep());
-            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp2r", qtdMaxR, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgR, getSep());
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB, getSep());
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR, getSep());
 
             int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
             int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
@@ -545,7 +545,7 @@ public class AllQPEtapa11 {
             }
 
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor);
 
             qp2b.executa();
 
@@ -560,7 +560,7 @@ public class AllQPEtapa11 {
             }
 
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor);
 
             qp2r.executa();
 
@@ -584,7 +584,7 @@ public class AllQPEtapa11 {
 //                qp2b.limpaEstatisticas(baseGeral, "qp2b");
 //            }
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2b", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor);
 
 //            int itensComb = (int) (qtdMaxB * 0.8); //80% da quantidade máxima de matchers bons.
 //            System.out.println("qtdMaxB: " + qtdMaxB);
@@ -621,7 +621,7 @@ public class AllQPEtapa11 {
 //                qp2m.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
 //            }
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2m", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2m", geraVetor);
 
 //            int itensComb = (int) (qtdMaxM * 0.8); //80% da quantidade máxima de matchers médios.
 ////            System.out.println("qtdMaxM: " + qtdMaxM);
@@ -659,7 +659,7 @@ public class AllQPEtapa11 {
 //                qp2r.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
 //            }
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp2r", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor);
 
 //            int itensComb = (int) (qtdMaxR * 0.8); //80% da quantidade máxima de matchers ruins.
 ////            System.out.println("qtdMaxR: " + qtdMaxR);
@@ -699,7 +699,7 @@ public class AllQPEtapa11 {
 //                qp3All.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
 //            }
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3all", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp3all", geraVetor);
 
 //            int itensComb = (int) (esteQtdMaxAll * 0.8); //80% da quantidade máxima de matchers bons.
 ////            System.out.println("esteQtdMaxAll: " + esteQtdMaxAll);
@@ -753,7 +753,7 @@ public class AllQPEtapa11 {
 //                qp3Lot.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
 //            }
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp3lot", geraVetor);
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp3lot", geraVetor);
 //
 //            int itensComb = (int) qtdMaxAll / 2; //Metade da quantidade máxima de matchers bons.
 ////            System.out.println("qtdMaxLot: " + qtdMaxLot);
@@ -796,7 +796,7 @@ public class AllQPEtapa11 {
             }
 
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseOne, chavePrimaria, gsOne, goldId1, goldId2, ';', "qp5o", geraVetorQP5);
+            objVet.setAllVarDedup(baseOne, chavePrimaria, gsOne, goldId1, goldId2, getSepChar(), "qp5o", geraVetorQP5);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
             qp5o.setvQtdAlg(getvQtdAlgGeral());
@@ -821,7 +821,7 @@ public class AllQPEtapa11 {
             }
 
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseThree, chavePrimaria, gsThree, goldId1, goldId2, ';', "qp5t", geraVetorQP5);
+            objVet.setAllVarDedup(baseThree, chavePrimaria, gsThree, goldId1, goldId2, getSepChar(), "qp5t", geraVetorQP5);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
             qp5t.setvQtdAlg(getvQtdAlgGeral());
@@ -847,7 +847,7 @@ public class AllQPEtapa11 {
             }
 
             //Mesma ideia do construtor
-            objVet.setAllVarDedup(baseFive, chavePrimaria, gsFive, goldId1, goldId2, ';', "qp5f", geraVetorQP5);
+            objVet.setAllVarDedup(baseFive, chavePrimaria, gsFive, goldId1, goldId2, getSepChar(), "qp5f", geraVetorQP5);
 
             //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
             qp5f.setvQtdAlg(getvQtdAlgGeral());

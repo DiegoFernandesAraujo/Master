@@ -248,12 +248,18 @@ public class ExperimentosCDs1 extends VetorSimEstat11 {
 //        AllQPEtapa11 expCdsQP2b = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 7, 10, 6, 7, 7, 9763, 0, 0, 0, 10, true, true, true, true, true, true, false, false, false, obj);
 //        expCdsQP2b.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsQP2b.rodaExpDedup();
-        AllQPEtapa11 expCdsQP1e2e3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 12, 0, 11, 12, 12, 9763, 0, 0, 0, 1000, true, true, false, true, true, true, false, false, false, obj);
-        expCdsQP1e2e3.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
-        expCdsQP1e2e3.rodaExpDedup();
-//        AllQPEtapa11 expCdsQP2bre3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 23, 12, 0, 11, 12, 12, 9763, 0, 0, 0, 1000, false, true, false, true, true, true, false, false, false, obj);
-//        expCdsQP2bre3.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
-//        expCdsQP2bre3.rodaExpDedup();
+//        AllQPEtapa11 expGeraVetorMaior = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 31, 16, 0, 15, 16, 16, 9763, 0, 0, 0, 1, true, true, false, true, true, true, false, false, false, obj);
+//        expGeraVetorMaior.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
+//        expGeraVetorMaior.rodaExpDedup();
+
+//        AllQPEtapa11 expCdsQP1e2e3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 31, 16, 0, 15, 16, 16, 9763, 0, 0, 0, 1000, false, true, false, true, true, true, false, false, false, obj);
+//        expCdsQP1e2e3.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', true, false);
+//        expCdsQP1e2e3.rodaExpDedup();
+
+        AllQPEtapa11 expCdsQP2bre3 = new AllQPEtapa11("cd", "cd_gold", null, null, null, null, null, null, 31, 16, 0, 15, 16, 16, 9763, 0, 0, 0, 1000, false, true, false, true, true, true, false, false, false, obj);
+        expCdsQP2bre3.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
+        expCdsQP2bre3.rodaExpDedup();
+
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);
 //        expCdsMenosQP5.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsMenosQP5.rodaExpDedup();

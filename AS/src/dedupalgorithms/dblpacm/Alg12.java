@@ -56,7 +56,7 @@ public class Alg12 extends DedupAlg {
         super(baseDados1, baseDados2, chavePrimaria1, chavePrimaria2, gold, goldId1, goldId2, ',');
 
         dir = "resultsDedup/" + baseDados1 + "-" + baseDados2;
-        
+
         estatisticasCSV = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".csv");
         estatisticasTXT = new File("./src/csv/" + dir + "/estatisticas", "estatisticasDedup" + ordem + ".txt");
 
@@ -87,11 +87,10 @@ public class Alg12 extends DedupAlg {
         EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("authors");
         EuclideanDistanceFunction similarityFunc4 = new EuclideanDistanceFunction("venue");
         NeedlemanWunschFunction similarityFunc5 = new NeedlemanWunschFunction("year");
-        
+
 //        Maximum max = new Maximum();
 //        max.add(similarityFunc);
 //        max.add(similarityFunc2);
-
         Average avg = new Average();
         avg.add(similarityFunc);
         avg.add(similarityFunc2);
@@ -123,7 +122,7 @@ public class Alg12 extends DedupAlg {
             final double similarity2 = similarityFunc3.getSimilarity(pair);
             final double similarity3 = avg2.getSimilarity(pair);
 
-                if (similarity >= 0.75 && similarity2 >= 0.65 && similarity3 > 0.5) {
+            if (similarity >= 0.75 && similarity2 >= 0.65 && similarity3 > 0.5) {
 
 //            if ((similarity >= 0.35) && (similarity2 >= 0.35) && (similarity3 >= 0.35) && (similarity4 >= 0.35)) {
 //            if ((similarity >= 0.9) && (similarity2 >= 0.9) && (similarity3 >= 0.9) /*&& (similarity4 >= 0.85)*/) {
@@ -136,13 +135,13 @@ public class Alg12 extends DedupAlg {
                 try {
 
                     a = similarity;
-//                    b = similarity2;
-//                    c = similarity3;
+                    b = similarity2;
+                    c = similarity3;
 //                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a);
+                    final double simNorm = (a + b + c) / 3;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

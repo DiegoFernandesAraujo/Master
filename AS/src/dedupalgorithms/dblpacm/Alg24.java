@@ -131,12 +131,12 @@ public class Alg24 extends DedupAlg {
 
                     a = similarity;
                     b = similarity2;
-//                    c = similarity3;
-//                    d = similarity4;
+                    c = similarity3;
+                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b) / 2;
+                    final double simNorm = (a + b + c + d) / 4;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

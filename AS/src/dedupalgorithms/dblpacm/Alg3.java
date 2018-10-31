@@ -122,13 +122,13 @@ public class Alg3 extends DedupAlg {
                 try {
 
                     a = similarity;
-                    b = similarity2;
+//                    b = similarity2;
                     c = similarity3;
-                    d = similarity4;
+//                    d = similarity4;
 //                e = similarityFunc2.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                    final double simNorm = (a + b + c + d) / 4;
+                    final double simNorm = (a + c) / 2;
                     String elemento1 = pair.getFirstElement().toString();
                     String elemento2 = pair.getSecondElement().toString();
 

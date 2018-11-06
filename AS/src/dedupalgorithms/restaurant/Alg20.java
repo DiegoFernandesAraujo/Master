@@ -21,12 +21,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.Soundex;
 
 /**
  *
  * @author Diego
  */
-public class Alg1 extends DedupAlg {
+public class Alg20 extends DedupAlg {
 
     String rotulo;
     double a, b, c, d, e, f;
@@ -37,7 +38,7 @@ public class Alg1 extends DedupAlg {
     File estatisticasCSV;
     File estatisticasTXT;
 
-    public Alg1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
+    public Alg20(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ',');
 
         dir = "resultsDedup/" + baseDados1;
@@ -61,13 +62,13 @@ public class Alg1 extends DedupAlg {
             java.awt.Toolkit.getDefaultToolkit().beep();
             System.exit(0);
         }
-        
+
         try {
 
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg20.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -97,17 +98,46 @@ public class Alg1 extends DedupAlg {
 
         NaiveTransitiveClosureGenerator fechoTrans = new NaiveTransitiveClosureGenerator();
 
+        String firstSoundex = null;
+        String secondSoundex = null;
+        
+        String firstSoundex1 = null;
+        String secondSoundex1 = null;
+        
+        String firstSoundex2 = null;
+        String secondSoundex2 = null;
+        
+        String firstSoundex4 = null;
+        String secondSoundex4 = null;
+
+        Soundex similarityFuncSOUNDEX = new Soundex();
+
         //Gerando o fecho transitivo
         for (DuDeObjectPair pair : algorithm) {
-            final double similarity = similarityFunc.getSimilarity(pair);
-            final double similarity2 = similarityFunc2.getSimilarity(pair);
-            final double similarity3 = similarityFunc3.getSimilarity(pair);
-            final double similarity4 = similarityFunc4.getSimilarity(pair);
-            final double similarity5 = similarityFunc5.getSimilarity(pair);
 
-            if ((similarity >= 0.5) && (similarity2 >= 0.5) && (similarity3 >= 0.5) && (similarity4 >= 0.5) && (similarity5 >= 0.5)) {
+            firstSoundex = pair.getFirstElement().getAttributeValues("name").toString();
+            secondSoundex = pair.getSecondElement().getAttributeValues("name").toString();
+
+            firstSoundex1 = pair.getFirstElement().getAttributeValues("addr").toString();
+            secondSoundex1 = pair.getSecondElement().getAttributeValues("addr").toString();
+
+            firstSoundex2 = pair.getFirstElement().getAttributeValues("city").toString();
+            secondSoundex2 = pair.getSecondElement().getAttributeValues("city").toString();
+
+            firstSoundex4 = pair.getFirstElement().getAttributeValues("type").toString();
+            secondSoundex4 = pair.getSecondElement().getAttributeValues("type").toString();
+
+            final double similarity = similarityFuncSOUNDEX.getSimilarity(firstSoundex, secondSoundex);
+            final double similarity2 = similarityFuncSOUNDEX.getSimilarity(firstSoundex1, secondSoundex1);
+            final double similarity3 = similarityFuncSOUNDEX.getSimilarity(firstSoundex2, secondSoundex2);
+            final double similarity4 = similarityFunc4.getSimilarity(pair);
+            final double similarity5 = similarityFuncSOUNDEX.getSimilarity(firstSoundex4, secondSoundex4);
+
+//            if ((similarity >= 0.5) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.45)) {
+//            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
+            if ((similarity >= 0.85) && (similarity2 >= 0.85) && (similarity3 >= 0.85) && (similarity5 >= 0.85)) {
                 fechoTrans.add(pair);
-                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
+//                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
             } else {
                 statistic.addNonDuplicate(pair);
@@ -169,6 +199,14 @@ public class Alg1 extends DedupAlg {
 
         statisticOutputCSV.writeStatistics();
         statisticOutputTXT.writeStatistics();
+        System.out.println("");
+        System.out.printf("Recall: %.2f %n", (statisticOutputTXT.getStatistics().getRecall()));
+        System.out.printf("Precision: %.2f %n", (statisticOutputTXT.getStatistics().getPrecision()));
+        System.out.printf("F1: %.2f %n", (statisticOutputTXT.getStatistics().getFMeasure()));
+        System.out.println("");
+        System.out.println("True positives: " + statisticOutputTXT.getStatistics().getTruePositives());
+        System.out.println("False positives: " + statisticOutputTXT.getStatistics().getFalsePositives());
+        System.out.println("False negatives: " + statisticOutputTXT.getStatistics().getFalseNegatives());
 
         algorithm.cleanUp();
         goldStandard.close();
@@ -176,11 +214,11 @@ public class Alg1 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg1 obj1 = new Alg1("restaurant", "id", "restaurant_gold", "id_1", "id_2", 1);
+        Alg20 obj1 = new Alg20("restaurant", "id", "restaurant_gold", "id_1", "id_2", 20);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg20.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

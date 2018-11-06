@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author Diego
  */
-public class Alg1 extends DedupAlg {
+public class Alg11 extends DedupAlg {
 
     String rotulo;
     double a, b, c, d, e, f;
@@ -37,7 +37,7 @@ public class Alg1 extends DedupAlg {
     File estatisticasCSV;
     File estatisticasTXT;
 
-    public Alg1(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
+    public Alg11(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, int ordem) {
         super(baseDados1, chavePrimaria, gold, goldId1, goldId2, ',');
 
         dir = "resultsDedup/" + baseDados1;
@@ -61,13 +61,13 @@ public class Alg1 extends DedupAlg {
             java.awt.Toolkit.getDefaultToolkit().beep();
             System.exit(0);
         }
-        
+
         try {
 
             this.escreveResult = new FileWriter(new File("./src/csv/" + dir, "resultado" + ordem + ".csv"));
 
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg11.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -105,9 +105,11 @@ public class Alg1 extends DedupAlg {
             final double similarity4 = similarityFunc4.getSimilarity(pair);
             final double similarity5 = similarityFunc5.getSimilarity(pair);
 
-            if ((similarity >= 0.5) && (similarity2 >= 0.5) && (similarity3 >= 0.5) && (similarity4 >= 0.5) && (similarity5 >= 0.5)) {
+//            if ((similarity >= 0.5) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.45)) {
+//            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
+            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
                 fechoTrans.add(pair);
-                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
+//                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
             } else {
                 statistic.addNonDuplicate(pair);
@@ -169,6 +171,14 @@ public class Alg1 extends DedupAlg {
 
         statisticOutputCSV.writeStatistics();
         statisticOutputTXT.writeStatistics();
+        System.out.println("");
+        System.out.printf("Recall: %.2f %n", (statisticOutputTXT.getStatistics().getRecall()));
+        System.out.printf("Precision: %.2f %n", (statisticOutputTXT.getStatistics().getPrecision()));
+        System.out.printf("F1: %.2f %n", (statisticOutputTXT.getStatistics().getFMeasure()));
+        System.out.println("");
+        System.out.println("True positives: " + statisticOutputTXT.getStatistics().getTruePositives());
+        System.out.println("False positives: " + statisticOutputTXT.getStatistics().getFalsePositives());
+        System.out.println("False negatives: " + statisticOutputTXT.getStatistics().getFalseNegatives());
 
         algorithm.cleanUp();
         goldStandard.close();
@@ -176,11 +186,11 @@ public class Alg1 extends DedupAlg {
     }
 
     public static void main(String[] args) {
-        Alg1 obj1 = new Alg1("restaurant", "id", "restaurant_gold", "id_1", "id_2", 1);
+        Alg11 obj1 = new Alg11("restaurant", "id", "restaurant_gold", "id_1", "id_2", 11);
         try {
             obj1.executaDedupAlg();
         } catch (IOException ex) {
-            Logger.getLogger(Alg1.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alg11.class.getName()).log(Level.SEVERE, null, ex);
         }
         java.awt.Toolkit.getDefaultToolkit().beep();
     }

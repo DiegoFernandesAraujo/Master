@@ -1,0 +1,15 @@
+Base: cd - qp2b - Abordagem: 2 - AA[pet-chr] - Classificador: rf
+../csv/estatisticas/cd/qp2b/
+../csv/estatisticas/cd/qp2b/estatisticaDS2-PtChr.csv
+Base: cd - qp2b - Abordagem: 2 - AA[dg-arj] - Classificador: rf
+../csv/estatisticas/cd/qp2b/
+../csv/estatisticas/cd/qp2b/estatisticaDS2-DgArj-incert-k0.01.csv
+Base: cd - qp2b - Abordagem: 2 - AA[dg-arj] - Classificador: rf
+../csv/estatisticas/cd/qp2b/
+../csv/estatisticas/cd/qp2b/estatisticaDS2-DgArj-incert-k0.01.csv
+1000
+['8']Base: cd - qp2b - Abordagem: 2 - AA[dg-arj] - Classificador: rf
+../csv/estatisticas/cd/qp2b/
+../csv/estatisticas/cd/qp2b/estatisticaDS2-DgArj-k0.01.csv
+1000
+['8']

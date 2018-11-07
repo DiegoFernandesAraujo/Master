@@ -351,11 +351,11 @@ public class DedupAlg {
 
             goldStandard = new GoldStandard(goldStandardSource);
 
-//            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
-//            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
+            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
+            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
 
-            goldStandard.setFirstElementsObjectIdAttributes("id1");
-            goldStandard.setSecondElementsObjectIdAttributes("id2");
+//            goldStandard.setFirstElementsObjectIdAttributes("id1");
+//            goldStandard.setSecondElementsObjectIdAttributes("id2");
             
             goldStandard.setSourceIdLiteral(literalGS);
 

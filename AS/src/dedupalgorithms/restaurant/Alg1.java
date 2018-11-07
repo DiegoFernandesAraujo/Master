@@ -107,7 +107,7 @@ public class Alg1 extends DedupAlg {
 
             if ((similarity >= 0.5) && (similarity2 >= 0.5) && (similarity3 >= 0.5) && (similarity4 >= 0.5) && (similarity5 >= 0.5)) {
                 fechoTrans.add(pair);
-                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
+//                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
             } else {
                 statistic.addNonDuplicate(pair);

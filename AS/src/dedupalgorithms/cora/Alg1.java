@@ -73,6 +73,8 @@ public class Alg1 extends DedupAlg {
         }
     }
 
+    int contPrint = 0;
+
     @Override
     public void executaDedupAlg() throws IOException {
 
@@ -130,7 +132,12 @@ public class Alg1 extends DedupAlg {
 //            similarity6 = similarityFunc6.getSimilarity(pair);
             } catch (IllegalArgumentException e) {
                 // ignore invalid values
-                System.out.println("Values will be ignored: " + e.getMessage());
+//                System.out.print(".");
+//                if (++contPrint >= 20) {
+//                    contPrint = 0;
+//                    System.out.println("");
+//                }
+
                 continue;
             }
 

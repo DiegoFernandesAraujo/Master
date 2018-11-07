@@ -9,6 +9,7 @@ import dude.algorithm.Algorithm;
 import dude.algorithm.duplicatedetection.NaiveDuplicateDetection;
 import dude.algorithm.recordlinkage.NaiveRecordLinkage;
 import dude.datasource.CSVSource;
+import dude.datasource.XMLSource;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
 import experimentos.ExperimentosCDs1;
@@ -40,6 +41,7 @@ public class DedupAlg {
     private Algorithm algorithm;
     private CSVSource source1;
     private CSVSource source2;
+    private XMLSource sourceXML1;
     private GoldStandard goldStandard;
 
     String dir = null;
@@ -80,6 +82,33 @@ public class DedupAlg {
         this.separator = separator;
         deduplication(); //Não era final antes
     }
+    
+        /**
+     * Construtor utilizado para quando o projeto de herança não estava bem
+     * definido. Pode ser utilizado com cd.
+     *
+     * @param baseDados1
+     * @param chavePrimaria
+     * @param gold
+     * @param goldId1
+     * @param goldId2
+     * @param separator
+     */
+    @Deprecated
+    public DedupAlg(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String xml) {
+//    public DedupAlg(String baseDados1, String gold, String goldId1, String goldId2, String result) {
+
+        this.result = baseDados1;
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.idBaseDados = idBaseDados;
+        this.separator = separator;
+        deduplicationXML(); //Não era final antes
+    }
+
 
     /**
      * Construtor utilizado para quando o projeto de herança não estava bem
@@ -214,6 +243,40 @@ public class DedupAlg {
         setGoldStandard(baseDados1);
 
     }
+    
+    /**
+     *
+     */
+    public final void deduplicationXML() {
+//        String literalGS = baseDados1;
+        try {
+            sourceXML1 = new XMLSource(baseDados1, new File("./src/csv/datasets", baseDados1 + ".xml"), baseDados1);
+
+            //Vejamos se funcionam essas 2 linhas:
+//            source1.withQuoteCharacter('"');
+////            source1.withSeparatorCharacter(';');
+//            source1.withSeparatorCharacter(getSeparator());
+//
+//            source1.enableHeader();
+
+            sourceXML1.addIdAttributes(chavePrimaria);
+
+            File file = new File("./src/csv/datasets", baseDados1 + ".xml");
+            System.out.println(file.getAbsolutePath());
+            System.out.println(file.getPath());
+            System.out.println(file.getName());
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(DedupAlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        algorithm = new NaiveDuplicateDetection();
+
+        algorithm.addDataSource(sourceXML1);
+
+        setGoldStandard(baseDados1);
+
+    }
 
     /**
      *
@@ -288,9 +351,12 @@ public class DedupAlg {
 
             goldStandard = new GoldStandard(goldStandardSource);
 
-            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
-            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
+//            goldStandard.setFirstElementsObjectIdAttributes(getGoldId1());
+//            goldStandard.setSecondElementsObjectIdAttributes(getGoldId2());
 
+            goldStandard.setFirstElementsObjectIdAttributes("id1");
+            goldStandard.setSecondElementsObjectIdAttributes("id2");
+            
             goldStandard.setSourceIdLiteral(literalGS);
 
         } catch (FileNotFoundException ex) {
@@ -298,6 +364,7 @@ public class DedupAlg {
         }
 
     }
+    
 
     //Para record linkage
     /**
@@ -391,6 +458,7 @@ public class DedupAlg {
      * @return
      */
     public String getGoldId1() {
+        System.out.println("goldId1: " + goldId1);
         return goldId1;
     }
 
@@ -399,6 +467,7 @@ public class DedupAlg {
      * @return
      */
     public String getGoldId2() {
+        System.out.println("goldId2: " + goldId2);
         return goldId2;
     }
 

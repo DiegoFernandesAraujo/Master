@@ -7,6 +7,7 @@ package experimentos;
 
 import DS.DgStd1;
 import dude.algorithm.Algorithm;
+import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.NeedlemanWunschFunction;
 import dude.util.data.DuDeObjectPair;
 import java.io.BufferedReader;
@@ -87,14 +88,15 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
         //Utilizando-se funções de similaridade que apresentaram bons resultados para gerar os vetores de similaridade.
         NeedlemanWunschFunction similarityFunc = new NeedlemanWunschFunction("title");
         NeedlemanWunschFunction similarityFunc2 = new NeedlemanWunschFunction("authors");
-        NeedlemanWunschFunction similarityFunc3 = new NeedlemanWunschFunction("year");
+        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("venue");
+        NeedlemanWunschFunction similarityFunc4 = new NeedlemanWunschFunction("year");
 
         //Escrita do cabeçalho
         try {
             escreveArqVetor = new FileWriter(getVetorSimilaridade(), false); //O parâmetro false faz com que as informações sejam sobreescritas
 
             bwArqVetor = new BufferedWriter(escreveArqVetor);
-            bwArqVetor.write("elemento1;elemento2;title;authors;year\n"); //ERA ASSIM
+            bwArqVetor.write("elemento1;elemento2;title;authors;venue;year\n"); //ERA ASSIM
 
         } catch (IOException ex) {
             System.out.println("Não foi possível escrever o cabeçalho no arquivo vetorSimilaridade.csv.");
@@ -150,7 +152,6 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
 
 //            String firstSoundex = null;
 //            String secondSoundex = null;
-
 //            System.out.println(algorithm.getMaximumPairCount());
             for (DuDeObjectPair pair : algorithm) {
 
@@ -165,10 +166,9 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
                 elemento2Par = elemento2Par.replaceAll("\\[|\\]", ""); //Substituindo todos números por espaços
                 elemento1Par = elemento1Par.replaceAll("ACM.", ""); //Substituindo todos números por espaços
                 elemento2Par = elemento2Par.replaceAll("DBLP2.", ""); //Substituindo todos números por espaços
-                
+
 //                System.out.println("elemento1Par: " + elemento1Par);
 //                System.out.println("elemento2Par: " + elemento2Par);
-
                 //Fecho transitivo
                 if (mapDivergsMaior.containsKey(elemento1Par + ";" + elemento2Par) || mapDivergsMaior.containsKey(elemento2Par + ";" + elemento1Par)) {
 
@@ -181,7 +181,7 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
                     a = Double.toString(similarityFunc.getSimilarity(pair));
                     b = Double.toString(similarityFunc2.getSimilarity(pair));
                     c = Double.toString(similarityFunc3.getSimilarity(pair));
-//                    d = Double.toString(similarityFunc4.getSimilarity(pair));
+                    d = Double.toString(similarityFunc4.getSimilarity(pair));
 //                    e = Double.toString(similarityFunc5.getSimilarity(pair));
 //                    f = Double.toString(similarityFunc6.getSimilarity(pair));
 //                    g = Double.toString(similarityFunc7.getSimilarity(pair));
@@ -196,8 +196,8 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
                         bwArqVetor.append(b);
                         bwArqVetor.append(';');
                         bwArqVetor.append(c);
-//                        bwArqVetor.append(';');
-//                        bwArqVetor.append(d);
+                        bwArqVetor.append(';');
+                        bwArqVetor.append(d);
 //                        bwArqVetor.append(';');
 //                        bwArqVetor.append(e);
 //                        bwArqVetor.append(';');
@@ -253,15 +253,17 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
 //        expCdsQP2b.rodaExpDedup();
         //public AllQPEtapa11(int qtdMaxGeral, int qtdMaxB, int qtdMaxM, int qtdMaxR, int qtdMaxAll, int qtdMaxLot, int tamBase1Geral, int tamBase1One, int tamBase1Three, int tamBase1Five, int tamBase2Geral, int tamBase2One, int tamBase2Three, int tamBase2Five, int qtdObs, int[] vQtdAlgB, int[] vQtdAlgM, int[] vQtdAlgR, int[] vQtdAlgAll, int[] vQtdAlgLot, boolean okqp1, boolean okqp2b, boolean okqp2m, boolean okqp2r, boolean okqp3all, boolean okqp3lot, boolean okqp5one, boolean okqp5three, boolean okqp5five) throws IOException, InterruptedException
 //        AllQPEtapa11 expDBLP2ACMQP2br = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 23, 10, 0, 13, 10, 10, 2616, 0, 0, 0, 2294, 0, 0, 0, 10, true, true, false, true, true, true, false, false, false, obj);
-        AllQPEtapa11 expDBLP2ACMQP2br = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 23, 10, 0, 13, 10, 10, 2616, 0, 0, 0, 2294, 0, 0, 0, 1, false, true, false, true, false, false, false, false, false, obj);
+//        AllQPEtapa11 expDBLP2ACMQP2br = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 23, 10, 0, 13, 10, 10, 2616, 0, 0, 0, 2294, 0, 0, 0, 1, false, true, false, true, false, false, false, false, false, obj);
+//        expDBLP2ACMQP2br.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', false, false);
+//        expDBLP2ACMQP2br.rodaExpRecLink();
+        
+        AllQPEtapa11 expDBLP2ACMQ1 = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 33, 0, 0, 0, 0, 0, 2616, 0, 0, 0, 2294, 0, 0, 0, 1, true, false, false, false, false, false, false, false, false, obj);
+        expDBLP2ACMQ1.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', true, false);
+        expDBLP2ACMQ1.rodaExpRecLink();
 
-//, char separator, String chavePrimaria1QP5, String chavePrimaria2QP5, String goldId1QP5, String goldId2QP5, char separatorQP5, boolean geraVetor, boolean geraVetorQP5
-        expDBLP2ACMQP2br.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', false, false);
-        expDBLP2ACMQP2br.rodaExpRecLink();
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);
 //        expCdsMenosQP5.setParamVetorSim("pk", "disc1_id", "disc2_id", ';', null, null, null, ',', false, false);
 //        expCdsMenosQP5.rodaExpDedup();
-
     }
 
 }

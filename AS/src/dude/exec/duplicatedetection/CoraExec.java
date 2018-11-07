@@ -71,13 +71,15 @@ public class CoraExec {
 		// instantiates the XML data source
 		// "cora" is the source identifier
 		// "CORA" is the root element of the data source - all child elements of the root will be transformed into DuDeObjects
-		DataSource dataSource = new XMLSource("cora", new File("CORA.xml"), "CORA");
+//		DataSource dataSource = new XMLSource("cora", new File("CORA.xml"), "CORA");
+//                DataSource dataSource = new XMLSource("cora", new File("./", "CORA.xml"), "CORA");
+                DataSource dataSource = new XMLSource("cora", new File("./src/csv/datasets", "CORA.xml"), "CORA");
 
 		// uses the id attribute for the object id - this call is optional, if no id attribute is set, DuDe will generate its own object ids
 		dataSource.addIdAttributes("id");
 
 		// instantiate a gold standard (the identifier of the CSVSource is not important)
-		GoldStandard goldStandard = new GoldStandard(new CSVSource("goldstandard", new File("./", "cora_gold.csv")).withHeader());
+		GoldStandard goldStandard = new GoldStandard(new CSVSource("goldstandard", new File("./src/csv/datasets", "cora_gold.csv")).withHeader());
 
 		// since "id1" and "id2" are the default attribute names, no custom object id attributes need to be set
 		// goldStandard.setFirstElementsObjectIdAttributes("id1");

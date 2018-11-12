@@ -257,7 +257,7 @@ public class ExperimentosDBLP2ACM extends VetorSimEstat11 {
 //        expDBLP2ACMQP2br.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', false, false);
 //        expDBLP2ACMQP2br.rodaExpRecLink();
         
-        AllQPEtapa11 expDBLP2ACMQ1 = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 33, 0, 0, 0, 0, 0, 2616, 0, 0, 0, 2294, 0, 0, 0, 1, true, false, false, false, false, false, false, false, false, obj);
+        AllQPEtapa11 expDBLP2ACMQ1 = new AllQPEtapa11("DBLP2", "ACM", "DBLP2-ACM_perfectMapping", null, null, null, null, null, null, null, null, null, 32, 16, 0, 16, 16, 16, 2616, 0, 0, 0, 2294, 0, 0, 0, 1000, true, true, false, true, true, true, false, false, false, obj);
         expDBLP2ACMQ1.setParamVetorSim("id", "id", "idDBLP", "idACM", ',', null, null, null, null, ',', true, false);
         expDBLP2ACMQ1.rodaExpRecLink();
 

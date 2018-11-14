@@ -106,7 +106,7 @@ public class Alg35 extends DedupAlg {
             final double similarity5 = similarityFunc5.getSimilarity(pair);
 
 //            if ((similarity >= 0.45) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.45) && (similarity5 >= 0.45)) {
-            if ((similarity >= 0.5) && (similarity2 >= 0.4) && (similarity3 >= 0.45) && (similarity4 >= 0.55) && (similarity5 >= 0.6)) {
+            if ((similarity >= 0.5) && (similarity2 >= 0.4) && (similarity3 >= 0.45)) {
                 fechoTrans.add(pair);
 //                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
@@ -130,11 +130,11 @@ public class Alg35 extends DedupAlg {
                 a = similarityFunc.getSimilarity(pair);
                 b = similarityFunc2.getSimilarity(pair);
                 c = similarityFunc3.getSimilarity(pair);
-                d = similarityFunc4.getSimilarity(pair);
-                e = similarityFunc5.getSimilarity(pair);
+//                d = similarityFunc4.getSimilarity(pair);
+//                e = similarityFunc5.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                final double simNorm = (a + b + c + d + e) / 5;
+                final double simNorm = (a + b + c) / 3;
                 String elemento1 = pair.getFirstElement().toString();
                 String elemento2 = pair.getSecondElement().toString();
 

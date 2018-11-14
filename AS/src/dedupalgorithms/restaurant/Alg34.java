@@ -106,7 +106,7 @@ public class Alg34 extends DedupAlg {
             final double similarity5 = similarityFunc5.getSimilarity(pair);
 
 //            if ((similarity >= 0.45) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.45) && (similarity5 >= 0.45)) {
-            if ((similarity >= 0.3) && (similarity2 >= 0.3) && (similarity3 >= 0.45) && (similarity4 >= 0.55) && (similarity5 >= 0.6)) {
+            if ((similarity >= 0.5) && (similarity2 >= 0.4) && (similarity3 >= 0.45) && (similarity4 >= 0.55) && (similarity5 >= 0.6)) {
                 fechoTrans.add(pair);
 //                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 

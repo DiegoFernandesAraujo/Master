@@ -109,7 +109,7 @@ public class Alg31 extends DedupAlg {
 
 //            if ((similarity >= 0.5) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.45)) {
 //            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
-            if ((similarity >= 0.7) && (similarity2 >= 0.4) && (similarity4 >= 0.6)) {
+            if ((similarity >= 0.5) && (similarity2 >= 0.7) && (similarity4 >= 0.6)) {
                 fechoTrans.add(pair);
 //                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 

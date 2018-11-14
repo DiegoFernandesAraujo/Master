@@ -12,6 +12,7 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
+import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.JaroDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.util.GoldStandard;
@@ -80,9 +81,9 @@ public class Alg30 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        JaroDistanceFunction similarityFunc = new JaroDistanceFunction("name");
-        JaroDistanceFunction similarityFunc2 = new JaroDistanceFunction("addr");
-        JaroDistanceFunction similarityFunc3 = new JaroDistanceFunction("city");
+        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("name");
+        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("addr");
+        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("city");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("phone");
         JaroDistanceFunction similarityFunc5 = new JaroDistanceFunction("type");
 
@@ -108,7 +109,7 @@ public class Alg30 extends DedupAlg {
 
 //            if ((similarity >= 0.5) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.45)) {
 //            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
-            if ((similarity >= 0.75) && (similarity2 >= 0.5) && (similarity4 >= 0.6)) {
+            if ((similarity >= 0.7) && (similarity2 >= 0.4) && (similarity4 >= 0.6)) {
                 fechoTrans.add(pair);
 //                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
@@ -137,7 +138,6 @@ public class Alg30 extends DedupAlg {
 //                f = similarityFunc2.getSimilarity(pair);
 
                 final double simNorm = (a + b + d) / 3;
-
                 String elemento1 = pair.getFirstElement().toString();
                 String elemento2 = pair.getSecondElement().toString();
 

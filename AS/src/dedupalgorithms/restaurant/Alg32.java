@@ -12,8 +12,6 @@ import dude.output.statisticoutput.SimpleStatisticOutput;
 import dude.output.statisticoutput.StatisticOutput;
 import dude.postprocessor.NaiveTransitiveClosureGenerator;
 import dude.postprocessor.StatisticComponent;
-import dude.similarityfunction.contentbased.impl.simmetrics.EuclideanDistanceFunction;
-import dude.similarityfunction.contentbased.impl.simmetrics.JaroDistanceFunction;
 import dude.similarityfunction.contentbased.impl.simmetrics.LevenshteinDistanceFunction;
 import dude.util.GoldStandard;
 import dude.util.data.DuDeObjectPair;
@@ -81,11 +79,11 @@ public class Alg32 extends DedupAlg {
         Algorithm algorithm = getAlg();
         algorithm.enableInMemoryProcessing();
 
-        EuclideanDistanceFunction similarityFunc = new EuclideanDistanceFunction("name");
-        EuclideanDistanceFunction similarityFunc2 = new EuclideanDistanceFunction("addr");
-        EuclideanDistanceFunction similarityFunc3 = new EuclideanDistanceFunction("city");
+        LevenshteinDistanceFunction similarityFunc = new LevenshteinDistanceFunction("name");
+        LevenshteinDistanceFunction similarityFunc2 = new LevenshteinDistanceFunction("addr");
+        LevenshteinDistanceFunction similarityFunc3 = new LevenshteinDistanceFunction("city");
         LevenshteinDistanceFunction similarityFunc4 = new LevenshteinDistanceFunction("phone");
-        JaroDistanceFunction similarityFunc5 = new JaroDistanceFunction("type");
+        LevenshteinDistanceFunction similarityFunc5 = new LevenshteinDistanceFunction("type");
 
         StatisticComponent statistic = new StatisticComponent(goldStandard, algorithm);
 
@@ -107,9 +105,8 @@ public class Alg32 extends DedupAlg {
             final double similarity4 = similarityFunc4.getSimilarity(pair);
             final double similarity5 = similarityFunc5.getSimilarity(pair);
 
-//            if ((similarity >= 0.5) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.45)) {
-//            if ((similarity >= 0.45) && (similarity2 >= 0.2) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.25)) {
-            if ((similarity >= 0.5) && (similarity2 >= 0.7) && (similarity4 >= 0.6)) {
+//            if ((similarity >= 0.45) && (similarity2 >= 0.45) && (similarity3 >= 0.45) && (similarity4 >= 0.45) && (similarity5 >= 0.45)) {
+            if ((similarity >= 0.3) && (similarity2 >= 0.3) && (similarity3 >= 0.45) && (similarity4 >= 0.6) && (similarity5 >= 0.6)) {
                 fechoTrans.add(pair);
 //                System.out.println(pair.getFirstElement().toString() + " - " + pair.getSecondElement().toString());
 
@@ -132,12 +129,12 @@ public class Alg32 extends DedupAlg {
 
                 a = similarityFunc.getSimilarity(pair);
                 b = similarityFunc2.getSimilarity(pair);
-//                c = similarityFunc3.getSimilarity(pair);
+                c = similarityFunc3.getSimilarity(pair);
                 d = similarityFunc4.getSimilarity(pair);
-//                e = similarityFunc5.getSimilarity(pair);
+                e = similarityFunc5.getSimilarity(pair);
 //                f = similarityFunc2.getSimilarity(pair);
 
-                final double simNorm = (a + b + d) / 3;
+                final double simNorm = (a + b + c + d + e) / 5;
                 String elemento1 = pair.getFirstElement().toString();
                 String elemento2 = pair.getSecondElement().toString();
 

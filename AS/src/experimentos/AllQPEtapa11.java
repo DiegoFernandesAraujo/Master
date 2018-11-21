@@ -431,7 +431,7 @@ public class AllQPEtapa11 {
         this.vQtdAlgAll = vQtdAlgAll;
         this.vQtdAlgLot = vQtdAlgLot;
         this.vQtdAlgGeral = new int[]{5, 15, 25};
-
+        
         this.okqp1 = okqp1;
         this.okqp2b = okqp2b;
         this.okqp2m = okqp2m;
@@ -1318,7 +1318,7 @@ public class AllQPEtapa11 {
         //Para qp3  - Parte
         if (okqp3lot) {
 //            int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot, getSep());
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot, getSep());
 
             //Mesma ideia do construtor
             objVet.setAllVarDedup(baseGeral1, baseGeral2, chavePrimaria, chavePrimaria2, gsGeral, goldId1, goldId2, getSepChar(), "qp3lot", geraVetor);
@@ -1547,7 +1547,7 @@ public class AllQPEtapa11 {
         //Para qp3  - Parte
         if (okqp3lot) {
 //            int[] vetor6 = {10}; //Uma única quantidade a ser definida
-            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3Lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot, getSep());
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral1, baseGeral2, "qp3lot", qtdMaxLot, tamBase1Geral, tamBase2Geral, qtdObs, vQtdAlgLot, getSep());
 
             //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
             if (geraVetor) {
@@ -1918,8 +1918,8 @@ public class AllQPEtapa11 {
                 qtdObservacoes = (int) (fact(itensTotal) / (fact(itensTotal - i) * fact(i)));
                 vetor[0] = qtdObservacoes;
                 vetor[1] = i;
-                
-                if(i == 5){
+
+                if (i == 5) {
                     System.out.println("Maior quantidade de combinações: " + vetor[0] + " gerada por " + vetor[1] + " algoritmos de " + itensTotal + " possíveis.");
                     return vetor;
                 }

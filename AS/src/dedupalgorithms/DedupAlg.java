@@ -602,6 +602,17 @@ public class DedupAlg {
         this.separator = separator;
         deduplication(); //Não era final antes
     }
+    
+    public void setAllVarDedup(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String xml) {
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.idBaseDados = idBaseDados;
+        this.separator = separator;
+        deduplicationXML(); //Não era final antes
+    }
 
     public void setAllVarDedup(String baseDados1, String baseDados2, String chavePrimaria1, String chavePrimaria2, String gold, String goldId1, String goldId2, char separator) {
 

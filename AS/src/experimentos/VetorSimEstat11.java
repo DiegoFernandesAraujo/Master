@@ -8,6 +8,7 @@
  */
 package experimentos;
 
+import DS.DgStd1;
 import DS.ExecVetorSimCDs;
 import dedupalgorithms.*;
 import java.io.BufferedReader;
@@ -17,6 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +46,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
     String idBaseDados;
     char separator;
     String qp;
+    Map<String, String> mapVetorMaior;
 
     public boolean isGerVetMaior() {
         return geraVetorMaior;
@@ -73,6 +77,38 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         this.qp = qp;
 //        geraVetorMaior = geraVetorMaior;
         super.setAllVarDedup(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator);
+
+//        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
+        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + ".csv");
+        dirDiverg = new File("./src/csv/conjuntosDS/conjuntosDivergAA/" + baseDados1 + "/" + qp + "/");
+
+        if (!vetorSimilaridade.exists()) {
+            System.out.println("Não existe arquivo vetorSimilaridade.csv.");
+
+            try {
+                vetorSimilaridade.createNewFile();
+
+            } catch (IOException ex) {
+                System.out.println("Não foi possível criar arquivo vetorSimilaridade.csv.");
+            }
+
+        }
+        setGerVetMaior(geraVetor);
+
+        exeGerVetMaior();
+    }
+
+    //XML!
+    public void setAllVarDedup(String baseDados1, String chavePrimaria, String gold, String goldId1, String goldId2, char separator, String qp, boolean geraVetor, String xml) {
+        this.baseDados1 = baseDados1;
+        this.chavePrimaria = chavePrimaria;
+        this.gold = gold;
+        this.goldId1 = goldId1;
+        this.goldId2 = goldId2;
+        this.separator = separator;
+        this.qp = qp;
+//        geraVetorMaior = geraVetorMaior;
+        super.setAllVarDedup(baseDados1, chavePrimaria, gold, goldId1, goldId2, separator, xml);
 
 //        vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + "-" + qp + ".csv");
         vetorSimilaridade = new File("./src/csv/conjuntosDS/vetorSimilaridades", "vetorSimilaridades-" + baseDados1 + ".csv");
@@ -271,7 +307,172 @@ public abstract class VetorSimEstat11 extends DedupAlg {
         }
     }
 
+    //A partir do vetor de similaridades geral cria um vetor menor dado o par de possíveis duplicatas
+    //existente no arquivo de divergências informado
+    /**
+     *
+     * @param arqDiverg
+     * @param vetorSim
+     * @throws IOException
+     */
+    public void geraVetorMenor2(File arqDiverg) throws IOException {
+
+//O gabarito tem de estar sem aspas
+        String str;
+        String str2;
+        String elementoDiverg1;
+        String elementoDiverg2;
+        String elementoVetorSim1;
+        String elementoVetorSim2;
+        String[] linhaAtual;
+        String[] linhaAtualVetor;
+
+        BufferedReader brDiverg = null;
+        BufferedReader brVetorSim = null;
+        BufferedWriter bwVetorMenor = null;
+        FileWriter escreveVetorMenor;
+        int linha = 0;
+
+        try {
+            brDiverg = new BufferedReader(new FileReader(arqDiverg.getPath()));
+
+            String diretorio = arqDiverg.getParent();
+            String nome = arqDiverg.getName();
+            nome = nome.substring(0, nome.indexOf('.'));
+
+            escreveVetorMenor = new FileWriter(diretorio + "/" + nome + "_NEW.csv", false);
+            bwVetorMenor = new BufferedWriter(escreveVetorMenor);
+
+//            bwVetorMenor.write("elemento1;elemento2;title;artist;track01;track02;track03;duplicata\n");
+            //Ordem para o algoritmo de Peter Christen
+            //ANTERIOR
+//            bwVetorMenor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;title;artist;track01;track02;track03;track10;track11\n");
+            //Construir a string acima a partir do cabeçalho de NAO_DA2 e do vetorMaior
+            while ((str = brDiverg.readLine()) != null) {
+
+                if (str.contains("elemento1")) {
+//                    System.out.println("Entrei no Str.contains");
+                    continue;
+
+                }
+
+                linhaAtual = str.split(";");
+
+                elementoDiverg1 = linhaAtual[0];
+                elementoDiverg2 = linhaAtual[1];
+
+                if (linha++ == 0) {
+                    if (mapVetorMaior.containsKey("elemento1;elemento2")){
+                        bwVetorMenor.write("elemento1;elemento2;qtdAlg;min;max;med;duplicata;" + mapVetorMaior.get("elemento1;elemento2") + "\n"); //NOVO
+                        
+                    }
+                }
+
+//                System.out.println("elementoDiverg1: " + elementoDiverg1 + " - " + "elementoDiverg2: " + elementoDiverg2);
+                if (mapVetorMaior.containsKey(elementoDiverg1 + ";" + elementoDiverg2) || mapVetorMaior.containsKey(elementoDiverg2 + ";" + elementoDiverg1)) {
+
+                    bwVetorMenor.append(str);
+                    bwVetorMenor.append(';');
+                    try {
+
+                        bwVetorMenor.append(mapVetorMaior.get(elementoDiverg1 + ";" + elementoDiverg2) + "\n");
+                    } catch (Exception ex) {
+                        bwVetorMenor.append(mapVetorMaior.get(elementoDiverg2 + ";" + elementoDiverg1) + "\n");
+                    }
+                    bwVetorMenor.flush();
+
+                }
+
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Não foi possível encontrar o arquivo " + arqDiverg.getName() + " em geraVetorMenor()");
+        } catch (IOException ex) {
+            Logger.getLogger(VetorSimEstat11.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+
+            bwVetorMenor.flush();
+            bwVetorMenor.close();
+
+            brDiverg.close();
+
+        }
+    }
+
+    public void populaMapVetorMaior() {
+
+//        System.out.println("populaMapArqResult!");
+        //Limpando valores anteriores
+        try {
+            mapVetorMaior.clear();
+        } catch (NullPointerException ex) {
+            System.out.println("ERRO NO CLEAR!");
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        String str;
+        String[] linhaAtual1;
+        String elementoA1;
+        String elementoA2;
+
+        BufferedReader brVetorMaior = null;
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brVetorMaior = new BufferedReader(new FileReader(getVetorSimilaridade().getPath()));
+//            System.out.println(getArqResult().getName());
+
+//            int linha = 0;
+            while ((str = brVetorMaior.readLine()) != null) {
+
+//                if (linha > 0) {
+                linhaAtual1 = str.split(";", 3);
+
+                elementoA1 = linhaAtual1[0];
+                elementoA2 = linhaAtual1[1];
+//                System.out.println(elementoA1 + ";" + elementoA2 + " - " + linhaAtual1[2]);
+
+//                mapVetorMaior.put(elementoA1 + ";" + elementoA2, elementoA1 + ";" + elementoA2 + ";" + linhaAtual1[2]);
+                mapVetorMaior.put(elementoA1 + ";" + elementoA2, linhaAtual1[2]);
+//                }
+//                linha++;
+            }
+
+//            while ((str = brHistDA.readLine()) != null) {
+//
+//                linhaAtual = str.split(";", 4);
+//
+//                elemento1 = linhaAtual[0];
+//                elemento2 = linhaAtual[1];
+//
+//                mapVetorMaior.put(elemento1 + ";" + elemento2, linhaAtual[2]);
+            brVetorMaior.close();
+        } catch (NullPointerException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(DgStd1.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brVetorMaior = null;
+            elementoA1 = null;
+            elementoA2 = null;
+//            int cont = 0;
+//            for (Map.Entry<String, String> entry : mapVetorMaior.entrySet()) {
+//
+//                System.out.println(++cont + " " + entry.getKey() + " - " + entry.getValue());
+//                System.out.println(entry.getKey());
+        }
+    }
+
     public void executaGerVetMenor() {
+
+        mapVetorMaior = new HashMap<String, String>();
+        populaMapVetorMaior();
 
         try {
 
@@ -285,7 +486,8 @@ public abstract class VetorSimEstat11 extends DedupAlg {
                     System.out.println("Nome do arquivo: " + nome);
 
                     if (nome.contains("diverg") && !nome.contains("_NEW")) {
-                        geraVetorMenor(arq, getVetorSimilaridade());
+//                        geraVetorMenor(arq, getVetorSimilaridade());
+                        geraVetorMenor2(arq);
                         arq.delete(); //Exclui o arquivo depois de gerar os vetores de similaridade
                     }
 

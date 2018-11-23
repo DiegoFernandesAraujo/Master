@@ -863,6 +863,415 @@ public class AllQPEtapa11 {
     }
 
     /**
+     * Executa todos os experimentos para deduplicação.
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void rodaExpDedupXML() throws IOException, InterruptedException {
+
+        //Apenas para gerar o vetor de divergências maior! IRÁ SERVIR PARA QP1 INDEPENDENTEMENTE DE okp1 SER true. QP1 é o carro chefe!
+        Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral, getSep());
+
+        //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+        if (geraVetor) {
+            qp1.setvQtdAlg(new int[]{qtdMaxGeral}); //Quantidade total de matchers existentes para a base em questão
+            qp1.setQtdObservacoes(1); //Basta uma vez                
+            qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+
+            //Limpeza dos dados extras gerados
+            qp1.limpaEstatisticas(baseGeral, "qp1");
+            limpaDivergBase(dirDivergqp1);
+        }
+
+        //Se geraVetor == true, gera o vetor de similaridades maior
+        objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp1", geraVetor, "XML");
+        geraVetor = false; //Garantindo que as demais questões de pesquisa não precisarão gerar o vetor maior novamente
+
+        //Para qp1
+        if (okqp1) {
+//            int[] vetor = {10, 15, 20}; //Poderia passar direto nos argumentos assim: new int[]{10, 15, 20}
+//            Etapa1Experimento qp1 = new Etapa1Experimento(gsGeral, baseGeral, "qp1", qtdMaxGeral, tamBase1Geral, qtdObs, vQtdAlgGeral);
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp1.setvQtdAlg(new int[]{qtdMaxGeral});
+//                qp1.setQtdObservacoes(1); //Basta uma vez                
+//                qp1.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//                qp1.limpaEstatisticas(baseGeral, "qp1");
+//            }
+//
+//            //Mesma ideia do construtor
+//            //Se geraVetor == true, gera o vetor de similaridades maior
+//            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, ';', "qp1", geraVetor, "XML");
+            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+            qp1.setvQtdAlg(getvQtdAlgGeral());
+            qp1.setQtdObservacoes(qtdObs);
+            qp1.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+            //Arquivos de divergência de QP1 e suas respectivas estatísticas são as mesmas a serem utilizadas em QP4, QP6 e QP7
+            copia(dirDivergqp1, dirDivergqp4);
+            copia(dirDivergqp1, dirDivergqp6);
+            copia(dirDivergqp1, dirDivergqp7);
+            copia(dirEstatqp1, dirEstatqp4);
+            copia(dirEstatqp1, dirEstatqp6);
+            copia(dirEstatqp1, dirEstatqp7);
+
+        }
+
+        if (okqp2b && okqp2r) {
+
+            System.out.println("okqp2b && okqp2r");
+
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB, getSep());
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR, getSep());
+
+            int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            int qtdMaxObs2 = calcQtdObs(qtdMaxR)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb2 = calcQtdObs(qtdMaxR)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            //Para garantir que seja selecionada a mesma quantidade de matchers bons e ruins 
+            //e ainda garantir a mair quantidade de combinações possíveis do menor conjunto.
+            if (itensComb <= itensComb2) {
+                System.out.println("Itens utilizados: " + itensComb);
+                qp2b.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+            } else {
+                System.out.println("Itens utilizados: " + itensComb2);
+                qp2b.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+                qp2r.setvQtdAlg(new int[]{itensComb2}); //Quantidade de itens para gerar a quantidade específica de combinações
+            }
+
+            //*****QP2B*****
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2b.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor, "XML");
+
+            qp2b.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+            //*****QP2R*****
+            if (qtdMaxObs2 < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2r.setQtdObservacoes(qtdMaxObs2);
+            } else {
+                qp2r.setQtdObservacoes(qtdObs);
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor, "XML");
+
+            qp2r.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+            okqp2b = false;
+            okqp2r = false;
+
+        }
+
+        //Para qp2  - Bons
+        if (okqp2b) {
+//            int[] vetor2 = {10}; //Uma única quantidade a ser definida
+            Etapa1Experimento qp2b = new Etapa1Experimento(gsGeral, baseGeral, "qp2b", qtdMaxB, tamBase1Geral, qtdObs, vQtdAlgB, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp2b.setvQtdAlg(new int[]{qtdMaxB});
+//                qp2b.setQtdObservacoes(1); //Basta uma vez                
+//                qp2b.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//                qp2b.limpaEstatisticas(baseGeral, "qp2b");
+//            }
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2b", geraVetor, "XML");
+
+//            int itensComb = (int) (qtdMaxB * 0.8); //80% da quantidade máxima de matchers bons.
+//            System.out.println("qtdMaxB: " + qtdMaxB);
+            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp2b.setvQtdAlg(new int[]{itensComb});
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxB)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxB)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2b.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2b.setQtdObservacoes(qtdObs);
+            }
+
+            qp2b.setvQtdAlg(new int[]{itensComb}); //Quantidade de itens para gerar a quantidade específica de combinações
+            //em Etapa1Experimento
+
+            qp2b.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+        } //Para qp2  - Médios
+        if (okqp2m) {
+//            int vetor3 = 10; //Uma única quantidade a ser definida
+            Etapa1Experimento qp2m = new Etapa1Experimento(gsGeral, baseGeral, "qp2m", qtdMaxM, tamBase1Geral, qtdObs, vQtdAlgM, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp2m.setvQtdAlg(new int[]{qtdMaxGeral});
+//                qp2m.setQtdObservacoes(1); //Basta uma vez                
+//                qp2m.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//            }
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2m", geraVetor, "XML");
+
+//            int itensComb = (int) (qtdMaxM * 0.8); //80% da quantidade máxima de matchers médios.
+////            System.out.println("qtdMaxM: " + qtdMaxM);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp2m.setvQtdAlg(new int[]{itensComb});
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxM)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxM)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2m.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2m.setQtdObservacoes(qtdObs);
+            }
+
+            qp2m.setvQtdAlg(new int[]{itensComb});
+
+            qp2m.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+        }
+
+        //Para qp2  - Ruins
+        if (okqp2r) {
+//            int[] vetor4 = {10}; //Uma única quantidade a ser definida
+            Etapa1Experimento qp2r = new Etapa1Experimento(gsGeral, baseGeral, "qp2r", qtdMaxR, tamBase1Geral, qtdObs, vQtdAlgR, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp2r.setvQtdAlg(new int[]{qtdMaxGeral});
+//                qp2r.setQtdObservacoes(1); //Basta uma vez                
+//                qp2r.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//            }
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp2r", geraVetor, "XML");
+
+//            int itensComb = (int) (qtdMaxR * 0.8); //80% da quantidade máxima de matchers ruins.
+////            System.out.println("qtdMaxR: " + qtdMaxR);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp2r.setvQtdAlg(new int[]{itensComb});
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxR)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxR)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp2r.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp2r.setQtdObservacoes(qtdObs);
+            }
+
+            qp2r.setvQtdAlg(new int[]{itensComb});
+
+            qp2r.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+        }
+
+        //Para qp3  - Todos
+        if (okqp3all) {
+
+            //            int[] vetor5 = {10}; //Uma única quantidade a ser definida
+            Etapa1Experimento qp3All = new Etapa1Experimento(gsGeral, baseGeral, "qp3all", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgAll, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp3All.setvQtdAlg(new int[]{qtdMaxGeral});
+//                qp3All.setQtdObservacoes(1); //Basta uma vez                
+//                qp3All.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//            }
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp3all", geraVetor, "XML");
+
+//            int itensComb = (int) (esteQtdMaxAll * 0.8); //80% da quantidade máxima de matchers bons.
+////            System.out.println("esteQtdMaxAll: " + esteQtdMaxAll);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp3All.setvQtdAlg(new int[]{itensComb});
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //de combinações possíveis de n-2 matchers.
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObs(qtdMaxAll)[0]; //Quantidade máxima de combinações possíveis
+            int itensComb = calcQtdObs(qtdMaxAll)[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+            if (itensComb >= (int) (qtdMaxAll * 0.70)) { //Se for maior ou igual a 70%, pode mandar brasa!
+
+                if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                    qp3All.setQtdObservacoes(qtdMaxObs);
+                } else {
+                    qp3All.setQtdObservacoes(qtdObs);
+                }
+
+            } else { // Senão força a pegar um valor acima da metade (quantidade máxima de qp3lot)
+                qtdMaxObs = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll * 0.70))[0]; //Quantidade máxima de combinações possíveis
+                itensComb = calcQtdObsAcima(qtdMaxAll, (int) (qtdMaxAll * 0.70))[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações
+
+                if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                    qp3All.setQtdObservacoes(qtdMaxObs);
+                } else {
+                    qp3All.setQtdObservacoes(qtdObs);
+                }
+            }
+
+            qp3All.setvQtdAlg(new int[]{itensComb});
+
+            qp3All.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+        }
+
+        //Para qp3  - Parte
+        if (okqp3lot) {
+//            int[] vetor6 = {10}; //Uma única quantidade a ser definida
+            Etapa1Experimento qp3Lot = new Etapa1Experimento(gsGeral, baseGeral, "qp3lot", qtdMaxAll, tamBase1Geral, qtdObs, vQtdAlgLot, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+//            if (geraVetor) {
+//                qp3Lot.setvQtdAlg(new int[]{qtdMaxGeral});
+//                qp3Lot.setQtdObservacoes(1); //Basta uma vez                
+//                qp3Lot.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+//            }
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseGeral, chavePrimaria, gsGeral, goldId1, goldId2, getSepChar(), "qp3lot", geraVetor, "XML");
+//
+//            int itensComb = (int) qtdMaxAll / 2; //Metade da quantidade máxima de matchers bons.
+////            System.out.println("qtdMaxLot: " + qtdMaxLot);
+//
+//            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+//            qp3Lot.setvQtdAlg(new int[]{itensComb});
+
+            //Validando se a quantidade de Observações definida inicialmente (1000) pode ser alcançada pela quantidade
+            //de matchers disponíveis. Se não for possível, a quantidade de observações é definida a partir do cálculo
+            //da maior quantidade de combinações possíveis.
+            int qtdMaxObs = calcQtdObsAbaixo(qtdMaxAll, (int) (qtdMaxAll / 2))[0]; //Quantidade máxima de combinações possíveis abaixo da metade de All
+            int itensComb = calcQtdObsAbaixo(qtdMaxAll, (int) (qtdMaxAll / 2))[1]; //Quantidade de algoritmos que gera a quantidade máxima de combinações abaixo da metade de All
+
+            if (qtdMaxObs < qtdObs) { //Esse cálculo foi feito baseado nas 1000 iterações clássicas
+                qp3Lot.setQtdObservacoes(qtdMaxObs);
+            } else {
+                qp3Lot.setQtdObservacoes(qtdObs);
+            }
+
+            qp3Lot.setvQtdAlg(new int[]{itensComb});
+
+            qp3Lot.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+        }
+
+        //Para qp5 - 1% 
+        if (okqp5one) {
+//            int[] vetor8 = {10, 15, 20}; //Uma única quantidade a ser definida
+            //A quantidade de elementos da baseGeral de dados aqui é diferente
+            Etapa1Experimento qp5o = new Etapa1Experimento(gsOne, baseOne, "qp5o", qtdMaxGeral, tamBase1One, qtdObs, vQtdAlgGeral, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+            if (geraVetorQP5) {
+                qp5o.setvQtdAlg(new int[]{qtdMaxGeral});
+                qp5o.setQtdObservacoes(1); //Basta uma vez                
+                qp5o.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+                qp5o.limpaEstatisticas(baseOne, "qp5o");
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseOne, chavePrimaria, gsOne, goldId1, goldId2, getSepChar(), "qp5o", geraVetorQP5);
+
+            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+            qp5o.setvQtdAlg(getvQtdAlgGeral());
+            qp5o.setQtdObservacoes(qtdObs);
+            qp5o.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+        }
+
+        //Para qp5 - 3% 
+        if (okqp5three) {
+//            int[] vetor9 = {10, 15, 20}; //Uma única quantidade a ser definida9
+            //A quantidade de elementos da baseGeral de dados aqui é diferente
+            Etapa1Experimento qp5t = new Etapa1Experimento(gsThree, baseThree, "qp5t", qtdMaxGeral, tamBase1Three, qtdObs, vQtdAlgGeral, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+            if (geraVetorQP5) {
+                qp5t.setvQtdAlg(new int[]{qtdMaxGeral});
+                qp5t.setQtdObservacoes(1); //Basta uma vez                
+                qp5t.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+                qp5t.limpaEstatisticas(baseOne, "qp5t");
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseThree, chavePrimaria, gsThree, goldId1, goldId2, getSepChar(), "qp5t", geraVetorQP5);
+
+            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+            qp5t.setvQtdAlg(getvQtdAlgGeral());
+            qp5t.setQtdObservacoes(qtdObs);
+            qp5t.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+        }
+
+        //Para qp5 - 5% 
+        if (okqp5five) {
+//            int[] vetor10 = {10, 15, 20}; //Uma única quantidade a ser definida
+            //A quantidade de elementos da baseGeral de dados aqui é diferente
+            Etapa1Experimento qp5f = new Etapa1Experimento(gsFive, baseFive, "qp5f", qtdMaxGeral, tamBase1Five, qtdObs, vQtdAlgGeral, getSep());
+
+            //Gera o arquivo de divergências com todos os algoritmos (NAO_DA)
+            if (geraVetorQP5) {
+                qp5f.setvQtdAlg(new int[]{qtdMaxGeral});
+                qp5f.setQtdObservacoes(1); //Basta uma vez                
+                qp5f.executa(); //Gera os arquivos de divergências com todos os algoritmos (NAO_DA)
+                qp5f.limpaEstatisticas(baseOne, "qp5f");
+            }
+
+            //Mesma ideia do construtor
+            objVet.setAllVarDedup(baseFive, chavePrimaria, gsFive, goldId1, goldId2, getSepChar(), "qp5f", geraVetorQP5);
+
+            //Retornando às quantidades de matchers passadas como parâmetros para geração dos vetores de similaridade menores
+            qp5f.setvQtdAlg(getvQtdAlgGeral());
+            qp5f.setQtdObservacoes(qtdObs);
+            qp5f.executa();
+
+            objVet.executaGerVetMenor(); //Para gerar os vetores menores
+
+        }
+
+        System.out.println("Quantidade de observações geradas: " + qtdObs);
+
+        System.out.println("QPs executadas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
+
+    }
+    /**
      * Executa todos os experimentos para deduplicação a partir de arquivo com
      * lista de sequências aleatórias de <i>matchers</i>.
      *

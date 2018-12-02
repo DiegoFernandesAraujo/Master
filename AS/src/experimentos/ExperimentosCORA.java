@@ -259,7 +259,7 @@ public class ExperimentosCORA extends VetorSimEstat11 {
 //        expRest.setParamVetorSim("id", "id_1", "id_2", ',', null, null, null, ',', true, false);
 //        expRest.rodaExpDedup();
         AllQPEtapa11 expQP1 = new AllQPEtapa11("CORA", "cora_gold", null, null, null, null, null, null, 34, 17, 0, 17, 17, 17, 1879, 0, 0, 0, 500, true, true, false, true, true, true, false, false, false, obj);
-        expQP1.setParamVetorSim("id", "id1", "id2", ';', null, null, null, ',', true, false);
+        expQP1.setParamVetorSim("id", "id1", "id2", ';', null, null, null, ',', false, false);
         expQP1.rodaExpDedupXML();
 
 //        AllQPEtapa11 expCdsMenosQP5 = new AllQPEtapa11("cd", "cd_gold", "cdO", "cdO_gold", "cdT", "cdT_gold", null, null, 23, 10, 15, 6, 10, 10, 9763, 9763, 9763, 0, 1, true, true, true, true, true, true, true, true, false, obj);

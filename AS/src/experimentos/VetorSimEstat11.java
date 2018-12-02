@@ -8,7 +8,6 @@
  */
 package experimentos;
 
-import DS.DgStd1;
 import DS.ExecVetorSimCDs;
 import dedupalgorithms.*;
 import java.io.BufferedReader;
@@ -406,7 +405,7 @@ public abstract class VetorSimEstat11 extends DedupAlg {
             mapVetorMaior.clear();
         } catch (NullPointerException ex) {
             System.out.println("ERRO NO CLEAR!");
-            Logger.getLogger(DgStd1.class
+            Logger.getLogger(VetorSimEstat11.class
                     .getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             System.out.println(e);
@@ -451,11 +450,11 @@ public abstract class VetorSimEstat11 extends DedupAlg {
 //                mapVetorMaior.put(elemento1 + ";" + elemento2, linhaAtual[2]);
             brVetorMaior.close();
         } catch (NullPointerException ex) {
-            Logger.getLogger(DgStd1.class
+            Logger.getLogger(VetorSimEstat11.class
                     .getName()).log(Level.SEVERE, null, ex);
 
         } catch (IOException ex) {
-            Logger.getLogger(DgStd1.class
+            Logger.getLogger(VetorSimEstat11.class
                     .getName()).log(Level.SEVERE, null, ex);
         } finally {
             brVetorMaior = null;

@@ -122,7 +122,7 @@ public class DgStd1 {
     }
 
     public DgStd1(File gabarito, String base, String experimento, String sepGS) {
-        
+
         this.sepGS = sepGS;
 
         setDirDiverg(base, experimento);
@@ -2935,14 +2935,15 @@ public class DgStd1 {
         try {
 
             double precision = getPrecision(tp, fp);
-            int fn = getFN(arqResult);
+//            int fn = getFN(arqResult);
+            int fn = getFN2(arqResult);
             int tn = getTN(tp, fp, fn);
             double recall = getRecall(tp, fn);
             double f1 = getF1(precision, recall);
-            int inspecoes = getInspManuais();
+            int inspecoes = 0;
             int tamDA = getTamDA();
-            int tamDM = getTamDM();
-            int tamNDM = getTamNDM();
+            int tamDM = 0;
+            int tamNDM = 0;
             int tamPC = getTamPC();
 
             BufferedWriter bwEstat = null;
@@ -3451,6 +3452,77 @@ public class DgStd1 {
         return fn;
     }
 
+    public int getFN2(File arqResult) throws IOException {
+        //Já deve receber o arqResult padronizado
+        //Adicionar um teste para saber se está padronizado ou não, para poder tratar o arquivo
+
+        String str;
+
+        BufferedReader brArq = null;
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        //Armazenando valores do arquivo atual no mapa
+        try {
+
+            brArq = new BufferedReader(new FileReader(arqResult.getPath()));
+            while ((str = brArq.readLine()) != null) {
+
+                map.put(str, str);
+            }
+            brArq.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(AnnStd.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            brArq = null;
+        }
+
+        ///////////////////////
+        tp = 0;
+        fp = 0;
+
+        String elementoGS1;
+        String elementoGS2;
+        String[] linhaAtual;
+        boolean existe = false;
+
+        for (Map.Entry<String, String> entry : mapGS.entrySet()) {
+
+            existe = false;
+            linhaAtual = entry.getValue().split(";", 2);
+
+            elementoGS1 = linhaAtual[0];
+            elementoGS2 = linhaAtual[1];
+//            System.out.println("entry.getValue(): " + entry.getValue());
+//            System.out.println("elementoGS1: " + elementoGS1 + " - elementoGS2: " + elementoGS2);
+
+            //Passando o arqResult para procurar os elementos do gabarito nele.
+            //O que estiver no gabarito e não estiver em arqResult é, portanto, um falso negativo
+//                existe = buscaFN(elementoGS1, elementoGS2, arqResult);
+//                existe = buscaFN2(elementoGS1, elementoGS2, arqResult);
+            if (map.containsKey(elementoGS1 + ";" + elementoGS2) || map.containsKey(elementoGS2 + ";" + elementoGS1)) {
+
+                existe = true;
+
+            }
+
+//                if (existe) {
+//                    contExiste++;
+//                }
+            //Só entra se a variável existe for falsa
+            if (!existe) {
+//                    contNaoExiste++;
+                fn++;
+            }
+
+        }
+//        fn--; //Reduzindo um do título do gabarito --> Não necessário com mapa
+        map.clear();
+        return fn;
+    }
+
     private boolean buscaFN(String elementoGS1, String elementoGS2, File arqResult) throws IOException {
         String Str;
         String elemento1;
@@ -3849,7 +3921,7 @@ public class DgStd1 {
                 brGS = new BufferedReader(new FileReader(gs.getPath()));
 
             } else {
-                
+
                 brGS = new BufferedReader(new FileReader(gs.getPath() + ".csv"));
             }
 

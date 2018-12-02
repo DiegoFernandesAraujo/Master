@@ -256,6 +256,7 @@ public class AllQPEtapa11 {
         this.tamBase1Five = tamBaseFive;
         this.qtdObs = qtdObs;
         this.vQtdAlgGeral = new int[]{5, 15, 25};
+//        this.vQtdAlgGeral = new int[]{5};
 
         this.okqp1 = okqp1;
         this.okqp2b = okqp2b;
@@ -431,7 +432,7 @@ public class AllQPEtapa11 {
         this.vQtdAlgAll = vQtdAlgAll;
         this.vQtdAlgLot = vQtdAlgLot;
         this.vQtdAlgGeral = new int[]{5, 15, 25};
-        
+
         this.okqp1 = okqp1;
         this.okqp2b = okqp2b;
         this.okqp2m = okqp2m;
@@ -1271,6 +1272,7 @@ public class AllQPEtapa11 {
         System.out.println("QPs executadas - qp1: " + okqp1 + " - qp2b: " + okqp2b + " - qp2m: " + okqp2m + " - qp2r: " + okqp2r + " - qp3all: " + okqp3all + " - qp3lot: " + okqp3lot + " - qp5one :" + okqp5one + " - qp5three: " + okqp5three + " - qp5five: " + okqp5five);
 
     }
+
     /**
      * Executa todos os experimentos para deduplicação a partir de arquivo com
      * lista de sequências aleatórias de <i>matchers</i>.
